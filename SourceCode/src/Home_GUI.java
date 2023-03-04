@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Label;
 import java.awt.Panel;
+import java.awt.SystemColor;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -15,10 +16,14 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import com.toedter.calendar.JDateChooser;
+
 public class Home_GUI extends JFrame{
-	JButton btnPfl, btnHome, btnSearch, btnGiamGia, btnBooked, btnPay;
+	JButton btnPfl, btnHome, btnSearch, btnGiamGia, btnBooked, btnPay, btnSearchNow;
+	JTextField txtDiaDiem;
 	JPanel panelWest, panelCenter;
 	JLabel lblLogo;
 	public Home_GUI() {
@@ -119,11 +124,62 @@ public class Home_GUI extends JFrame{
 	public void addContainer() {
 		panelCenter.setLayout(new BoxLayout(panelCenter, BoxLayout.Y_AXIS));
 		JPanel panelTitle = new JPanel();
+		panelTitle.setBackground(Color.WHITE);
 		JLabel lblTitle = new JLabel("ĐIỂM ĐẾN THÚ VỊ VUI CHƠI THỎA THÍCH");
 		lblTitle.setForeground(new Color(0, 0, 0));
 		lblTitle.setFont(new Font("Georgia", Font.BOLD, 30));
+		lblTitle.setPreferredSize(new Dimension(750, 80));
 		panelTitle.add(lblTitle);
 		panelCenter.add(panelTitle);
+		
+		JPanel panelSearch = new JPanel();
+		panelSearch.setLayout(new FlowLayout(FlowLayout.LEFT));
+		JLabel lblSearch = new JLabel("> Tim kiem chuyen di");
+		lblSearch.setForeground(SystemColor.controlDkShadow);
+		lblSearch.setFont(new Font("Georgia", Font.PLAIN, 20));
+		panelSearch.add(lblSearch);
+		panelCenter.add(panelSearch);
+		
+		Box b = Box.createHorizontalBox();
+		JLabel lblDiaDiem = new JLabel("Chọn Địa Điểm:");
+		lblDiaDiem.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		b.add(lblDiaDiem);
+		b.add(Box.createHorizontalStrut(5));
+		txtDiaDiem = new JTextField();
+		txtDiaDiem.setColumns(10);
+		txtDiaDiem.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		b.add(txtDiaDiem);
+		b.add(Box.createHorizontalStrut(10));
+		JLabel lblNgayDi = new JLabel("Ngày khởi hành:");
+		lblNgayDi.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		b.add(lblNgayDi);
+		b.add(Box.createHorizontalStrut(5));
+		JDateChooser dateChooser = new JDateChooser();
+		b.add(dateChooser);
+		b.add(Box.createHorizontalStrut(40));
+		
+		ImageIcon iconSearch = new ImageIcon("img/search.png");
+		btnSearchNow = new JButton("Search", iconSearch);
+		btnSearchNow.setBackground(Color.CYAN);
+		btnSearchNow.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		b.add(btnSearchNow);
+		b.add(Box.createHorizontalStrut(40));
+		panelCenter.add(b);
+		
+		JPanel panelTourHot = new JPanel();
+		panelTourHot.setLayout(new FlowLayout(FlowLayout.LEFT));
+		JLabel lblTourHot = new JLabel("> Tour Hot");
+		lblTourHot.setForeground(SystemColor.controlDkShadow);
+		lblTourHot.setFont(new Font("Georgia", Font.PLAIN, 20));
+		panelTourHot.add(lblTourHot);
+		panelCenter.add(panelTourHot);
+		
+		JPanel panelContainer = new JPanel();
+		panelContainer.setLayout(new BoxLayout(panelContainer, BoxLayout.X_AXIS));
+		for(int i=0; i<6; i++) {
+			JPanel panel = new JPanel(new BoxLayout(panelContainer, BoxLayout.Y_AXIS));
+			
+		}
 	}
 	public static void main(String[] args) {
 		new Home_GUI().setVisible(true);
