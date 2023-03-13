@@ -4,11 +4,10 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.Label;
 import java.awt.Panel;
+import java.awt.ScrollPane;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,30 +20,33 @@ import java.awt.event.WindowListener;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 
 import com.toedter.calendar.JDateChooser;
 
-public class Home_GUI extends JFrame implements ActionListener{
+public class SearchTour_GUI extends JFrame implements ActionListener{
 	JButton btnPfl, btnHome, btnSearch, btnGiamGia, btnBooked, btnPay, btnSearchNow;
-	JTextField txtDiemDen;
+	JTextField txtDiemDen, txtMaTour;
 	JPanel panelWest, panelCenter;
 	JLabel lblLogo;
-	JPanel panelHot;
-	JLabel lblTitleHot;
+	JPanel panelTour;
 	JPanel panelContainer;
-	public Home_GUI() {
+	public SearchTour_GUI() {
 		setTitle("Travel Company");
-		setSize(1200, 630);
+		setSize(1300, 800);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		createGUI();
@@ -84,16 +86,16 @@ public class Home_GUI extends JFrame implements ActionListener{
 		btnHome.setHorizontalAlignment(SwingConstants.LEFT);
 		btnHome.setForeground(new Color(240, 255, 240));
 		btnHome.setFont(new Font(".VnArial", Font.BOLD, 20));
-		btnHome.setBackground(new Color(102, 255, 153));
-		btnHome.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(204, 51, 255)));
+		btnHome.setBackground(new Color(153, 204, 255));
+		btnHome.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.LIGHT_GRAY));
 		
 		ImageIcon iconSearch = new ImageIcon("img/search.png");
 		panelControl.add(btnSearch = new JButton("SEARCH TOUR", iconSearch));
 		btnSearch.setHorizontalAlignment(SwingConstants.LEFT);
 		btnSearch.setForeground(new Color(240, 255, 240));
 		btnSearch.setFont(new Font(".VnArial", Font.BOLD, 20));
-		btnSearch.setBackground(new Color(153, 204, 255));
-		btnSearch.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.LIGHT_GRAY));
+		btnSearch.setBackground(new Color(102, 255, 153));
+		btnSearch.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(204, 51, 255)));
 		
 		ImageIcon iconKM = new ImageIcon("img/coupon.png");
 		panelControl.add(btnGiamGia = new JButton("DISCOUNT", iconKM));
@@ -159,6 +161,14 @@ public class Home_GUI extends JFrame implements ActionListener{
 		panelCenter.add(panelSearch);
 		
 		Box b = Box.createHorizontalBox();
+		JLabel lblMaTour = new JLabel("Mã Tour:");
+		lblMaTour.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		b.add(lblMaTour);
+		b.add(Box.createHorizontalStrut(5));
+		txtMaTour = new JTextField();
+		txtMaTour.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		b.add(txtMaTour);
+		b.add(Box.createHorizontalStrut(10));
 		JLabel lblDiemDen = new JLabel("Điểm đến:");
 		lblDiemDen.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		b.add(lblDiemDen);
@@ -184,72 +194,130 @@ public class Home_GUI extends JFrame implements ActionListener{
 		b.add(Box.createHorizontalStrut(40));
 		panelCenter.add(b);
 		
-		JPanel panelTourHot = new JPanel();
-		panelTourHot.setLayout(new FlowLayout(FlowLayout.LEFT));
-		JLabel lblTourHot = new JLabel("> Tour Hot");
-		lblTourHot.setForeground(SystemColor.controlDkShadow);
-		lblTourHot.setFont(new Font("Georgia", Font.PLAIN, 20));
-		panelTourHot.add(lblTourHot);
-		panelCenter.add(panelTourHot);
+		JPanel panelKQ = new JPanel();
+		panelKQ.setLayout(new BoxLayout(panelKQ, BoxLayout.X_AXIS));
+		panelKQ.setBorder(BorderFactory.createTitledBorder("Kết quả tìm kiếm"));
+		panelCenter.add(panelKQ);
 		
-		panelContainer = new JPanel();
-		panelContainer.setLayout(new GridLayout(3, 4, 25, 15));
-		panelContainer.setBackground(Color.WHITE);
-		JScrollPane pnscroll = new JScrollPane(panelContainer, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		JPanel panelDS = new JPanel();
+		panelDS.setPreferredSize(new Dimension(350, Integer.MAX_VALUE));
+		panelDS.setBackground(Color.WHITE);
+		panelKQ.add(panelDS);
 		
-		for(int i=0; i<12;i++) {
-			panelHot = createTourPanel("Tour " + i);
-			panelHot.setLayout(new BoxLayout(panelHot, BoxLayout.Y_AXIS));
-			panelHot.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, Color.WHITE));
-			ImageIcon iconIMG = new ImageIcon("img/phuquoc.jpg");
-			JLabel lblImage = new JLabel(iconIMG);
-			lblTitleHot = new JLabel("Phú Quốc 3ngày - 2đêm          Giá: 2.000.000đ");
-			lblTitle.setFont(new Font("Arial", Font.BOLD, 14));
-			JLabel lblPrice = new JLabel("Time: 30/04/2023                       Xuất phát: TP HCM");
-			lblPrice.setFont(new Font("Arial", Font.PLAIN, 12));
-			panelHot.add(lblImage);
-			panelHot.add(lblTitleHot);
-			panelHot.add(lblPrice);
-			panelContainer.add(panelHot);
-		}
+		JPanel panelDetail = new JPanel();
+		panelDetail.setLayout(new BoxLayout(panelDetail, BoxLayout.Y_AXIS));
+		panelDetail.setBackground(new Color(255, 239, 213));
+		JScrollPane scrollKQ = new JScrollPane(panelDetail, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		panelKQ.add(scrollKQ);
 		
-		panelCenter.add(Box.createVerticalStrut(10));
-		panelCenter.add(pnscroll);
+		Box b1 = Box.createHorizontalBox();
+		JLabel lblTitleSearch = new JLabel("Tour ABCDED");
+		JLabel lblTime = new JLabel("Time: 3 ngày 2 đêm");
+		b1.add(lblTitleSearch);
+		b1.add(Box.createHorizontalStrut(100));
+		b1.add(lblTime);
+		
+		Box b2 = Box.createHorizontalBox();
+		JLabel lblTimeStart = new JLabel("Ngày khởi hành: 18:00 30/04/2023");
+		JLabel lblPlaceStart = new JLabel("Địa điểm khởi hành: Phường 10, Quận Gò Vấp, TP HCM");
+		b2.add(lblTimeStart);
+		b2.add(Box.createHorizontalStrut(30));
+		b2.add(lblPlaceStart);
+		
+		JLabel lblMoTa = new JLabel("Mô tả:");
+		JTextArea textAreaMoTa = new JTextArea("Chuyến du lịch nửa ngày từ Huế sẽ đưa bạn đi tham quan 2 ngôi làng cổ và hòa mình vào nền văn hóa địa phương.\r\n"
+				+ "\r\n"
+				+ "Hướng dẫn viên chuyên nghiệp sẽ đón bạn tại khách sạn. Từ đây, xe sẽ đưa bạn đến làng Sình hay còn được gọi là làng Lại Ân để khám phá nghề làm tranh dân gian và kỹ thuật của những người thợ thủ công nơi đây. Sau đó, bạn sẽ được tìm hiểu về nghệ thuật giấy và xem một số sản phẩm có thiết kế đặc biệt tại Vườn Trúc Chỉ, nơi làm việc của nhiều nghệ nhân.\r\n"
+				+ "\r\n"
+				+ "Điểm dừng chân tiếp theo là làng hương Thủy Xuân. Tại đây, hướng dẫn viên sẽ giải thích quy trình sản xuất hương và các nguyên liệu thô được sử dụng. Ngoài ra, bạn sẽ được chiêm ngưỡng vô số những nén hương lõi tre đủ màu sắc đang được phơi nắng dọc các con phố. Chuyến đi khép lại tại khách sạn của bạn trong thành phố.");
+		textAreaMoTa.setLineWrap(true);
+		textAreaMoTa.setWrapStyleWord(true);
+		textAreaMoTa.setEditable(false);
+		textAreaMoTa.setBackground(new Color(255, 218, 185));
+		textAreaMoTa.setPreferredSize(new Dimension(500, 200));
+		
+		JLabel lblImg = new JLabel("Hình ảnh");
+		
+		Box b3 = Box.createHorizontalBox();
+		ImageIcon iconImg1 = new ImageIcon("img/hinh1.jpg");
+		JLabel lblImg1 = new JLabel(iconImg1);
+		lblImg1.setPreferredSize(new Dimension(200, 150));
+		ImageIcon iconImg2 = new ImageIcon("img/hinh1.jpg");
+		JLabel lblImg2 = new JLabel(iconImg2);
+		lblImg2.setPreferredSize(new Dimension(200, 150));
+		ImageIcon iconImg3 = new ImageIcon("img/hinh1.jpg");
+		JLabel lblImg3 = new JLabel(iconImg3);
+		lblImg3.setPreferredSize(new Dimension(200, 150));
+		b3.add(lblImg1);
+		b3.add(lblImg2);
+		b3.add(lblImg3);
+		
+		Box b4 = Box.createHorizontalBox();
+		ImageIcon iconImg4 = new ImageIcon("img/hinh1.jpg");
+		JLabel lblImg4 = new JLabel(iconImg4);
+		lblImg4.setPreferredSize(new Dimension(200, 150));
+		ImageIcon iconImg5 = new ImageIcon("img/hinh1.jpg");
+		JLabel lblImg5 = new JLabel(iconImg5);
+		lblImg5.setPreferredSize(new Dimension(200, 150));
+		b4.add(lblImg4);
+		b4.add(lblImg5);
+		
+		JLabel lblSoLuong = new JLabel("Số lượng: 10/20 người");
+		
+		JLabel lblDatVe = new JLabel("Đặt vé ngay:");
+		
+		Box b5 = Box.createHorizontalBox();
+		JLabel lblSL = new JLabel("Số lượng người: ");
+		JSpinner spinner = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
+		spinner.setPreferredSize(new Dimension(50, 20));
+		JLabel lblXe = new JLabel("Chọn phương tiện");
+		JRadioButton btnBus, btnMaybay;
+		ButtonGroup btnGroup = new ButtonGroup();
+		btnGroup.add(btnBus = new JRadioButton("Xe khách"));
+		btnBus.setBackground(new Color(255, 239, 213));
+		btnGroup.add(btnMaybay = new JRadioButton("Máy bay"));
+		btnMaybay.setBackground(new Color(255, 239, 213));
+		b5.add(Box.createHorizontalStrut(10));
+		b5.add(lblSL);
+		b5.add(Box.createHorizontalStrut(20));
+		b5.add(spinner);
+		b5.add(Box.createHorizontalStrut(150));
+		b5.add(lblXe);
+		b5.add(Box.createHorizontalStrut(20));
+		b5.add(btnBus);
+		b5.add(btnMaybay);
+		b5.add(Box.createHorizontalStrut(50));
+		
+		Box b6 = Box.createHorizontalBox();
+		JButton btnDatVe, btnThem, btnSua, btnXoa, btnLuu;
+		b6.add(btnDatVe = new JButton("Đặt vé"));
+		b6.add(Box.createHorizontalStrut(20));
+		b6.add(btnDatVe = new JButton("Thêm"));
+		b6.add(Box.createHorizontalStrut(20));
+		b6.add(btnDatVe = new JButton("Sửa"));
+		b6.add(Box.createHorizontalStrut(20));
+		b6.add(btnDatVe = new JButton("Xóa"));
+		b6.add(Box.createHorizontalStrut(20));
+		b6.add(btnDatVe = new JButton("Lưu"));
+		
+		panelDetail.add(b1);
+		panelDetail.add(b2);
+		panelDetail.add(lblMoTa);
+		panelDetail.add(textAreaMoTa);
+		panelDetail.add(lblImg);
+		panelDetail.add(b3);
+		panelDetail.add(b4);
+		panelDetail.add(lblSoLuong);
+		panelDetail.add(lblDatVe);
+		panelDetail.add(b5);
+		panelDetail.add(b6);
+		
 	}
-	private JPanel createTourPanel(String tourID) {
-        JPanel panel = new JPanel();
-        panel.addMouseListener(new TourMouseListener(tourID, panel));
-        return panel;
-    } 
-    private class TourMouseListener extends MouseAdapter{
-        private String tourID;
-        private JPanel panel;
-        public TourMouseListener(String tourID, JPanel panel) {
-            this.tourID = tourID;
-            this.panel = panel;
-        }
-        public void mouseClicked(MouseEvent e) {
-           txtDiemDen.setText(tourID);
-        }
-        //di chuyen chuot qua hien border
-        public void mouseEntered(MouseEvent e) {
-        	panel.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, Color.GREEN));
-        }
-        //thoat chuot tat border
-        public void mouseExited(MouseEvent e) {
-        	panel.setBorder(null);
-        }
-    }
 	public static void main(String[] args) {
-		new Home_GUI().setVisible(true);
+		new SearchTour_GUI().setVisible(true);
 	}
 	public void actionPerformed(ActionEvent e) {
-		Object obj = e.getSource();
-		if(obj==btnSearch) {
-	
-		}if(obj==btnSearchNow) {
-			
-		}
+		// TODO Auto-generated method stub
 		
 	}
 }
