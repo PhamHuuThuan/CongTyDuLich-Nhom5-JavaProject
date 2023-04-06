@@ -25,7 +25,8 @@ public class ConnectDB {
 			}
 		}
 	}
-	public static Connection getConnection() {
+	public static Connection getConnection() throws SQLException {
+		instance.connect();
 		return con;
 	}
 }
