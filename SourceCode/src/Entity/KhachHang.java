@@ -24,8 +24,16 @@ public class KhachHang extends NguoiDung{
 		super(maND);
 		// TODO Auto-generated constructor stub
 	}
-	
-	
-	
-	
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getDiaChi() {
+		return diaChi;
+	}
+	public void setDiaChi(String diaChi) {
+		this.diaChi = diaChi;
+	}
 }

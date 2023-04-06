@@ -27,9 +27,4 @@ public class NhanVien extends NguoiDung{
 		super(maND);
 		// TODO Auto-generated constructor stub
 	}
-	
-	
-	
-	
-	
 }	
