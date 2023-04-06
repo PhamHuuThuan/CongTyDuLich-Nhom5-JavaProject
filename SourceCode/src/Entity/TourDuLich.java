@@ -12,19 +12,20 @@ public class TourDuLich {
 	private String phuongTien;
 	private Date ngayDi;
 	private Date ngayKetThuc;
-	private String diemKH;
-	private String diemDen;
+	private DiaDiem diemKH;
+	private DiaDiem diemDen;
 	private String khachSan;
 	private double gia;
-	
+	private ArrayList<String> dsAnh = new ArrayList<String>();
 	
 	public TourDuLich() {
-		ArrayList<String >danhSachAnh =new ArrayList<>();
+		
 	}
-
-
+	public TourDuLich(String maTour) {
+		this.maTour = maTour;
+	}
 	public TourDuLich(String maTour, String tenTour, String moTa, int soCho, String phuongTien, Date ngayDi,
-			Date ngayKetThuc, String diemKH, String diemDen, String khachSan, double gia) {
+			Date ngayKetThuc, DiaDiem diemKH, DiaDiem diemDen, String khachSan, double gia, ArrayList<String> dsAnh) {
 		super();
 		this.maTour = maTour;
 		this.tenTour = tenTour;
@@ -37,13 +38,12 @@ public class TourDuLich {
 		this.diemDen = diemDen;
 		this.khachSan = khachSan;
 		this.gia = gia;
+		this.dsAnh = dsAnh;
 	}
-
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(diemDen, diemKH, gia, khachSan, maTour, moTa, ngayDi, ngayKetThuc, phuongTien, soCho,
-				tenTour);
+		return Objects.hash(maTour);
 	}
 
 
@@ -56,12 +56,7 @@ public class TourDuLich {
 		if (getClass() != obj.getClass())
 			return false;
 		TourDuLich other = (TourDuLich) obj;
-		return Objects.equals(diemDen, other.diemDen) && Objects.equals(diemKH, other.diemKH)
-				&& Double.doubleToLongBits(gia) == Double.doubleToLongBits(other.gia)
-				&& Objects.equals(khachSan, other.khachSan) && Objects.equals(maTour, other.maTour)
-				&& Objects.equals(moTa, other.moTa) && Objects.equals(ngayDi, other.ngayDi)
-				&& Objects.equals(ngayKetThuc, other.ngayKetThuc) && Objects.equals(phuongTien, other.phuongTien)
-				&& soCho == other.soCho && Objects.equals(tenTour, other.tenTour);
+		return Objects.equals(maTour, other.maTour);
 	}
 
 
@@ -135,22 +130,22 @@ public class TourDuLich {
 	}
 
 
-	public String getDiemKH() {
+	public DiaDiem getDiemKH() {
 		return diemKH;
 	}
 
 
-	public void setDiemKH(String diemKH) {
+	public void setDiemKH(DiaDiem diemKH) {
 		this.diemKH = diemKH;
 	}
 
 
-	public String getDiemDen() {
+	public DiaDiem getDiemDen() {
 		return diemDen;
 	}
 
 
-	public void setDiemDen(String diemDen) {
+	public void setDiemDen(DiaDiem diemDen) {
 		this.diemDen = diemDen;
 	}
 
