@@ -4,7 +4,10 @@ public class DiaDiem {
 	private String maDiaDiem;
 	private String tenDiaDiem;
 	
-	
+	public DiaDiem(String maDiaDiem) {
+		super();
+		this.maDiaDiem = maDiaDiem;
+	}
 	public DiaDiem(String maDiaDiem, String tenDiaDiem) {
 		super();
 		this.maDiaDiem = maDiaDiem;
