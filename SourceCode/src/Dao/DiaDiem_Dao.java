@@ -34,8 +34,7 @@ public class DiaDiem_Dao {
 		}
 		return dsDD;
 	}
-	public ArrayList<DiaDiem> getDiaDiemTheoMa(String maDiaDiem){
-		ArrayList<DiaDiem> dsDD = new ArrayList<DiaDiem>();
+	public DiaDiem getDiaDiemTheoMa(String maDiaDiem){
 		PreparedStatement statement = null;
 		try {
 			ConnectDB.getInstance();
@@ -48,8 +47,7 @@ public class DiaDiem_Dao {
 				String maDD = rs.getString("MaDiaDiem");
 				String tenDD = rs.getString("TenDiaDiem");
 				DiaDiem dd = new DiaDiem(maDD, tenDD);
-				System.out.println(maDD+" | "+ tenDD);
-				dsDD.add(dd);
+				return dd;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -61,7 +59,7 @@ public class DiaDiem_Dao {
 				e.printStackTrace();
 			}
 		}
-		return dsDD;
+		return null;
 	}
 	public boolean themDiaDiem(DiaDiem dd) {
 		ConnectDB.getInstance();

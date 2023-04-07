@@ -168,5 +168,10 @@ public class TourDuLich {
 	public void setGia(double gia) {
 		this.gia = gia;
 	}
-	
+	public ArrayList<String> getDsAnh() {
+		return dsAnh;
+	}
+	public void setDsAnh(ArrayList<String> dsAnh) {
+		this.dsAnh = dsAnh;
+	}
 }
