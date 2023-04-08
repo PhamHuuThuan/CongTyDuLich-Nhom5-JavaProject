@@ -72,7 +72,7 @@ public class ThanhVien_Dao {
 		}
 		return null;
 	}
-	public boolean themThanhVien(ThanhVien tv) {
+	public boolean addThanhVien(ThanhVien tv) {
 		ConnectDB.getInstance();
 		PreparedStatement statement = null;
 		int n=0;
