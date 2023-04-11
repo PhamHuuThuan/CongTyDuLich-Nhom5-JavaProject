@@ -108,7 +108,7 @@ public class Home_GUI extends JFrame implements ActionListener{
 			
 		}else if(o==btnTour) {
 			setVisible(false);
-//			new Tour_GUI().setVisible(true);
+			new Tour_GUI().setVisible(true);
 		}
 	}
 }
