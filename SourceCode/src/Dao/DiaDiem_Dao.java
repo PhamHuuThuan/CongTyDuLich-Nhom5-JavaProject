@@ -128,4 +128,44 @@ public class DiaDiem_Dao {
 		}
 		return n>0;
 	}
+	public ArrayList<DiaDiem> getAllDiemDi() {
+		ArrayList<DiaDiem> dsDD = new ArrayList<DiaDiem>();
+		PreparedStatement stmt = null;
+		try {
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+			stmt = con.prepareStatement("Select * from DiaDiem where MaDiaDiem like ?");
+			stmt.setString(1, "DKH%");
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()) {
+				String maDD = rs.getString("MaDiaDiem");
+				String tenDD = rs.getString("TenDiaDiem");
+				DiaDiem dd = new DiaDiem(maDD, tenDD);
+				dsDD.add(dd);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return dsDD;
+	}
+	public ArrayList<DiaDiem> getAllDiemDuLich() {
+		ArrayList<DiaDiem> dsDD = new ArrayList<DiaDiem>();
+		PreparedStatement stmt = null;
+		try {
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+			stmt = con.prepareStatement("Select * from DiaDiem where MaDiaDiem like ?");
+			stmt.setString(1, "DDL%");
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()) {
+				String maDD = rs.getString("MaDiaDiem");
+				String tenDD = rs.getString("TenDiaDiem");
+				DiaDiem dd = new DiaDiem(maDD, tenDD);
+				dsDD.add(dd);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return dsDD;
+	}
 }
