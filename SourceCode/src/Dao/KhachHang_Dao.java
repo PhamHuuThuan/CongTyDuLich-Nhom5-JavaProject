@@ -23,10 +23,10 @@ import Entity.KhachHang;
 	            while(rs.next()) {
 	                String maKH = rs.getString("MaKH");
 	                String hoTen = rs.getString("HoTen");
-	                String gioiTinh = rs.getString("GioiTinh");
-	                String sdt = rs.getString("SDT");
-	                String email = rs.getString("Email");
-	                KhachHang kh = new KhachHang(maKH);
+	                String gioiTinh = rs.getString("SDT");
+	                String sdt = rs.getString("Email");
+	                String email = rs.getString("DiaChi");
+	                KhachHang kh = new KhachHang(maKH, hoTen, sdt, email, email);
 	                dsKH.add(kh);
 	            }
 	        } catch (SQLException e) {
@@ -45,10 +45,10 @@ import Entity.KhachHang;
 	            ResultSet rs = statement.executeQuery();
 	            while(rs.next()) {
 	                String hoTen = rs.getString("HoTen");
-	                String gioiTinh = rs.getString("GioiTinh");
 	                String sdt = rs.getString("SDT");
 	                String email = rs.getString("Email");
-	                KhachHang kh = new KhachHang(maKH);
+	                String diaChi = rs.getString("DiaChi");
+	                KhachHang kh = new KhachHang(maKH, hoTen, sdt, email, diaChi);
 	                return kh;
 	            }
 	        } catch (SQLException e) {
@@ -69,11 +69,11 @@ import Entity.KhachHang;
 	        try {
 	            Connection con = ConnectDB.getConnection();
 	            statement = con.prepareStatement("INSERT INTO KhachHang VALUES(?, ?, ?, ?, ?)");
-	            statement.setString(1, kh.getMaND());
-	            statement.setString(2, kh.getTenND());
-	            statement.setBoolean(3, kh.getGioiTinh());
-	            statement.setString(4, kh.getSoDT());
-	            statement.setString(5, kh.getEmail());
+	            statement.setString(1, kh.getMaKH());
+	            statement.setString(2, kh.getTenKH());
+	            statement.setString(3, kh.getSdt());
+	            statement.setString(4, kh.getEmail());
+	            statement.setString(5, kh.getDiaChi());
 	            n = statement.executeUpdate();
 	        } catch (SQLException e) {
 	            e.printStackTrace();
@@ -92,21 +92,21 @@ import Entity.KhachHang;
 	        PreparedStatement stmt = null;
 	        int n=0;
 	        try {
-	            Connection con = ConnectDB.getConnection();
-	            stmt = con.prepareStatement("UPDATE KhachHang SET HoTen=?, GioiTinh=?, SDT=?, Email=? WHERE MaKH=?");
-	            stmt.setString(1, kh.getTenND());
-	            stmt.setBoolean(2, kh.getGioiTinh());
-	            stmt.setString(3, kh.getSoDT());
-	            stmt.setString(4, kh.getEmail());
-	            stmt.setString(5, kh.getMaND());
-	            n = stmt.executeUpdate();
+		            Connection con = ConnectDB.getConnection();
+		            stmt = con.prepareStatement("UPDATE KhachHang SET HoTen=, SDT=?, Email=?, DiaChi=? WHERE MaKH=?");
+		            stmt.setString(1, kh.getTenKH());
+		            stmt.setString(2, kh.getSdt());
+		            stmt.setString(3, kh.getEmail());
+		            stmt.setString(4, kh.getDiaChi());
+		            stmt.setString(5, kh.getMaKH());
+		            n = stmt.executeUpdate();
 	            } catch (SQLException e) {
-	            e.printStackTrace();
+	            	e.printStackTrace();
 	            } finally {
 	            try {
-	            stmt.close();
+	            	stmt.close();
 	            } catch (SQLException e) {
-	            e.printStackTrace();
+	            	e.printStackTrace();
 	            }
 	            }
 	            return n > 0;

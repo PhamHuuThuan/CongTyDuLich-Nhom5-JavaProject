@@ -41,6 +41,7 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import org.jdatepicker.DateModel;
@@ -237,14 +238,24 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		String cols[] = {"Mã Tour", "Tên Tour", "Số chỗ", "Ngày đi", "Ngày kết thúc", "Giá tour"};
 		tblModel = new DefaultTableModel(cols, 0);
 		tblTour = new JTable(tblModel);
+		tblTour.setFont(new Font("Arial", Font.PLAIN, 14));
+		tblTour.getTableHeader().setBackground(new Color(0, 0, 204));
+		tblTour.getTableHeader().setForeground(Color.WHITE);
+		tblTour.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
 		tblTour.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tblTour.getColumnModel().getColumn(0).setPreferredWidth(100);
-		tblTour.getColumnModel().getColumn(1).setPreferredWidth(360);
+		tblTour.getColumnModel().getColumn(1).setPreferredWidth(350);
 		tblTour.getColumnModel().getColumn(2).setPreferredWidth(100);
 		tblTour.getColumnModel().getColumn(3).setPreferredWidth(125);
 		tblTour.getColumnModel().getColumn(4).setPreferredWidth(125);
 		tblTour.getColumnModel().getColumn(5).setPreferredWidth(150);
 		tblTour.setSize(MAXIMIZED_HORIZ, 150);
+		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+		rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
+		tblTour.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
+		tblTour.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
+		tblTour.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
+		tblTour.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
 		JScrollPane tblScroll = new JScrollPane(tblTour,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ, 100));
 		panelThongTin.add(Box.createVerticalStrut(5));
@@ -272,7 +283,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		//hinh anh
 		JPanel panelImage = new JPanel(new GridLayout(1, 2));
 		panelThongTin.add(panelImage);
-		ImageIcon hinh1 = new ImageIcon("Img/ban.png");
+		ImageIcon hinh1 = new ImageIcon("Img/noimagefound.png");
 		Image image1 = hinh1.getImage();
 		Image scaledImage1 = image1.getScaledInstance(550, 300, Image.SCALE_SMOOTH);
 		ImageIcon scaledIcon1 = new ImageIcon(scaledImage1);
@@ -285,23 +296,14 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		JPanel panelImageTop = new JPanel(new GridLayout(1, 2));
 		panelImageRight.add(panelImageTop);
 		
-		ImageIcon hinh2 = new ImageIcon("Img/ban.png");
-		Image image2 = hinh1.getImage();
-		Image scaledImage2= image2.getScaledInstance(230, 140, Image.SCALE_SMOOTH);
+		Image scaledImage2= image1.getScaledInstance(230, 140, Image.SCALE_SMOOTH);
 		ImageIcon scaledIcon2 = new ImageIcon(scaledImage2);
 		lblHinh2 = new JLabel(scaledIcon2);
 		panelImageTop.add(lblHinh2);
-		
-		ImageIcon hinh3 = new ImageIcon("Img/ban.png");
-		Image image3 = hinh3.getImage();
-		Image scaledImage3= image3.getScaledInstance(230, 140, Image.SCALE_SMOOTH);
-		ImageIcon scaledIcon3 = new ImageIcon(scaledImage3);
-		lblHinh3 = new JLabel(scaledIcon3);
+		lblHinh3 = new JLabel(scaledIcon2);
 		panelImageTop.add(lblHinh3);
 		
-		ImageIcon hinh4 = new ImageIcon("Img/ban.png");
-		Image image4 = hinh4.getImage();
-		Image scaledImage4= image4.getScaledInstance(470, 150, Image.SCALE_SMOOTH);
+		Image scaledImage4= image1.getScaledInstance(470, 150, Image.SCALE_SMOOTH);
 		ImageIcon scaledIcon4 = new ImageIcon(scaledImage4);
 		lblHinh4 = new JLabel(scaledIcon4);
 		panelImageRight.add(lblHinh4);
@@ -539,6 +541,9 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		model.setValue(null);
 		model.setSelected(false);
 		txtTim.setText(null);
+		lblTourTim.setText(null);
+		dsTour = tourBus.getTourGanNhat();
+		dataArrayToTable(dsTour);
 	}
 	public void timTour() {
 		String maTim = txtTim.getText();
@@ -546,8 +551,9 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		if(dsTim!=null) {
 			dsTour = dsTim;
 			dataArrayToTable(dsTour);
+			lblTourTim.setText( "Đã tìm được "+dsTim.size()+" Tour.");
 		}else {
-			JOptionPane.showMessageDialog(this, "Không tìm thấy !");
+			lblTourTim.setText( "Không tìm thấy tour phù hợp !");
 		}
 	}
 	public void locTour() {
@@ -570,8 +576,9 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		if(dsLoc!=null) {
 			dsTour = dsLoc;
 			dataArrayToTable(dsTour);
+			lblTourTim.setText( "Đã tìm được "+dsLoc.size()+" Tour phù hợp.");
 		}else {
-			JOptionPane.showMessageDialog(this, "Không tìm thấy tour phù hợp !");
+			lblTourTim.setText( "Không tìm thấy tour phù hợp !");
 		}
 	}
 	@Override
