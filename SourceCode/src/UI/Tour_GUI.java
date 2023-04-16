@@ -59,7 +59,7 @@ import Entity.DiaDiem;
 import Entity.TourDuLich;
 
 public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
-	private JButton btnTrangChu, btnTour, btnDonHang, btnQuanLi, btnLoc, btnReset, btnTim, btnDatTour;
+	private JButton btnTrangChu, btnTour, btnDonHang, btnKH, btnQuanLi, btnNhanVien,btnLoc, btnReset, btnTim, btnDatTour;
 	private JTextField txtTim;
 	private JTextArea txtAMoTa;
 	private JLabel lblTourTim, lblTitleTour, lblGia, lblKhoiHanh, lblTime, lblNoiKH, lblCho, lblKhachSan, lblPhuongTien,lblNoiDen;
@@ -109,7 +109,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		btnTrangChu.setForeground(new Color(255, 255, 255));
 		
 		ImageIcon imgTour = new ImageIcon("img/search.png");
-		panelHead.add(Box.createHorizontalStrut(50));
+		panelHead.add(Box.createHorizontalStrut(20));
 		panelHead.add(btnTour = new JButton("Tour", imgTour));
 		btnTour.setFont(new Font("Arial", Font.BOLD, 14));
 		btnTour.setBackground(Color.WHITE);
@@ -118,12 +118,8 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		btnTour.setForeground(new Color(255, 255, 255));
 		btnTour.setPreferredSize(btnTrangChu.getPreferredSize());
 		
-		ImageIcon imgLogo = new ImageIcon("img/vietour_logo.png");
-		panelHead.add(Box.createHorizontalStrut(50));
-		panelHead.add(new JLabel(imgLogo));
-		
 		ImageIcon imgHD = new ImageIcon("img/ticket.png");
-		panelHead.add(Box.createHorizontalStrut(50));
+		panelHead.add(Box.createHorizontalStrut(20));
 		panelHead.add(btnDonHang = new JButton("Hóa Đơn", imgHD));
 		btnDonHang.setFont(new Font("Arial", Font.BOLD, 14));
 		btnDonHang.setBackground(Color.WHITE);
@@ -131,9 +127,23 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		btnDonHang.setBackground(new Color(60, 179, 113));
 		btnDonHang.setForeground(new Color(255, 255, 255));
 		btnDonHang.setPreferredSize(btnTrangChu.getPreferredSize());
+		
+		ImageIcon imgLogo = new ImageIcon("img/vietour_logo.png");
+		panelHead.add(Box.createHorizontalStrut(20));
+		panelHead.add(new JLabel(imgLogo));
+		
+		ImageIcon imgKH = new ImageIcon("img/customer.png");
+		panelHead.add(Box.createHorizontalStrut(20));
+		panelHead.add(btnKH = new JButton("Khách Hàng", imgKH));
+		btnKH.setFont(new Font("Arial", Font.BOLD, 14));
+		btnKH.setBackground(Color.WHITE);
+		btnKH.setBorder(new EmptyBorder(10, 10, 10, 10));
+		btnKH.setBackground(new Color(60, 179, 113));
+		btnKH.setForeground(new Color(255, 255, 255));
+		btnKH.setPreferredSize(btnKH.getPreferredSize());
 
 		ImageIcon imgQL = new ImageIcon("img/execute.png");
-		panelHead.add(Box.createHorizontalStrut(50));
+		panelHead.add(Box.createHorizontalStrut(20));
 		panelHead.add(btnQuanLi = new JButton("Quản lí", imgQL));
 		btnQuanLi.setFont(new Font("Arial", Font.BOLD, 14));
 		btnQuanLi.setBackground(Color.WHITE);
@@ -142,9 +152,13 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		btnQuanLi.setForeground(new Color(255, 255, 255));
 		btnQuanLi.setPreferredSize(btnTrangChu.getPreferredSize());
 		
-		JLabel lblUser = new JLabel("Nhân viên: abc");
-		panelHead.add(Box.createHorizontalStrut(50));
-		panelHead.add(lblUser);
+		panelHead.add(Box.createHorizontalStrut(20));
+		ImageIcon imgUser = new ImageIcon("img/user.png");
+		panelHead.add(btnNhanVien = new JButton(": Nguyễn Văn A", imgUser));
+		btnNhanVien.setBackground(new Color(250,  128, 144));
+		btnNhanVien.setForeground(Color.WHITE);
+		btnNhanVien.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+		btnNhanVien.setFont(new Font("Arial", Font.BOLD, 12));
 		
 		//form search
 		JPanel panelSearch = new JPanel();
@@ -313,8 +327,14 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		panelThongTin.add(panelBottom);
 		JPanel panelBotLeft = new JPanel(new GridLayout(2, 1));
 		panelBottom.add(panelBotLeft);
-		panelBotLeft.add(txtAMoTa = new JTextArea("Không có mô tả"));
+		txtAMoTa = new JTextArea("Không có mô tả");
+		JScrollPane scrollMoTa = new JScrollPane(txtAMoTa, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollMoTa.setPreferredSize(new Dimension(500, 50));
+		scrollMoTa.setBorder(BorderFactory.createEmptyBorder());
+		panelBotLeft.add(scrollMoTa);
 		txtAMoTa.setFont(new Font("Arial", Font.ITALIC, 14));
+		txtAMoTa.setWrapStyleWord(true);
+		txtAMoTa.setLineWrap(true);
 		
 		JPanel panelTT = new JPanel(new GridLayout(4, 2));
 		panelBotLeft.add(panelTT);
@@ -417,6 +437,8 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		btnTour.addActionListener(this);
 		btnDonHang.addActionListener(this);
 		btnQuanLi.addActionListener(this);
+		btnNhanVien.addActionListener(this);
+		btnKH.addActionListener(this);
 		
 		tblTour.addMouseListener(this);
 		btnLoc.addActionListener(this);
@@ -443,8 +465,13 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		}else if(o==btnDonHang) {
 			
 		}else if(o==btnQuanLi){
-			
+			setVisible(false);
+			new QuanLiTour_GUI().setVisible(true);
 		}else if(o==btnTour) {
+			
+		}else if(o==btnNhanVien){
+			
+		}else if(o==btnKH){
 			
 		}else if(o==btnLoc) {
 			locTour();

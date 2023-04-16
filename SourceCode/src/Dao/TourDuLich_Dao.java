@@ -26,7 +26,7 @@ public class TourDuLich_Dao {
 			String sql = "select top 5 * from TourDuLich where (SoCho-(select count(hd.MaTour)as soluong\r\n"
 					+ "from HoaDon hd join ThanhVien tv ON hd.SoHoaDon = tv.MaHD\r\n"
 					+ "where MaTour = MaTour\r\n"
-					+ "group by hd.MaTour)) > 0 and NgayDi > getDate() \r\n"
+					+ "group by hd.MaTour)) > 0 and NgayDi >= getDate() \r\n"
 					+ "order by NgayDi";
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
