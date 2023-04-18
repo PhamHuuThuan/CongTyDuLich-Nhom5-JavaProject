@@ -57,6 +57,7 @@ import BUS.Tour_Bus;
 import ConnectDB.ConnectDB;
 import Entity.DiaDiem;
 import Entity.TourDuLich;
+import Util.MaTourGenerator;
 
 public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 	private JButton btnTrangChu, btnTour, btnDonHang, btnKH, btnQuanLi, btnNhanVien,btnLoc, btnReset, btnTim, btnDatTour;
@@ -77,7 +78,6 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 	private Tour_Bus tourBus;
 	private HoaDon_Bus hdBus;
 	private DiaDiem_Bus ddBus;
-	
 	public Tour_GUI() {
 		setTitle("Vietour - Phan mem quan li tour du lich");
 		setSize(1200, 820);

@@ -113,8 +113,7 @@ public class TourDuLich_Dao {
 										+ "DiemKH = ? ,"
 										+ "DiemKT = ? ,"
 										+ "KhachSan = ? ,"
-										+ "Gia = ? ,"
-										+ "Anh = ? "
+										+ "Gia = ? "
 										+ "where MaTour = ? ");
 			stmt.setString(1, tourNew.getTenTour());
 			stmt.setString(2, tourNew.getMoTa());
@@ -126,11 +125,35 @@ public class TourDuLich_Dao {
 			stmt.setString(8, tourNew.getDiemDen().getMaDiaDiem());
 			stmt.setString(9, tourNew.getKhachSan());
 			stmt.setDouble(10, tourNew.getGia());
+			stmt.setString(11, tourNew.getMaTour());
+			n = stmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return n>0;
+	}
+	public boolean updateDSAnh(String maTour, ArrayList<String> listAnh) {
+		ConnectDB.getInstance();
+		PreparedStatement stmt = null;
+		int n = 0;
+		try {
+			Connection con = ConnectDB.getConnection();
+			stmt = con.prepareStatement("update TourDuLich Set "
+										+ "Anh = ? "
+										+ "where MaTour = ? ");
 			String dsAnh = "";
-			for(String str : tourNew.getDsAnh())
+			for(String str : listAnh)
 				dsAnh+=str+";";
-			stmt.setString(11, dsAnh);
-			stmt.setString(12, tourNew.getMaTour());
+			stmt.setString(1, dsAnh);
+			stmt.setString(2, maTour);
 			n = stmt.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -206,5 +229,20 @@ public class TourDuLich_Dao {
 			e.printStackTrace();
 		}
 		return dsTour;
+	}
+	public String getMaTourMax() {
+		String maTour = "";
+		ConnectDB.getInstance();
+		try {
+			Connection con = ConnectDB.getConnection();
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select max(MaTour) as MAX from TourDuLich");
+			while(rs.next())
+				maTour = rs.getString("MAX");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return maTour;
 	}
 }
