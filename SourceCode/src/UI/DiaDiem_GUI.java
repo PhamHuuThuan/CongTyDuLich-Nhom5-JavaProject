@@ -341,7 +341,7 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 			
 		}else if(o==btnTour) {
 			setVisible(false);
-			new Tour_GUI().setVisible(true);
+			new QuanLiTour_GUI().setVisible(true);
 		}
 		
 	}
