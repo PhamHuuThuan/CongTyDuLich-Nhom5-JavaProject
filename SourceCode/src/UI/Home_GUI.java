@@ -136,5 +136,6 @@ public class Home_GUI extends JFrame implements ActionListener{
 			setVisible(false);
 			new KhachHang_GUI().setVisible(true);
 		}
+		
 	}
 }
