@@ -57,6 +57,7 @@ import BUS.Tour_Bus;
 import ConnectDB.ConnectDB;
 import Entity.DiaDiem;
 import Entity.TourDuLich;
+import Util.MaTourGenerator;
 
 public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 	private JButton btnTrangChu, btnTour, btnDonHang, btnKH, btnQuanLi, btnNhanVien,btnLoc, btnReset, btnTim, btnDatTour;
@@ -77,7 +78,6 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 	private Tour_Bus tourBus;
 	private HoaDon_Bus hdBus;
 	private DiaDiem_Bus ddBus;
-	
 	public Tour_GUI() {
 		setTitle("Vietour - Phan mem quan li tour du lich");
 		setSize(1200, 820);
@@ -473,8 +473,6 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		}else if(o==btnNhanVien){
 			
 		}else if(o==btnKH){
-			setVisible(false);
-			new KhachHang_GUI().setVisible(true);
 		}else if(o==btnLoc) {
 			locTour();
 		}else if(o==btnReset) {
@@ -536,29 +534,33 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		lblNoiDen.setText(dsTour.get(r).getDiemDen().getTenDiaDiem());
 		
 		//hien thi hinh anh
-		ImageIcon hinh1 = new ImageIcon("Img/"+dsTour.get(r).getDsAnh().get(0));
-		Image image1 = hinh1.getImage();
-		Image scaledImage1 = image1.getScaledInstance(550, 300, Image.SCALE_SMOOTH);
-		ImageIcon scaledIcon1 = new ImageIcon(scaledImage1);
-		lblHinh1.setIcon(scaledIcon1);
-		
-		ImageIcon hinh2 = new ImageIcon("Img/"+dsTour.get(r).getDsAnh().get(1));
-		Image image2 = hinh2.getImage();
-		Image scaledImage2= image2.getScaledInstance(230, 140, Image.SCALE_SMOOTH);
-		ImageIcon scaledIcon2 = new ImageIcon(scaledImage2);
-		lblHinh2.setIcon(scaledIcon2);
-
-		ImageIcon hinh3 = new ImageIcon("Img/"+dsTour.get(r).getDsAnh().get(2));
-		Image image3 = hinh3.getImage();
-		Image scaledImage3= image3.getScaledInstance(230, 140, Image.SCALE_SMOOTH);
-		ImageIcon scaledIcon3 = new ImageIcon(scaledImage3);
-		lblHinh3.setIcon(scaledIcon3);
-		
-		ImageIcon hinh4 = new ImageIcon("Img/"+dsTour.get(r).getDsAnh().get(3));
-		Image image4 = hinh4.getImage();
-		Image scaledImage4= image4.getScaledInstance(470, 150, Image.SCALE_SMOOTH);
-		ImageIcon scaledIcon4 = new ImageIcon(scaledImage4);
-		lblHinh4.setIcon(scaledIcon4);
+		try {
+			ImageIcon hinh1 = new ImageIcon(dsTour.get(r).getDsAnh().get(0));
+			Image image1 = hinh1.getImage();
+			Image scaledImage1 = image1.getScaledInstance(550, 300, Image.SCALE_SMOOTH);
+			ImageIcon scaledIcon1 = new ImageIcon(scaledImage1);
+			lblHinh1.setIcon(scaledIcon1);
+			
+			ImageIcon hinh2 = new ImageIcon(dsTour.get(r).getDsAnh().get(1));
+			Image image2 = hinh2.getImage();
+			Image scaledImage2= image2.getScaledInstance(230, 140, Image.SCALE_SMOOTH);
+			ImageIcon scaledIcon2 = new ImageIcon(scaledImage2);
+			lblHinh2.setIcon(scaledIcon2);
+	
+			ImageIcon hinh3 = new ImageIcon(dsTour.get(r).getDsAnh().get(2));
+			Image image3 = hinh3.getImage();
+			Image scaledImage3= image3.getScaledInstance(230, 140, Image.SCALE_SMOOTH);
+			ImageIcon scaledIcon3 = new ImageIcon(scaledImage3);
+			lblHinh3.setIcon(scaledIcon3);
+			
+			ImageIcon hinh4 = new ImageIcon(dsTour.get(r).getDsAnh().get(3));
+			Image image4 = hinh4.getImage();
+			Image scaledImage4= image4.getScaledInstance(470, 150, Image.SCALE_SMOOTH);
+			ImageIcon scaledIcon4 = new ImageIcon(scaledImage4);
+			lblHinh4.setIcon(scaledIcon4);
+		} catch (Exception e1) {
+			// TODO: handle exception
+		}
 	}
 	public void reset() {
 		cmbDi.setSelectedIndex(0);
