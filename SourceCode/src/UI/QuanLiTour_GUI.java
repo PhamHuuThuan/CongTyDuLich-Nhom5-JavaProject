@@ -90,6 +90,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 	private ArrayList<TourDuLich> dsTour;
 	private ArrayList<String> dsAnh;
 	private MaTourGenerator maTourGenerator;
+	
 	public QuanLiTour_GUI() {
 		setTitle("Vietour - Phan mem quan li tour du lich");
 		setSize(1200, 820);
