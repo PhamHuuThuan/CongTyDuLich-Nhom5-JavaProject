@@ -121,7 +121,8 @@ public class Home_GUI extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if(o==btnTrangChu) {
-			
+			setVisible(false);
+			new Home_GUI().setVisible(true);
 		}else if(o==btnDonHang) {
 			
 		}else if(o==btnQuanLi){
