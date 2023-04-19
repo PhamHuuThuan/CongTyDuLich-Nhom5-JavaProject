@@ -343,6 +343,7 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 			setVisible(false);
 			new Tour_GUI().setVisible(true);
 		}
+		
 	}
 
 	@Override
