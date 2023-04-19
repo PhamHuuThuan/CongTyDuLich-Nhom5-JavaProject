@@ -133,7 +133,8 @@ public class Home_GUI extends JFrame implements ActionListener{
 		}else if(o==btnNhanVien){
 			
 		}else if(o==btnKH){
-			
+			setVisible(false);
+			new KhachHang_GUI().setVisible(true);
 		}
 	}
 }

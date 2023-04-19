@@ -531,11 +531,13 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener{
 			setVisible(false);
 			new Home_GUI().setVisible(true);
 		}else if(o==btnDiaDiem) {
-			
+			setVisible(false);
+			new DiaDiem_GUI().setVisible(true);
 		}else if(o==btnNhanVien){
 			
 		}else if(o==btnTour) {
-			
+			setVisible(false);
+			new Tour_GUI().setVisible(true);
 		}
 	}
 	public static void main(String[] args) {

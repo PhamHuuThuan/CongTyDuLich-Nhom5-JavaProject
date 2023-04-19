@@ -468,11 +468,13 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 			setVisible(false);
 			new QuanLiTour_GUI().setVisible(true);
 		}else if(o==btnTour) {
-			
+			setVisible(false);
+			new Tour_GUI().setVisible(true);
 		}else if(o==btnNhanVien){
 			
 		}else if(o==btnKH){
-			
+			setVisible(false);
+			new KhachHang_GUI().setVisible(true);
 		}else if(o==btnLoc) {
 			locTour();
 		}else if(o==btnReset) {
