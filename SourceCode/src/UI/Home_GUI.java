@@ -28,6 +28,7 @@ public class Home_GUI extends JFrame implements ActionListener{
 		setTitle("Vietour - Phan mem quan li tour du lich");
 		setSize(1200, 820);
 		setLocationRelativeTo(null);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("img/travel.png"));
 		createGUI();
 	}

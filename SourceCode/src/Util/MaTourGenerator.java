@@ -13,6 +13,8 @@ public class MaTourGenerator {
 			maNew+='0';
 			i/=10;
 		}
+		if((ma+1)%10==0)
+			maNew = maNew.substring(0, maNew.length()-1);
 		maNew += String.valueOf(ma+1);
 		System.out.println(maPre+" | "+ma+" | "+maNew);
 		return maNew;

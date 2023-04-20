@@ -82,6 +82,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		setTitle("Vietour - Phan mem quan li tour du lich");
 		setSize(1200, 820);
 		setLocationRelativeTo(null);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("img/travel.png"));
 		dsTour = new ArrayList<TourDuLich>();
