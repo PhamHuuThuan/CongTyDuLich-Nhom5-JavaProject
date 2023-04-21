@@ -11,6 +11,7 @@ import java.awt.ScrollPane;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.Date;
@@ -21,6 +22,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Properties;
 
 import javax.swing.BorderFactory;
@@ -43,6 +46,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import org.jdatepicker.DateModel;
 import org.jdatepicker.JDatePicker;
@@ -73,6 +77,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 	private JSpinner spinner;
 	private DefaultTableModel tblModel;
 	private JTable tblTour;
+	private JTableHeader tblHead;
 	private ArrayList<TourDuLich> dsTour;
 	private ArrayList<DiaDiem> dsDiemDi, dsDiemDen;
 	private Tour_Bus tourBus;
@@ -245,6 +250,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		
 		panelTop.add(txtTim=new JTextField(20));
 		txtTim.setFont(new Font("Arial", Font.PLAIN, 16));
+		txtTim.setToolTipText("Nhập mã tour hoặc tên tour để tìm.");
 		panelTop.add(btnTim = new JButton("Tìm"));
 		btnTim.setForeground(Color.WHITE);
 		btnTim.setBackground(new Color(30, 144, 255));
@@ -254,9 +260,15 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		tblModel = new DefaultTableModel(cols, 0);
 		tblTour = new JTable(tblModel);
 		tblTour.setFont(new Font("Arial", Font.PLAIN, 14));
-		tblTour.getTableHeader().setBackground(new Color(0, 0, 204));
-		tblTour.getTableHeader().setForeground(Color.WHITE);
-		tblTour.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+		
+		tblHead = new JTableHeader(tblTour.getColumnModel());
+		tblHead.setReorderingAllowed(false);
+		tblHead.setBackground(new Color(30, 144, 255));
+		tblHead.setForeground(Color.WHITE);
+		tblHead.setFont(new Font("Arial", Font.BOLD, 14));
+		tblTour.setTableHeader(tblHead);
+		
+		tblTour.setRowHeight(20);
 		tblTour.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tblTour.getColumnModel().getColumn(0).setPreferredWidth(100);
 		tblTour.getColumnModel().getColumn(1).setPreferredWidth(350);
@@ -446,6 +458,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		btnTim.addActionListener(this);
 		btnDatTour.addActionListener(this);
 		btnReset.addActionListener(this);
+		tblHead.addMouseListener(this);
 		
 		dsTour = tourBus.getTourGanNhat();
 		dataArrayToTable(dsTour);
@@ -492,79 +505,117 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 	}
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		int r = tblTour.getSelectedRow();
-		lblTitleTour.setText("["+tblModel.getValueAt(r, 0)+"] "+ tblModel.getValueAt(r, 1));
-		double number = Double.parseDouble(tblModel.getValueAt(r, 5).toString());
-		DecimalFormat formatter = new DecimalFormat("#,###");
-		String formattedNumber = formatter.format(number);
-		lblGia.setText(formattedNumber+"đ/khách");
-		
-		//format Ngay di
-		String timeKH = tblModel.getValueAt(r, 3).toString();
-		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
-		SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
-		java.util.Date dateKH = null;
-		try {
-			dateKH = inputFormat.parse(timeKH);
-		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		String output = outputFormat.format(dateKH);
-		lblKhoiHanh.setText(output);
-		
-		//tinh so ngay
-		java.util.Date startDate = null, endDate = null;
-		
-		try {
-			startDate = inputFormat.parse(tblModel.getValueAt(r, 3).toString());
-			endDate = inputFormat.parse(tblModel.getValueAt(r, 4).toString());
-		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		long differenceInMillis = endDate.getTime() - startDate.getTime();
-		long differenceInDays = differenceInMillis / (1000 * 60 * 60 * 24);
-		lblTime.setText(String.valueOf(differenceInDays) + "ngày");
-		
-		lblNoiKH.setText(dsTour.get(r).getDiemKH().getTenDiaDiem());
-		
-		int soCho = dsTour.get(r).getSoCho();
-		lblCho.setText(String.valueOf(soCho-hdBus.getSoLuongKhach(dsTour.get(r).getMaTour())));
-		
-		txtAMoTa.setText(dsTour.get(r).getMoTa());
-		lblPhuongTien.setText(dsTour.get(r).getPhuongTien());
-		lblKhachSan.setText(dsTour.get(r).getKhachSan());
-		lblNoiDen.setText(dsTour.get(r).getDiemDen().getTenDiaDiem());
-		
-		//hien thi hinh anh
-		try {
-			ImageIcon hinh1 = new ImageIcon(dsTour.get(r).getDsAnh().get(0));
-			Image image1 = hinh1.getImage();
-			Image scaledImage1 = image1.getScaledInstance(550, 300, Image.SCALE_SMOOTH);
-			ImageIcon scaledIcon1 = new ImageIcon(scaledImage1);
-			lblHinh1.setIcon(scaledIcon1);
+		Object o = e.getSource();
+		if(o==tblTour) {
+			int r = tblTour.getSelectedRow();
+			lblTitleTour.setText("["+tblModel.getValueAt(r, 0)+"] "+ tblModel.getValueAt(r, 1));
+			double number = Double.parseDouble(tblModel.getValueAt(r, 5).toString());
+			DecimalFormat formatter = new DecimalFormat("#,###");
+			String formattedNumber = formatter.format(number);
+			lblGia.setText(formattedNumber+"đ/khách");
 			
-			ImageIcon hinh2 = new ImageIcon(dsTour.get(r).getDsAnh().get(1));
-			Image image2 = hinh2.getImage();
-			Image scaledImage2= image2.getScaledInstance(230, 140, Image.SCALE_SMOOTH);
-			ImageIcon scaledIcon2 = new ImageIcon(scaledImage2);
-			lblHinh2.setIcon(scaledIcon2);
-	
-			ImageIcon hinh3 = new ImageIcon(dsTour.get(r).getDsAnh().get(2));
-			Image image3 = hinh3.getImage();
-			Image scaledImage3= image3.getScaledInstance(230, 140, Image.SCALE_SMOOTH);
-			ImageIcon scaledIcon3 = new ImageIcon(scaledImage3);
-			lblHinh3.setIcon(scaledIcon3);
+			//format Ngay di
+			String timeKH = tblModel.getValueAt(r, 3).toString();
+			SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
+			java.util.Date dateKH = null;
+			try {
+				dateKH = inputFormat.parse(timeKH);
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			String output = outputFormat.format(dateKH);
+			lblKhoiHanh.setText(output);
 			
-			ImageIcon hinh4 = new ImageIcon(dsTour.get(r).getDsAnh().get(3));
-			Image image4 = hinh4.getImage();
-			Image scaledImage4= image4.getScaledInstance(470, 150, Image.SCALE_SMOOTH);
-			ImageIcon scaledIcon4 = new ImageIcon(scaledImage4);
-			lblHinh4.setIcon(scaledIcon4);
-		} catch (Exception e1) {
-			// TODO: handle exception
+			//tinh so ngay
+			java.util.Date startDate = null, endDate = null;
+			
+			try {
+				startDate = inputFormat.parse(tblModel.getValueAt(r, 3).toString());
+				endDate = inputFormat.parse(tblModel.getValueAt(r, 4).toString());
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			long differenceInMillis = endDate.getTime() - startDate.getTime();
+			long differenceInDays = differenceInMillis / (1000 * 60 * 60 * 24);
+			lblTime.setText(String.valueOf(differenceInDays) + "ngày");
+			
+			lblNoiKH.setText(dsTour.get(r).getDiemKH().getTenDiaDiem());
+			
+			int soCho = dsTour.get(r).getSoCho();
+			lblCho.setText(String.valueOf(soCho-hdBus.getSoLuongKhach(dsTour.get(r).getMaTour())));
+			
+			txtAMoTa.setText(dsTour.get(r).getMoTa());
+			lblPhuongTien.setText(dsTour.get(r).getPhuongTien());
+			lblKhachSan.setText(dsTour.get(r).getKhachSan());
+			lblNoiDen.setText(dsTour.get(r).getDiemDen().getTenDiaDiem());
+			
+			//hien thi hinh anh
+			try {
+				ImageIcon hinh1 = new ImageIcon(dsTour.get(r).getDsAnh().get(0));
+				Image image1 = hinh1.getImage();
+				Image scaledImage1 = image1.getScaledInstance(550, 300, Image.SCALE_SMOOTH);
+				ImageIcon scaledIcon1 = new ImageIcon(scaledImage1);
+				lblHinh1.setIcon(scaledIcon1);
+				
+				ImageIcon hinh2 = new ImageIcon(dsTour.get(r).getDsAnh().get(1));
+				Image image2 = hinh2.getImage();
+				Image scaledImage2= image2.getScaledInstance(230, 140, Image.SCALE_SMOOTH);
+				ImageIcon scaledIcon2 = new ImageIcon(scaledImage2);
+				lblHinh2.setIcon(scaledIcon2);
+		
+				ImageIcon hinh3 = new ImageIcon(dsTour.get(r).getDsAnh().get(2));
+				Image image3 = hinh3.getImage();
+				Image scaledImage3= image3.getScaledInstance(230, 140, Image.SCALE_SMOOTH);
+				ImageIcon scaledIcon3 = new ImageIcon(scaledImage3);
+				lblHinh3.setIcon(scaledIcon3);
+				
+				ImageIcon hinh4 = new ImageIcon(dsTour.get(r).getDsAnh().get(3));
+				Image image4 = hinh4.getImage();
+				Image scaledImage4= image4.getScaledInstance(470, 150, Image.SCALE_SMOOTH);
+				ImageIcon scaledIcon4 = new ImageIcon(scaledImage4);
+				lblHinh4.setIcon(scaledIcon4);
+			} catch (Exception e1) {
+				// TODO: handle exception
+			}
+		}else if(o==tblHead) {
+			int col = tblHead.columnAtPoint(e.getPoint());
+			switch(col) {
+			case 0:
+				Collections.sort(dsTour, Comparator.comparing(tour->((TourDuLich)tour).getMaTour()));
+				break;
+			case 1:
+				Collections.sort(dsTour, Comparator.comparing(tour->((TourDuLich)tour).getTenTour()));
+				break;
+			case 2:
+				Collections.sort(dsTour, Comparator.comparing(tour->((TourDuLich)tour).getSoCho()));
+				break;
+			case 3:
+				Collections.sort(dsTour, Comparator.comparing(tour->((TourDuLich)tour).getNgayDi()));
+				break;
+			case 4:
+				Collections.sort(dsTour, Comparator.comparing(tour->((TourDuLich)tour).getNgayKetThuc()));
+				break;
+			case 5:
+				Collections.sort(dsTour, Comparator.comparing(tour->((TourDuLich)tour).getGia()));
+				break;
+			}
+			paintColumnSelected(col);
+			dataArrayToTable(dsTour);
 		}
+		
+	}
+	public void paintColumnSelected(int col) {
+		DefaultTableCellRenderer colorWhiteRenderer = new DefaultTableCellRenderer();
+		colorWhiteRenderer.setBackground(Color.WHITE);
+		for(int i=0;i<6;i++) {
+			tblTour.getColumnModel().getColumn(i).setCellRenderer(colorWhiteRenderer);
+		}
+		DefaultTableCellRenderer colorSelectedRenderer = new DefaultTableCellRenderer();
+		colorSelectedRenderer.setBackground(new Color(255, 255, 224));
+		tblTour.getColumnModel().getColumn(col).setCellRenderer(colorSelectedRenderer);
 	}
 	public void reset() {
 		cmbDi.setSelectedIndex(0);
