@@ -135,4 +135,32 @@ public class HoaDon_Dao {
 		}
 		return n>0;
 	}
+	public int soLuongDat(String maTour) {
+		int soLuongDat = 0;
+		ConnectDB.getInstance();
+		PreparedStatement stmt = null;
+		int n=0;
+		try {
+			Connection con = ConnectDB.getConnection();
+			stmt = con.prepareStatement("select count(hd.MaTour) as soluong\r\n"
+					+ "from HoaDon hd join ThanhVien tv ON hd.SoHoaDon = tv.MaHD\r\n"
+					+ "where MaTour = ?\r\n"
+					+ "group by hd.MaTour");
+			stmt.setString(1, maTour);
+			ResultSet rs = stmt.executeQuery();
+			if(rs.next())
+				soLuongDat = rs.getInt("soluong");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return soLuongDat;
+	}
 }

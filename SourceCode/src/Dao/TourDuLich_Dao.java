@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import ConnectDB.ConnectDB;
@@ -17,12 +18,16 @@ public class TourDuLich_Dao {
 	public TourDuLich_Dao(){
 		
 	}
-	public ArrayList<TourDuLich> getAllTour(){
+	public ArrayList<TourDuLich> getTourGanNhat(){
 		ArrayList<TourDuLich> dsTour = new ArrayList<TourDuLich>();
 		ConnectDB.getInstance();
 		try {
 			Connection con = ConnectDB.getConnection();
-			String sql = "select * from TourDuLich";
+			String sql = "select top 5 * from TourDuLich where (SoCho-(select count(hd.MaTour)as soluong\r\n"
+					+ "from HoaDon hd join ThanhVien tv ON hd.SoHoaDon = tv.MaHD\r\n"
+					+ "where MaTour = MaTour\r\n"
+					+ "group by hd.MaTour)) > 0 and NgayDi >= getDate() \r\n"
+					+ "order by NgayDi";
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()) {
@@ -108,8 +113,7 @@ public class TourDuLich_Dao {
 										+ "DiemKH = ? ,"
 										+ "DiemKT = ? ,"
 										+ "KhachSan = ? ,"
-										+ "Gia = ? ,"
-										+ "Anh = ? "
+										+ "Gia = ? "
 										+ "where MaTour = ? ");
 			stmt.setString(1, tourNew.getTenTour());
 			stmt.setString(2, tourNew.getMoTa());
@@ -121,11 +125,7 @@ public class TourDuLich_Dao {
 			stmt.setString(8, tourNew.getDiemDen().getMaDiaDiem());
 			stmt.setString(9, tourNew.getKhachSan());
 			stmt.setDouble(10, tourNew.getGia());
-			String dsAnh = "";
-			for(String str : tourNew.getDsAnh())
-				dsAnh+=str+";";
-			stmt.setString(11, dsAnh);
-			stmt.setString(12, tourNew.getMaTour());
+			stmt.setString(11, tourNew.getMaTour());
 			n = stmt.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -140,29 +140,109 @@ public class TourDuLich_Dao {
 		}
 		return n>0;
 	}
-	public static void main(String[] args) {
-		for(TourDuLich x : new TourDuLich_Dao().getAllTour()) {
-			System.out.println(x.getMaTour() + "|" + x.getTenTour() + "|" + x.getSoCho() + "|" + x.getDiemDen().getTenDiaDiem() + "|" + x.getDiemKH().getTenDiaDiem() + "|" + x.getNgayDi() + "|" + x.getNgayKetThuc());
+	public boolean updateDSAnh(String maTour, ArrayList<String> listAnh) {
+		ConnectDB.getInstance();
+		PreparedStatement stmt = null;
+		int n = 0;
+		try {
+			Connection con = ConnectDB.getConnection();
+			stmt = con.prepareStatement("update TourDuLich Set "
+										+ "Anh = ? "
+										+ "where MaTour = ? ");
+			String dsAnh = "";
+			for(String str : listAnh)
+				dsAnh+=str+";";
+			stmt.setString(1, dsAnh);
+			stmt.setString(2, maTour);
+			n = stmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-//		DiaDiem diemKH = new DiaDiem("DD01", "Gia Lai");
-//		DiaDiem diemKT = new DiaDiem("DD04", "Phu Quoc");
-//		ArrayList<String> dsAnh = new ArrayList<>();
-//		dsAnh.add("hinh3.png");
-//		dsAnh.add("hinh4.png");
-//		TourDuLich tour = new TourDuLich("TN001", "Gia Lai - Phu Quoc", "abc", 40, "Xe khach", new Date(2023, 06, 1), new Date(2023, 06, 4), diemKH, diemKT, "Khach san 4 sao", 5444333.222, dsAnh);
-//		if(new TourDuLich_Dao().addTour(tour)) {
-//			System.out.println("Them thanh cong!");
-//		}
-//		if(new TourDuLich_Dao().deleteTour("TN001"))
-//			System.out.println("Xoa thanh cong!");
-//		DiaDiem diemKH = new DiaDiem("DD01", "Gia Lai");
-//		DiaDiem diemKT = new DiaDiem("DD04", "Phu Quoc");
-//		ArrayList<String> dsAnh = new ArrayList<>();
-//		dsAnh.add("hinh3.png");
-//		dsAnh.add("hinh4.png");
-//		TourDuLich tour = new TourDuLich("TN001", "Gia Lai - Phu Quoc", "update mota", 50, "Xe khach", new Date(123, 06, 1), new Date(123, 06, 4), diemKH, diemKT, "Khach san 4 sao", 5444333.222, dsAnh);
-//		if(new TourDuLich_Dao().updateTour(tour)) {
-//			System.out.println("Sua thanh cong!");
-//		}
+		return n>0;
+	}
+	public ArrayList<TourDuLich> timTour(String maTim){
+		ArrayList<TourDuLich> dsTour = new ArrayList<TourDuLich>();
+		PreparedStatement stmt = null;
+		ConnectDB.getInstance();
+		try {
+			Connection con = ConnectDB.getConnection();
+			stmt = con.prepareStatement("select * from TourDuLich where MaTour like ? or TenTour like ?");
+			stmt.setString(1, "%"+maTim+"%");
+			stmt.setString(2, "%"+maTim+"%");
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()) {
+				DiaDiem diemKH = new DiaDiem_Dao().getDiaDiemTheoMa(rs.getString("DiemKH"));
+				DiaDiem diemKT = new DiaDiem_Dao().getDiaDiemTheoMa(rs.getString("DiemKT"));
+				String[] array = rs.getString("Anh").split(";");
+				List<String> list = Arrays.asList(array);
+				ArrayList<String> dsAnh = new ArrayList<>(list);
+				TourDuLich tour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getString("MoTa"), rs.getInt("SoCho"), rs.getString("PhuongTien"), rs.getDate("NgayDi"), rs.getDate("NgayKetThuc"), diemKH, diemKT, rs.getString("KhachSan"), rs.getDouble("Gia"), dsAnh);
+				dsTour.add(tour);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return dsTour;
+	}
+	public ArrayList<TourDuLich> locTour(String diemDi, String diemDen, int soNgay, java.sql.Date ngayDi, int soNguoi, String phuongTien){
+		ArrayList<TourDuLich> dsTour = new ArrayList<TourDuLich>();
+		PreparedStatement stmt = null;
+		ConnectDB.getInstance();
+		try {
+			Connection con = ConnectDB.getConnection();
+			String sql = "select * from TourDuLich\r\n"
+					+ "		where (SoCho-(select count(hd.MaTour)as soluong\r\n"
+					+ "		from HoaDon hd join ThanhVien tv ON hd.SoHoaDon = tv.MaHD\r\n"
+					+ "		where MaTour = MaTour\r\n"
+					+ "		group by hd.MaTour)) >= ? and NgayDi >= ? and DiemKH like ? and DiemKT like ? \r\n"
+					+ "		and PhuongTien like ? \r\n"
+					+ "		and DATEDIFF(day, NgayDi, NgayKetThuc) = ?";
+			stmt = con.prepareStatement(sql);
+			
+			stmt.setInt(1, soNguoi);
+			stmt.setDate(2, ngayDi);
+			stmt.setString(3, "%"+diemDi+"%");
+			stmt.setString(4, "%"+diemDen+"%");
+			stmt.setString(5, "%"+phuongTien+"%");
+			stmt.setInt(6, soNgay);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()) {
+				DiaDiem diemKH = new DiaDiem_Dao().getDiaDiemTheoMa(rs.getString("DiemKH"));
+				DiaDiem diemKT = new DiaDiem_Dao().getDiaDiemTheoMa(rs.getString("DiemKT"));
+				String[] array = rs.getString("Anh").split(";");
+				List<String> list = Arrays.asList(array);
+				ArrayList<String> dsAnh = new ArrayList<>(list);
+				TourDuLich tour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getString("MoTa"), rs.getInt("SoCho"), rs.getString("PhuongTien"), rs.getDate("NgayDi"), rs.getDate("NgayKetThuc"), diemKH, diemKT, rs.getString("KhachSan"), rs.getDouble("Gia"), dsAnh);
+				dsTour.add(tour);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return dsTour;
+	}
+	public String getMaTourMax() {
+		String maTour = "";
+		ConnectDB.getInstance();
+		try {
+			Connection con = ConnectDB.getConnection();
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select max(MaTour) as MAX from TourDuLich");
+			while(rs.next())
+				maTour = rs.getString("MAX");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return maTour;
 	}
 }
