@@ -250,7 +250,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		
 		panelTop.add(txtTim=new JTextField(20));
 		txtTim.setFont(new Font("Arial", Font.PLAIN, 16));
-		txtTim.setToolTipText("Nhập mã tour hoặc tên tour để tìm.");
+		txtTim.setToolTipText("Tìm theo mã tour hoặc tên tour");
 		panelTop.add(btnTim = new JButton("Tìm"));
 		btnTim.setForeground(Color.WHITE);
 		btnTim.setBackground(new Color(30, 144, 255));
@@ -464,12 +464,6 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		dataArrayToTable(dsTour);
 		
 	}
-	public void dataArrayToTable(ArrayList<TourDuLich> dsTour) {
-		tblModel.setRowCount(0);
-		for(TourDuLich x : dsTour) {
-			tblModel.addRow(new Object[] {x.getMaTour(), x.getTenTour(), x.getSoCho(), x.getNgayDi(), x.getNgayKetThuc(), x.getGia()});
-		}
-	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
@@ -605,7 +599,12 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 			paintColumnSelected(col);
 			dataArrayToTable(dsTour);
 		}
-		
+	}
+	public void dataArrayToTable(ArrayList<TourDuLich> dsTour) {
+		tblModel.setRowCount(0);
+		for(TourDuLich x : dsTour) {
+			tblModel.addRow(new Object[] {x.getMaTour(), x.getTenTour(), x.getSoCho(), x.getNgayDi(), x.getNgayKetThuc(), x.getGia()});
+		}
 	}
 	public void paintColumnSelected(int col) {
 		DefaultTableCellRenderer colorWhiteRenderer = new DefaultTableCellRenderer();
