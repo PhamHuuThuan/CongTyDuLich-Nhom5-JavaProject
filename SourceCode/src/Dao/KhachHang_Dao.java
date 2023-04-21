@@ -22,11 +22,11 @@ import Entity.KhachHang;
 	            ResultSet rs = statement.executeQuery(query);
 	            while(rs.next()) {
 	                String maKH = rs.getString("MaKH");
-	                String hoTen = rs.getString("HoTen");
-	                String gioiTinh = rs.getString("SDT");
-	                String sdt = rs.getString("Email");
-	                String email = rs.getString("DiaChi");
-	                KhachHang kh = new KhachHang(maKH, hoTen, sdt, email, email);
+	                String hoTen = rs.getString("TenKH");
+	                String sdt = rs.getString("SDT");
+	                String diaChi = rs.getString("DiaChi");
+	                String email = rs.getString("Email");
+	                KhachHang kh = new KhachHang(maKH, hoTen, sdt, email, diaChi);
 	                dsKH.add(kh);
 	            }
 	        } catch (SQLException e) {
