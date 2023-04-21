@@ -2,7 +2,7 @@ package Util;
 
 import BUS.Tour_Bus;
 
-public class MaTourGenerator {
+public class CodeGenerator {
 	Tour_Bus tourBus = new Tour_Bus();
 	public String sinhMaTour() {
 		String maNew = "T";

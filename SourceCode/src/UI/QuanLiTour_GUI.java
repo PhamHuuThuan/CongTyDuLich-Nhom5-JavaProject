@@ -70,7 +70,7 @@ import BUS.Tour_Bus;
 import ConnectDB.ConnectDB;
 import Entity.DiaDiem;
 import Entity.TourDuLich;
-import Util.MaTourGenerator;
+import Util.CodeGenerator;
 
 public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListener{
 	private JButton btnTrangChu, btnTour, btnDiaDiem, btnThongKe, btnNhanVien;
@@ -93,7 +93,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 	private ArrayList<DiaDiem> dsDiemDen;
 	private ArrayList<TourDuLich> dsTour;
 	private ArrayList<String> dsAnh;
-	private MaTourGenerator maTourGenerator;
+	private CodeGenerator maTourGenerator;
 	
 	public QuanLiTour_GUI() {
 		setTitle("Vietour - Phan mem quan li tour du lich");
@@ -114,7 +114,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		hd_Bus  = new HoaDon_Bus();
 		dd_Bus = new DiaDiem_Bus();
 		tour_Bus = new Tour_Bus();
-		maTourGenerator = new MaTourGenerator();
+		maTourGenerator = new CodeGenerator();
 		//menu
 		JPanel panelHead = new JPanel();
 		panelHead.setLayout(new FlowLayout());

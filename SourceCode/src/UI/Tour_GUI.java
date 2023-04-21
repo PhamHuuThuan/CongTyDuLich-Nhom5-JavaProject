@@ -61,7 +61,7 @@ import BUS.Tour_Bus;
 import ConnectDB.ConnectDB;
 import Entity.DiaDiem;
 import Entity.TourDuLich;
-import Util.MaTourGenerator;
+import Util.CodeGenerator;
 
 public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 	private JButton btnTrangChu, btnTour, btnDonHang, btnKH, btnQuanLi, btnNhanVien,btnLoc, btnReset, btnTim, btnDatTour;
