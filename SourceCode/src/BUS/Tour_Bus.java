@@ -25,7 +25,14 @@ public class Tour_Bus {
 		return tour_Dao.locTour(diemDi, diemDen, soNgay, date, soNguoi, phuongTien);
 	}
 	public boolean deleteTour(String maTour) {
-		return tour_Dao.deleteTour(maTour);
+		TourDuLich tour = tour_Dao.timTour(maTour).get(0);
+		boolean kq = tour_Dao.deleteTour(maTour);
+		if(kq = true) {
+			String filePath = tour.getDsAnh().get(0).substring(0, 9);
+			File file = new File(filePath);
+			deleteFolder(file);
+		}
+		return kq;
 	}
 	public String getMaTourMax() {
 		return tour_Dao.getMaTourMax();
@@ -62,4 +69,14 @@ public class Tour_Bus {
 		    tour.getDsAnh().set(tour.getDsAnh().indexOf(link), destinationPath);
 		}
 	}
+	public void deleteFolder(File file){
+	    for (File subFile : file.listFiles()) {
+	       if(subFile.isDirectory()) {
+	          deleteFolder(subFile);
+	       } else {
+	          subFile.delete();
+	        }
+	     }
+	    file.delete();
+	   }
 }
