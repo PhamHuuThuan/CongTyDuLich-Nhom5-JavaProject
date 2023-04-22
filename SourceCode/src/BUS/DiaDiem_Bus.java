@@ -14,4 +14,5 @@ public class DiaDiem_Bus {
 	public ArrayList<DiaDiem> getAllDiemDuLich() {
 		return dd_Dao.getAllDiemDuLich();
 	}
+	
 }

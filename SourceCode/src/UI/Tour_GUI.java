@@ -78,6 +78,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 	private Tour_Bus tourBus;
 	private HoaDon_Bus hdBus;
 	private DiaDiem_Bus ddBus;
+	
 	public Tour_GUI() {
 		setTitle("Vietour - Phan mem quan li tour du lich");
 		setSize(1200, 820);

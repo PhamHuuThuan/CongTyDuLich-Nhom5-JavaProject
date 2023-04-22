@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -18,6 +19,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,11 +28,17 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import BUS.KhachHang_Bus;
+import Entity.KhachHang;
+
 public class KhachHang_GUI extends JFrame implements MouseListener,ActionListener{
 	private JButton btnTrangChu, btnTour, btnDonHang, btnKH, btnQuanLi, btnNhanVien,btnSua;
 	private JTextField txtMaKH,txtTenKH,txtSdt,txtEmail,txtDiaChi;
 	private JTable tblKH;
 	private DefaultTableModel modelKH;
+	private KhachHang_Bus kh_bus;
+	private ArrayList<KhachHang> dsKhachHang;
+	
 	
 	public KhachHang_GUI() {
 		setTitle("Vietour - Phan mem quan li tour du lich");
@@ -109,8 +117,7 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 		panelAdd.setLayout(new BoxLayout(panelAdd, BoxLayout.Y_AXIS));
 		panelAdd.add(Box.createVerticalStrut(20));
 		panelAdd.setBorder(BorderFactory.createTitledBorder("Thông tin khách hàng"));
-		JScrollPane scrollAdd = new JScrollPane(panelAdd, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		add(scrollAdd, BorderLayout.WEST);
+		add(panelAdd, BorderLayout.WEST);
 		
 		JPanel pnMaKH = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel lblMaKH = new JLabel("Mã khách hàng: ");
@@ -123,16 +130,6 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 		panelAdd.add(Box.createVerticalStrut(5));
 		txtMaKH.setEditable(false);
 		
-		JPanel pnTen = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		JLabel lblTenKH = new JLabel("Họ và tên: ");
-		lblTenKH.setFont(new Font("Arial", Font.BOLD, 14));
-		lblTenKH.setForeground(new Color(0, 102, 204));
-		pnTen.add(lblTenKH);
-		panelAdd.add(pnTen);
-		panelAdd.add(Box.createVerticalStrut(5));
-		panelAdd.add(txtTenKH=new JTextField(20));
-		panelAdd.add(Box.createVerticalStrut(5));
-		
 		JPanel pnSdt = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel lblSdt = new JLabel("Số điện thoại: ");
 		lblSdt.setFont(new Font("Arial", Font.BOLD, 14));
@@ -141,6 +138,16 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 		panelAdd.add(pnSdt);
 		panelAdd.add(Box.createVerticalStrut(5));
 		panelAdd.add(txtSdt=new JTextField(20));
+		panelAdd.add(Box.createVerticalStrut(5));
+		
+		JPanel pnTen = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		JLabel lblTenKH = new JLabel("Họ và tên: ");
+		lblTenKH.setFont(new Font("Arial", Font.BOLD, 14));
+		lblTenKH.setForeground(new Color(0, 102, 204));
+		pnTen.add(lblTenKH);
+		panelAdd.add(pnTen);
+		panelAdd.add(Box.createVerticalStrut(5));
+		panelAdd.add(txtTenKH=new JTextField(20));
 		panelAdd.add(Box.createVerticalStrut(5));
 		
 		JPanel pnEmail = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -165,21 +172,14 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 
 		JPanel pnButtonTop = new JPanel(new FlowLayout());
 		pnButtonTop.add(Box.createVerticalStrut(50));
-		pnButtonTop.add(btnSua=new JButton("Lưu"));
+		pnButtonTop.add(btnSua=new JButton("Sửa"));
 		btnSua.setForeground(Color.WHITE);
 		btnSua.setBackground(new Color(30, 144, 255));
 		btnSua.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
 		panelAdd.add(pnButtonTop);
 		panelAdd.add(Box.createVerticalStrut(200));		
 		
-		JPanel panelThongTin = new JPanel();
-		panelThongTin.setLayout(new BoxLayout(panelThongTin, BoxLayout.Y_AXIS));
-		panelThongTin.setBorder(BorderFactory.createEmptyBorder(0, 20, 0,0));
-		add(panelThongTin, BorderLayout.CENTER);
-		
-		JPanel panelTop = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		panelThongTin.add(panelTop);
-		
+
 		String cols[] = {"Mã KH", "Tên KH", "SĐT", "Email", "Địa Chỉ"};
 		modelKH = new DefaultTableModel(cols, 0);
 		tblKH = new JTable(modelKH);
@@ -189,29 +189,71 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 		tblKH.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
 		tblKH.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tblKH.getColumnModel().getColumn(0).setPreferredWidth(100);
-		tblKH.getColumnModel().getColumn(1).setPreferredWidth(300);
-		tblKH.getColumnModel().getColumn(2).setPreferredWidth(150);
-		tblKH.getColumnModel().getColumn(3).setPreferredWidth(210);
-		tblKH.getColumnModel().getColumn(4).setPreferredWidth(210);
+		tblKH.getColumnModel().getColumn(1).setPreferredWidth(240);
+		tblKH.getColumnModel().getColumn(2).setPreferredWidth(155);
+		tblKH.getColumnModel().getColumn(3).setPreferredWidth(240);
+		tblKH.getColumnModel().getColumn(4).setPreferredWidth(220);
 		tblKH.setSize(MAXIMIZED_HORIZ, 150);
+		tblKH.setRowHeight(25);
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 		rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
 		tblKH.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
-		tblKH.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
-		tblKH.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
-		JScrollPane tblScroll = new JScrollPane(tblKH,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ, 100));
-		panelThongTin.add(Box.createVerticalStrut(5));
-		panelThongTin.add(tblScroll);
-		panelThongTin.add(Box.createVerticalStrut(460));
+		JScrollPane tblScroll = new JScrollPane(tblKH,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS , JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		add(tblScroll,BorderLayout.CENTER);
 		
 		btnTrangChu.addActionListener(this);
 		btnTour.addActionListener(this);
 		btnDonHang.addActionListener(this);
 		btnQuanLi.addActionListener(this);
 		btnNhanVien.addActionListener(this);
+		btnSua.addActionListener(this);
 		btnKH.addActionListener(this);
+		tblKH.addMouseListener(this);
+		
+		kh_bus = new KhachHang_Bus();
+		showDataOnTable();
+		
 	}
+	
+	public boolean validData() {
+		String tenKH = txtTenKH.getText().trim();
+		String sdt = txtSdt.getText().trim();
+		String email = txtEmail.getText().trim();
+		String diaChi = txtDiaChi.getText().trim();
+				
+		return true;
+	}
+	
+	public void showDataOnTable() {
+	    DefaultTableModel model = (DefaultTableModel) tblKH.getModel();
+	    ArrayList<KhachHang> dsKH = kh_bus.getAllKH();
+	    for (KhachHang kh : dsKH) {
+	        Object[] row = { kh.getMaKH(),kh.getSdt(), kh.getTenKH(), kh.getEmail(), kh.getDiaChi() };
+	        model.addRow(row);
+	    }
+	}
+	public void XoaHetTable() {
+		DefaultTableModel dm = (DefaultTableModel) tblKH.getModel();
+		dm.getDataVector().removeAllElements();
+	}
+	
+	private void suaThongTinKH() {                                          
+        KhachHang kh = new KhachHang();
+        kh.setMaKH(txtMaKH.getText());
+        kh.setTenKH(txtTenKH.getText());
+        kh.setSdt(txtSdt.getText());
+        kh.setEmail(txtEmail.getText());
+        kh.setDiaChi(txtDiaChi.getText());
+        
+        if (kh_bus.updateKhachHang(kh)) {
+            JOptionPane.showMessageDialog(this, "Cập nhật thông tin khách hàng thành công!");
+            XoaHetTable();
+            showDataOnTable(); // Tải lại danh sách khách hàng sau khi cập nhật
+        } else {
+            JOptionPane.showMessageDialog(this, "Cập nhật thông tin khách hàng thất bại!");
+        }
+    }
+	
 	public static void main(String[] args) {
 		new KhachHang_GUI().setVisible(true);
 	}
@@ -234,14 +276,20 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 		}else if(o==btnKH){
 			setVisible(false);
 			new KhachHang_GUI().setVisible(true);
+		}else if(o==btnSua) {
+			suaThongTinKH();
 		}
 		
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		int row = tblKH.getSelectedRow();
+		txtMaKH.setText(modelKH.getValueAt(row, 0).toString());
+		txtTenKH.setText(modelKH.getValueAt(row, 1).toString());
+		txtSdt.setText(modelKH.getValueAt(row, 2).toString());
+		txtEmail.setText(modelKH.getValueAt(row, 3).toString());
+		txtDiaChi.setText(modelKH.getValueAt(row, 4).toString());
 	}
 
 	@Override

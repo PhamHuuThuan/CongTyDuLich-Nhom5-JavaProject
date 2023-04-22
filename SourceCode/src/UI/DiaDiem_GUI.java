@@ -324,6 +324,13 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		btnNhanVien.addActionListener(this);
 	}
 	
+	
+	
+	
+	
+	
+	
+	
 	public static void main(String[] args) {
 		new DiaDiem_GUI().setVisible(true);
 	}
