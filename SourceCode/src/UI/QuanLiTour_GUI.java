@@ -28,6 +28,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
@@ -54,6 +56,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import org.jdatepicker.DateModel;
 import org.jdatepicker.impl.DateComponentFormatter;
@@ -67,7 +70,7 @@ import BUS.Tour_Bus;
 import ConnectDB.ConnectDB;
 import Entity.DiaDiem;
 import Entity.TourDuLich;
-import Util.MaTourGenerator;
+import Util.CodeGenerator;
 
 public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListener{
 	private JButton btnTrangChu, btnTour, btnDiaDiem, btnThongKe, btnNhanVien;
@@ -75,6 +78,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 	private JTextArea txtAMoTa, txtAInputMoTa;
 	private JTable tblTour;
 	private DefaultTableModel tblModel;
+	private JTableHeader tblHead;
 	private JButton btnTim;
 	private JTextField txtMaTour, txtTenTour, txtGia ,txtTim;
 	private JComboBox<String> cmbPhuongTien, cmbDiemKH, cmbDiemDen, cmbKhachSan;
@@ -89,7 +93,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 	private ArrayList<DiaDiem> dsDiemDen;
 	private ArrayList<TourDuLich> dsTour;
 	private ArrayList<String> dsAnh;
-	private MaTourGenerator maTourGenerator;
+	private CodeGenerator maTourGenerator;
 	
 	public QuanLiTour_GUI() {
 		setTitle("Vietour - Phan mem quan li tour du lich");
@@ -110,7 +114,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		hd_Bus  = new HoaDon_Bus();
 		dd_Bus = new DiaDiem_Bus();
 		tour_Bus = new Tour_Bus();
-		maTourGenerator = new MaTourGenerator();
+		maTourGenerator = new CodeGenerator();
 		//menu
 		JPanel panelHead = new JPanel();
 		panelHead.setLayout(new FlowLayout());
@@ -403,6 +407,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		panelTop.add(txtTim=new JTextField(20));
 		txtTim.setFont(new Font("Arial", Font.PLAIN, 16));
 		panelTop.add(btnTim = new JButton("Tìm"));
+		txtTim.setToolTipText("Tìm theo mã tour hoặc tên tour");
 		btnTim.setForeground(Color.WHITE);
 		btnTim.setBackground(new Color(30, 144, 255));
 		panelTop.add(lblTourTim = new JLabel());
@@ -410,10 +415,12 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		String cols[] = {"Mã Tour", "Tên Tour", "Số chỗ", "Ngày đi", "Ngày kết thúc", "Giá tour"};
 		tblModel = new DefaultTableModel(cols, 0);
 		tblTour = new JTable(tblModel);
-		tblTour.setFont(new Font("Arial", Font.PLAIN, 14));
-		tblTour.getTableHeader().setBackground(new Color(0, 0, 204));
-		tblTour.getTableHeader().setForeground(Color.WHITE);
-		tblTour.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+		tblHead = new JTableHeader(tblTour.getColumnModel());
+		tblHead.setReorderingAllowed(false);
+		tblHead.setBackground(new Color(30, 144, 255));
+		tblHead.setForeground(Color.WHITE);
+		tblHead.setFont(new Font("Arial", Font.BOLD, 14));
+		tblTour.setTableHeader(tblHead);
 		tblTour.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tblTour.getColumnModel().getColumn(0).setPreferredWidth(100);
 		tblTour.getColumnModel().getColumn(1).setPreferredWidth(350);
@@ -599,6 +606,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		btnReset.addActionListener(this);
 		btnTim.addActionListener(this);
 		
+		tblHead.addMouseListener(this);
 		tblTour.addMouseListener(this);
 		dsTour = new ArrayList<TourDuLich>();
 		dsAnh = new ArrayList<String>();
@@ -681,37 +689,64 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 	}
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		int r = tblTour.getSelectedRow();
-		updateChiTiet(r);
-
-		txtMaTour.setText(dsTour.get(r).getMaTour());
-		txtTenTour.setText(dsTour.get(r).getTenTour());
-		txtAInputMoTa.setText(dsTour.get(r).getMoTa());
-		spinSoCho.setValue(dsTour.get(r).getSoCho());
-		cmbDiemDen.setSelectedItem(dsTour.get(r).getDiemDen().getTenDiaDiem());
-		cmbDiemKH.setSelectedItem(dsTour.get(r).getDiemKH().getTenDiaDiem());
-		cmbKhachSan.setSelectedItem(dsTour.get(r).getKhachSan());
-		cmbPhuongTien.setSelectedItem(dsTour.get(r).getPhuongTien());
-		txtGia.setText(String.valueOf(dsTour.get(r).getGia()));
-		
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(dsTour.get(r).getNgayDi());
-		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH);
-		int day = calendar.get(Calendar.DAY_OF_MONTH);
-		UtilDateModel modelDate = (UtilDateModel) ngayKH.getModel();
-		modelDate.setSelected(true);
-		modelDate.setDate(year, month, day);
-		
-		calendar.setTime(dsTour.get(r).getNgayKetThuc());
-		year = calendar.get(Calendar.YEAR);
-		month = calendar.get(Calendar.MONTH);
-		day = calendar.get(Calendar.DAY_OF_MONTH);
-		modelDate = (UtilDateModel) ngayKT.getModel();
-		modelDate.setDate(year, month, day);
-		modelDate.setSelected(true);
-		
-		dsAnh = dsTour.get(r).getDsAnh();
+		Object o = e.getSource();
+		if(o==tblTour) {
+			int r = tblTour.getSelectedRow();
+			updateChiTiet(r);
+	
+			txtMaTour.setText(dsTour.get(r).getMaTour());
+			txtTenTour.setText(dsTour.get(r).getTenTour());
+			txtAInputMoTa.setText(dsTour.get(r).getMoTa());
+			spinSoCho.setValue(dsTour.get(r).getSoCho());
+			cmbDiemDen.setSelectedItem(dsTour.get(r).getDiemDen().getTenDiaDiem());
+			cmbDiemKH.setSelectedItem(dsTour.get(r).getDiemKH().getTenDiaDiem());
+			cmbKhachSan.setSelectedItem(dsTour.get(r).getKhachSan());
+			cmbPhuongTien.setSelectedItem(dsTour.get(r).getPhuongTien());
+			txtGia.setText(String.valueOf(dsTour.get(r).getGia()));
+			
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(dsTour.get(r).getNgayDi());
+			int year = calendar.get(Calendar.YEAR);
+			int month = calendar.get(Calendar.MONTH);
+			int day = calendar.get(Calendar.DAY_OF_MONTH);
+			UtilDateModel modelDate = (UtilDateModel) ngayKH.getModel();
+			modelDate.setSelected(true);
+			modelDate.setDate(year, month, day);
+			
+			calendar.setTime(dsTour.get(r).getNgayKetThuc());
+			year = calendar.get(Calendar.YEAR);
+			month = calendar.get(Calendar.MONTH);
+			day = calendar.get(Calendar.DAY_OF_MONTH);
+			modelDate = (UtilDateModel) ngayKT.getModel();
+			modelDate.setDate(year, month, day);
+			modelDate.setSelected(true);
+			
+			dsAnh = dsTour.get(r).getDsAnh();
+		}else if(o==tblHead) {
+			int col = tblHead.columnAtPoint(e.getPoint());
+			switch(col) {
+			case 0:
+				Collections.sort(dsTour, Comparator.comparing(tour->((TourDuLich)tour).getMaTour()));
+				break;
+			case 1:
+				Collections.sort(dsTour, Comparator.comparing(tour->((TourDuLich)tour).getTenTour()));
+				break;
+			case 2:
+				Collections.sort(dsTour, Comparator.comparing(tour->((TourDuLich)tour).getSoCho()));
+				break;
+			case 3:
+				Collections.sort(dsTour, Comparator.comparing(tour->((TourDuLich)tour).getNgayDi()));
+				break;
+			case 4:
+				Collections.sort(dsTour, Comparator.comparing(tour->((TourDuLich)tour).getNgayKetThuc()));
+				break;
+			case 5:
+				Collections.sort(dsTour, Comparator.comparing(tour->((TourDuLich)tour).getGia()));
+				break;
+			}
+			paintColumnSelected(col);
+			dataArrayToTable(dsTour);
+		}
 	}
 	@Override
 	public void mousePressed(MouseEvent e) {
@@ -732,6 +767,16 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+	public void paintColumnSelected(int col) {
+		DefaultTableCellRenderer colorWhiteRenderer = new DefaultTableCellRenderer();
+		colorWhiteRenderer.setBackground(Color.WHITE);
+		for(int i=0;i<6;i++) {
+			tblTour.getColumnModel().getColumn(i).setCellRenderer(colorWhiteRenderer);
+		}
+		DefaultTableCellRenderer colorSelectedRenderer = new DefaultTableCellRenderer();
+		colorSelectedRenderer.setBackground(new Color(255, 255, 224));
+		tblTour.getColumnModel().getColumn(col).setCellRenderer(colorSelectedRenderer);
 	}
 	public void dataArrayToTable(ArrayList<TourDuLich> dsTour) {
 		tblModel.setRowCount(0);

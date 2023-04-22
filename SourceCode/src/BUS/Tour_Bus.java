@@ -7,12 +7,25 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Properties;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
+import Dao.KhachHang_Dao;
 import Dao.TourDuLich_Dao;
+import Entity.KhachHang;
 import Entity.TourDuLich;
 
 public class Tour_Bus {
-	TourDuLich_Dao tour_Dao = new TourDuLich_Dao();
+	private TourDuLich_Dao tour_Dao = new TourDuLich_Dao();
+	private KhachHang_Dao kh_Dao = new KhachHang_Dao();
 	public ArrayList<TourDuLich> getTourGanNhat(){
 		return tour_Dao.getTourGanNhat();
 	}
@@ -25,7 +38,14 @@ public class Tour_Bus {
 		return tour_Dao.locTour(diemDi, diemDen, soNgay, date, soNguoi, phuongTien);
 	}
 	public boolean deleteTour(String maTour) {
-		return tour_Dao.deleteTour(maTour);
+		TourDuLich tour = tour_Dao.timTour(maTour).get(0);
+		boolean kq = tour_Dao.deleteTour(maTour);
+		if(kq = true) {
+			String filePath = tour.getDsAnh().get(0).substring(0, 9);
+			File file = new File(filePath);
+			deleteFolder(file);
+		}
+		return kq;
 	}
 	public String getMaTourMax() {
 		return tour_Dao.getMaTourMax();
@@ -43,6 +63,7 @@ public class Tour_Bus {
 		if(kq == true) {
 			luuImage(tour);
 			tour_Dao.updateDSAnh(tour.getMaTour(), tour.getDsAnh());
+			sendEmail(tour);
 		}
 		return kq;
 	}
@@ -61,5 +82,50 @@ public class Tour_Bus {
 		    }
 		    tour.getDsAnh().set(tour.getDsAnh().indexOf(link), destinationPath);
 		}
+	}
+	public void deleteFolder(File file){
+	    for (File subFile : file.listFiles()) {
+	       if(subFile.isDirectory()) {
+	          deleteFolder(subFile);
+	       } else {
+	          subFile.delete();
+	        }
+	     }
+	    file.delete();
+	  }
+	public void sendEmail(TourDuLich tour) {
+		ArrayList<KhachHang> dsKH = kh_Dao.getAllKhachHang();
+		Properties p = new Properties();
+		p.put("mail.smtp.auth", "true");
+		p.put("mail.smtp.starttls.enable", "true");
+		p.put("mail.smtp.host", "smtp.gmail.com");
+		p.put("mail.smtp.port", 587);
+		   
+		Session s = Session.getInstance(p,
+			new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+			return new PasswordAuthentication("huuthuan1405@gmail.com", "kveiddpirjksekmv");
+		}
+		});
+		  
+		try {
+			   for(KhachHang kh : dsKH) {
+				   Message msg = new MimeMessage(s);
+				   msg.setFrom(new InternetAddress("huuthuan1405@gmail.com"));
+				   msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(kh.getEmail()));
+				   msg.setSubject("VIETOUR - ["+tour.getMaTour()+"] "+tour.getTenTour()+ " <<New Tour>>");
+				   msg.setText("Xin chào "+ kh.getTenKH()+"!\n"
+					   +tour.getMoTa()+"\n"
+					   +"Ngày khởi hành: "+tour.getNgayDi()+"\n"
+					   +"Điểm đến: "+ tour.getDiemDen().getTenDiaDiem()+"\n"
+					   +"Phương tiện: "+tour.getPhuongTien()+"\n"
+					   +"Hãy cùng VIETOUR khám phá ngay nào!");
+				   Transport.send(msg);
+			   }
+			} catch (AddressException e) {
+				e.printStackTrace();
+			} catch (MessagingException e) {
+				e.printStackTrace();
+			} 
 	}
 }

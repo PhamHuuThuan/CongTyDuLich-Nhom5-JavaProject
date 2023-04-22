@@ -2,7 +2,7 @@ package Util;
 
 import BUS.Tour_Bus;
 
-public class MaTourGenerator {
+public class CodeGenerator {
 	Tour_Bus tourBus = new Tour_Bus();
 	public String sinhMaTour() {
 		String maNew = "T";
@@ -16,7 +16,6 @@ public class MaTourGenerator {
 		if((ma+1)%10==0)
 			maNew = maNew.substring(0, maNew.length()-1);
 		maNew += String.valueOf(ma+1);
-		System.out.println(maPre+" | "+ma+" | "+maNew);
 		return maNew;
 	}
 }

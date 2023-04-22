@@ -34,30 +34,6 @@ import Entity.KhachHang;
 	        }
 	        return dsKH;
 	    }
-//	    public boolean themKhachHang(KhachHang kh) {
-//	        ConnectDB.getInstance();
-//	        PreparedStatement statement = null;
-//	        int n=0;
-//	        try {
-//	            Connection con = ConnectDB.getConnection();
-//	            statement = con.prepareStatement("INSERT INTO KhachHang VALUES(?, ?, ?, ?, ?)");
-//	            statement.setString(1, kh.getMaKH());
-//	            statement.setString(2, kh.getTenKH());
-//	            statement.setString(3, kh.getSdt());
-//	            statement.setString(4, kh.getEmail());
-//	            statement.setString(5, kh.getDiaChi());
-//	            n = statement.executeUpdate();
-//	        } catch (SQLException e) {
-//	            e.printStackTrace();
-//	        }finally{
-//	            try {
-//	                statement.close();
-//	            } catch (SQLException e) {
-//	                e.printStackTrace();
-//	            }
-//	        }
-//	        return n>0;
-//	    }
 
 	    public boolean updateKhachHang(KhachHang kh) {
 	        ConnectDB.getInstance();
@@ -83,25 +59,5 @@ import Entity.KhachHang;
 	            }
 	        return n > 0;
 	    }
-//	    public boolean deleteKhachHang(String maKH) {
-//	    	ConnectDB.getInstance();
-//	    	int n = 0;
-//	    	PreparedStatement stmt = null;
-//	    	try {
-//	    		Connection con = ConnectDB.getConnection();
-//	    		stmt = con.prepareStatement("DELETE FROM KhachHang WHERE MaKH=?");
-//	    		stmt.setString(1, maKH);
-//	    		n = stmt.executeUpdate();
-//	    	} catch (SQLException e) {
-//	    		e.printStackTrace();
-//	    	} finally {
-//	    		try {
-//	    			stmt.close();
-//	    		} catch (SQLException e) {
-//	    			e.printStackTrace();
-//	    		}
-//	    	}
-//	    	return n > 0;
-//	    }
 	
 }
