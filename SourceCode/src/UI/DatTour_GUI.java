@@ -3,6 +3,7 @@ package UI;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -19,6 +20,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -42,8 +44,11 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import BUS.HoaDon_Bus;
+import BUS.KhachHang_Bus;
+import Entity.KhachHang;
 import Entity.ThanhVien;
 import Entity.TourDuLich;
+import Util.CodeGenerator;
 
 public class DatTour_GUI extends JFrame implements ActionListener{
 	private JButton btnThanhToan, btnClose, btnTao, btnThem, btnSua, btnXoa;
@@ -56,6 +61,8 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 	private JTable tblTV;
 	private ArrayList<ThanhVien> dsTV;
 	private HoaDon_Bus hdBus;
+	private KhachHang_Bus khBus;
+	private CodeGenerator sinhMa;
 	public DatTour_GUI(TourDuLich tour) {
 		setSize(1000, 750);
 		setLocationRelativeTo(null);
@@ -64,6 +71,9 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		setResizable(false);
 		this.tour = tour;
 		hdBus = new HoaDon_Bus();
+		khBus = new KhachHang_Bus();
+		sinhMa = new CodeGenerator();
+		dsTV = new ArrayList<ThanhVien>();
 		createGUI();
 	}
 	public void createGUI() {
@@ -211,7 +221,7 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		JPanel pnHoTen = new JPanel(new GridLayout(2, 1));
 		pnNhapKhach.add(pnHoTen);
 		pnHoTen.add(new JLabel("Họ và tên"));
-		pnHoTen.add(txtHoTenKH= new JTextField());
+		pnHoTen.add(txtHoTenKH= new JTextField(20));
 		
 		JPanel pnGioiTinh = new JPanel(new GridLayout(2, 1));
 		pnNhapKhach.add(Box.createHorizontalStrut(10));
@@ -231,6 +241,7 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		properties.put("text.year", "Year");
 		JDatePanelImpl datePanel = new JDatePanelImpl(model, properties);
 		ngaySinh = new JDatePickerImpl(datePanel, new DateComponentFormatter());
+		ngaySinh.setPreferredSize(new Dimension(100, 28));
 		pnNgaySinh.add(ngaySinh);
 		
 		JPanel pnLuaTuoi = new JPanel(new GridLayout(2, 1));
@@ -288,7 +299,7 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		panelThongTinHD.add(new JLabel("..."));
 		
 		JPanel pnLine = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		pnLine.add(new JLabel("- - - - - - - - - - - - - - - - - - - - - - -"));
+		pnLine.add(new JLabel("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"));
 		panelThanhToan.add(pnLine);
 		
 		JPanel pnTT = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -370,6 +381,11 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		
 		btnThanhToan.addActionListener(this);
 		btnClose.addActionListener(this);
+		btnTao.addActionListener(this);
+		btnThem.addActionListener(this);
+		btnSua.addActionListener(this);
+		btnXoa.addActionListener(this);
+	
 	}
 	public static void main(String[] args) {
 		new DatTour_GUI(null).setVisible(true);
@@ -379,7 +395,34 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		Object o = e.getSource();
 		if(o == btnClose) {
 			dispose();
+		}else if(o == btnTao) {
+			KhachHang kh = convertKH();
+			System.out.println(kh.getMaKH());
 		}
 		
+	}
+	public boolean validDataKH() {
+		String tenKH = txtHoTenKH.getText().trim();
+		String sdt = txtSDT.getText().trim();
+		String mail = txtEmail.getText().trim();
+		String diaChi = txtDiaChi.getText().trim();
+		
+		boolean ptTenKH  = Pattern.matches("[a-zA-Z0-9aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆ\r\n"
+				+ "fFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTu\r\n"
+				+ "UùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ '_]+", tenKH);
+		boolean ptSDT = Pattern.matches("[0-9]{10,11}", sdt);
+		boolean ptMail = Pattern.matches("\\w+@\\w+((mail(\\.)com)||((\\.)com))?(\\.\\w+)", mail);
+		boolean ptDiaChi = Pattern.matches("[a-zA-Z0-9aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆ\r\n"
+				+ "fFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTu\r\n"
+				+ "UùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ '*()_+{}\\\\\\\\[\\\\\\\\]:;,]+", diaChi);
+		return true;
+	}
+	public KhachHang convertKH() {
+		String tenKH = txtHoTenKH.getText().trim();
+		String sdt = txtSDT.getText().trim();
+		String mail = txtEmail.getText().trim();
+		String diaChi = txtDiaChi.getText().trim();
+		String maKH = sinhMa.sinhMaKH();
+		return new KhachHang(maKH, tenKH, sdt, mail, diaChi);
 	}
 }

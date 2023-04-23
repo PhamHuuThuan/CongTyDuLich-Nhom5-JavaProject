@@ -59,5 +59,20 @@ import Entity.KhachHang;
 	            }
 	        return n > 0;
 	    }
+	    public String getMaKHMax() {
+			String maKH = "";
+			ConnectDB.getInstance();
+			try {
+				Connection con = ConnectDB.getConnection();
+				Statement stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery("select max(MaKH) as MAX from KhachHang");
+				while(rs.next())
+					maKH = rs.getString("MAX");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return maKH;
+		}
 	
 }

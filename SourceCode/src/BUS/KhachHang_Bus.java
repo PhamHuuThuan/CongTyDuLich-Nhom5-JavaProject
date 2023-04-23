@@ -15,4 +15,7 @@ public class KhachHang_Bus {
 	public boolean updateKhachHang(KhachHang kh) {
 		return khachHang_Dao.updateKhachHang(kh);
 	}
+	public String getMaKHMax() {
+		return khachHang_Dao.getMaKHMax();
+	}
 }
