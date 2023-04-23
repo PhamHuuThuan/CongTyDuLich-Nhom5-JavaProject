@@ -1,13 +1,17 @@
 package Dao;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import ConnectDB.ConnectDB;
 import Entity.KhachHang;
+import Entity.ThanhVien;
 	public class KhachHang_Dao {
 	    public KhachHang_Dao() {
 	        
@@ -59,5 +63,35 @@ import Entity.KhachHang;
 	            }
 	        return n > 0;
 	    }
-	
+	    public KhachHang getKhachHangTheoMa(String maKhachHang) throws ParseException {
+			PreparedStatement statement = null;
+			try {
+				ConnectDB.getInstance();
+				Connection con = ConnectDB.getConnection();
+				String sql = "Select * from KhachHang where MaKH like ?";
+				statement = con.prepareStatement(sql);
+				statement.setString(1, "%"+maKhachHang+"%");
+				ResultSet rs = statement.executeQuery();
+				while(rs.next()) {
+					 String maKH = rs.getString("MaKH");
+		                String Sdt = rs.getString("SDT");
+		                String TenKH = rs.getString("TenKH");
+		                String email = rs.getString("Email");
+		                String diaChi = rs.getString("DiaChi");
+		                KhachHang kh = new KhachHang(maKH, Sdt, TenKH, email, diaChi);
+					return kh;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}finally {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			return null;
+		}
+	    
 }

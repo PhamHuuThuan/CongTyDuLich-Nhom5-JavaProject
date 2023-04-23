@@ -13,6 +13,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -22,6 +24,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -31,19 +34,28 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import BUS.DiaDiem_Bus;
+import BUS.KhachHang_Bus;
+import Entity.DiaDiem;
+import Entity.KhachHang;
+
 public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 	private JButton btnTrangChu, btnTour, btnDiaDiem, btnThongKe, btnNhanVien;
 	private JLabel lblMaDKH,lblTenDKH,lblMaDDL,lblDiemDL,lblTenPT,lblMaPT;
-	private JTextField txtMaDiemKH,txtTenDiemKH,txtMaDiemDL,txtDiemDL,txtMaPT,txtTenPT;
-	private JTable tblDiaDiem;
-	private DefaultTableModel modelDD;
-	private JButton btnThem, btnSua, btnReset, btnXoa;
+	private JTextField txtMaDiemKH,txtTenDiemKH,txtMaDiemDL,txtTenDiemDL,txtMaPT,txtTenPT;
+	private JTable tblDiaDiemKH,tblDiaDiemKT,tblPTien;
+	private DefaultTableModel modelDDKH,modelDDKT,modelPT;
+	private JButton btnThem,btnThem1,btnThem2, btnSua,btnSua1,btnSua2, btnXoa, btnXoa1, btnXoa2, btnReset, btnReset1, btnReset2;
+	private DiaDiem_Bus dd_bus;
+	private ArrayList<DiaDiem> dsDiaDiem;
 	
 	public DiaDiem_GUI() {
 		setTitle("Vietour - Phần mềm quản lí tour du lịch");
 		setSize(1100, 750);
 		setLocationRelativeTo(null);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("img/travel.png"));
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
 		createGUI();
 	}
 	public void createGUI() {
@@ -64,7 +76,7 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		btnTour.setFont(new Font("Arial", Font.BOLD, 14));
 		btnTour.setBackground(Color.WHITE);
 		btnTour.setBorder(new EmptyBorder(10, 10, 10, 10));
-		btnTour.setBackground(new Color(255, 165, 0));
+		btnTour.setBackground(new Color(60, 179, 113));
 		btnTour.setForeground(new Color(255, 255, 255));
 		btnTour.setPreferredSize(btnTrangChu.getPreferredSize());
 		
@@ -78,7 +90,7 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		btnDiaDiem.setFont(new Font("Arial", Font.BOLD, 14));
 		btnDiaDiem.setBackground(Color.WHITE);
 		btnDiaDiem.setBorder(new EmptyBorder(10, 10, 10, 10));
-		btnDiaDiem.setBackground(new Color(60, 179, 113));
+		btnDiaDiem.setBackground(new Color(255, 165, 0));
 		btnDiaDiem.setForeground(new Color(255, 255, 255));
 		btnDiaDiem.setPreferredSize(btnTrangChu.getPreferredSize());
 		
@@ -162,21 +174,18 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		JPanel panelTop = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		panelThongTin.add(panelTop);
 		
-		String cols[] = {"Mã địa điểm", "Tên địa điểm "};
-		modelDD = new DefaultTableModel(cols, 0);
-		tblDiaDiem = new JTable(modelDD);
-		tblDiaDiem.setFont(new Font("Arial", Font.PLAIN, 14));
-		tblDiaDiem.getTableHeader().setBackground(new Color(0, 0, 204));
-		tblDiaDiem.getTableHeader().setForeground(Color.WHITE);
-		tblDiaDiem.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
-		tblDiaDiem.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		tblDiaDiem.getColumnModel().getColumn(0).setPreferredWidth(300);
-		tblDiaDiem.getColumnModel().getColumn(1).setPreferredWidth(600);
-		tblDiaDiem.setSize(MAXIMIZED_HORIZ, 150);
-		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-		rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
-		tblDiaDiem.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
-		JScrollPane tblScroll = new JScrollPane(tblDiaDiem,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		String cols[] = {"Mã điểm khởi hành", "Tên điểm khởi hành"};
+		modelDDKH = new DefaultTableModel(cols, 0);
+		tblDiaDiemKH = new JTable(modelDDKH);
+		tblDiaDiemKH.setFont(new Font("Arial", Font.PLAIN, 14));
+		tblDiaDiemKH.getTableHeader().setBackground(new Color(0, 0, 204));
+		tblDiaDiemKH.getTableHeader().setForeground(Color.WHITE);
+		tblDiaDiemKH.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+		tblDiaDiemKH.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tblDiaDiemKH.getColumnModel().getColumn(0).setPreferredWidth(300);
+		tblDiaDiemKH.getColumnModel().getColumn(1).setPreferredWidth(470);
+		tblDiaDiemKH.setSize(MAXIMIZED_HORIZ, 150);
+		JScrollPane tblScroll = new JScrollPane(tblDiaDiemKH,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ, 100));
 		panelThongTin.add(tblScroll);
 		panelThongTin.add(Box.createVerticalStrut(130));
@@ -191,7 +200,7 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		panelAdd.add(pnTieuDe);
 		
 		JPanel pnMaDL = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		JLabel lblMaDDL = new JLabel("Mã điểm du lịch");
+		JLabel lblMaDDL = new JLabel("Mã điểm kết thúc");
 		lblMaDDL.setFont(new Font("Arial", Font.BOLD, 14));
 		lblMaDDL.setForeground(new Color(0, 102, 204));
 		pnMaDL.add(lblMaDDL);
@@ -201,50 +210,47 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		txtMaDiemDL.setEditable(false);
 		
 		JPanel pnDDen = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		JLabel lblDiemDen = new JLabel("Điểm đến");
+		JLabel lblDiemDen = new JLabel("Tên điểm kết thúc");
 		lblDiemDen.setFont(new Font("Arial", Font.BOLD, 14));
 		lblDiemDen.setForeground(new Color(0, 102, 204));
 		pnDDen.add(lblDiemDen);
 		panelAdd.add(pnDDen);
 		panelAdd.add(Box.createVerticalStrut(5));
-		panelAdd.add(txtDiemDL = new JTextField(20));
+		panelAdd.add(txtTenDiemDL = new JTextField(20));
 		
 		pnButtonTop = new JPanel(new FlowLayout());
-		pnButtonTop.add(btnThem=new JButton("Thêm"));
-		btnThem.setForeground(Color.WHITE);
-		btnThem.setBackground(new Color(30, 144, 255));
-		btnThem.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
-		pnButtonTop.add(btnSua=new JButton("Sửa"));
-		btnSua.setForeground(Color.WHITE);
-		btnSua.setBackground(new Color(30, 144, 255));
-		btnSua.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
-		pnButtonTop.add(btnXoa=new JButton("Xóa"));
-		btnXoa.setForeground(Color.WHITE);
-		btnXoa.setBackground(new Color(30, 144, 255));
-		btnXoa.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
+		pnButtonTop.add(btnThem1=new JButton("Thêm"));
+		btnThem1.setForeground(Color.WHITE);
+		btnThem1.setBackground(new Color(30, 144, 255));
+		btnThem1.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
+		pnButtonTop.add(btnSua1=new JButton("Sửa"));
+		btnSua1.setForeground(Color.WHITE);
+		btnSua1.setBackground(new Color(30, 144, 255));
+		btnSua1.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
+		pnButtonTop.add(btnXoa1=new JButton("Xóa"));
+		btnXoa1.setForeground(Color.WHITE);
+		btnXoa1.setBackground(new Color(30, 144, 255));
+		btnXoa1.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
 		imgReset = new ImageIcon("img/reset.png");
-		pnButtonTop.add(btnReset=new JButton(imgReset));
-		btnReset.setForeground(Color.WHITE);
-		btnReset.setBackground(new Color(30, 144, 255));
-		btnReset.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
+		pnButtonTop.add(btnReset1=new JButton(imgReset));
+		btnReset1.setForeground(Color.WHITE);
+		btnReset1.setBackground(new Color(30, 144, 255));
+		btnReset1.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
 		panelAdd.add(pnButtonTop);
 		
 //		//form ds tour và chi tiết dia diem
-		String cols2[] = {"Mã điểm du lịch", "Điểm đến"};
-		modelDD = new DefaultTableModel(cols2, 0);
-		tblDiaDiem = new JTable(modelDD);
-		tblDiaDiem.setFont(new Font("Arial", Font.PLAIN, 14));
-		tblDiaDiem.getTableHeader().setBackground(new Color(0, 0, 204));
-		tblDiaDiem.getTableHeader().setForeground(Color.WHITE);
-		tblDiaDiem.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
-		tblDiaDiem.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		tblDiaDiem.getColumnModel().getColumn(0).setPreferredWidth(300);
-		tblDiaDiem.getColumnModel().getColumn(1).setPreferredWidth(600);
-		tblDiaDiem.setSize(MAXIMIZED_HORIZ, 150);
-		rightRenderer = new DefaultTableCellRenderer();
-		rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
-		tblDiaDiem.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
-		tblScroll = new JScrollPane(tblDiaDiem,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		String cols2[] = {"Mã điểm kết thúc", "Tên điểm kết thúc"};
+		modelDDKT = new DefaultTableModel(cols2, 0);
+		tblDiaDiemKT = new JTable(modelDDKT);
+		tblDiaDiemKT.setFont(new Font("Arial", Font.PLAIN, 14));
+		tblDiaDiemKT.getTableHeader().setBackground(new Color(0, 0, 204));
+		tblDiaDiemKT.getTableHeader().setForeground(Color.WHITE);
+		tblDiaDiemKT.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+		tblDiaDiemKT.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tblDiaDiemKT.getColumnModel().getColumn(0).setPreferredWidth(300);
+		tblDiaDiemKT.getColumnModel().getColumn(1).setPreferredWidth(470);
+		tblDiaDiemKT.setSize(MAXIMIZED_HORIZ, 150);
+		tblScroll = new JScrollPane(tblDiaDiemKT,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ, 100));
 		panelThongTin.add(tblScroll);
 		panelThongTin.add(Box.createVerticalStrut(100));
@@ -279,56 +285,196 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		panelAdd.add(txtTenPT = new JTextField(20));
 		
 		pnButtonTop = new JPanel(new FlowLayout());
-		pnButtonTop.add(btnThem=new JButton("Thêm"));
-		btnThem.setForeground(Color.WHITE);
-		btnThem.setBackground(new Color(30, 144, 255));
-		btnThem.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
-		pnButtonTop.add(btnSua=new JButton("Sửa"));
-		btnSua.setForeground(Color.WHITE);
-		btnSua.setBackground(new Color(30, 144, 255));
-		btnSua.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
-		pnButtonTop.add(btnXoa=new JButton("Xóa"));
-		btnXoa.setForeground(Color.WHITE);
-		btnXoa.setBackground(new Color(30, 144, 255));
-		btnXoa.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
+		pnButtonTop.add(btnThem2=new JButton("Thêm"));
+		btnThem2.setForeground(Color.WHITE);
+		btnThem2.setBackground(new Color(30, 144, 255));
+		btnThem2.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
+		pnButtonTop.add(btnSua2=new JButton("Sửa"));
+		btnSua2.setForeground(Color.WHITE);
+		btnSua2.setBackground(new Color(30, 144, 255));
+		btnSua2.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
+		pnButtonTop.add(btnXoa2=new JButton("Xóa"));
+		btnXoa2.setForeground(Color.WHITE);
+		btnXoa2.setBackground(new Color(30, 144, 255));
+		btnXoa2.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
 		imgReset = new ImageIcon("img/reset.png");
-		pnButtonTop.add(btnReset=new JButton(imgReset));
-		btnReset.setForeground(Color.WHITE);
-		btnReset.setBackground(new Color(30, 144, 255));
-		btnReset.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
+		pnButtonTop.add(btnReset2=new JButton(imgReset));
+		btnReset2.setForeground(Color.WHITE);
+		btnReset2.setBackground(new Color(30, 144, 255));
+		btnReset2.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
 		panelAdd.add(pnButtonTop);
 		
 		String cols3[] = {"Mã phương tiện", "Tên phương tiện"};
-		modelDD = new DefaultTableModel(cols3, 0);
-		tblDiaDiem = new JTable(modelDD);
-		tblDiaDiem.setFont(new Font("Arial", Font.PLAIN, 14));
-		tblDiaDiem.getTableHeader().setBackground(new Color(0, 0, 204));
-		tblDiaDiem.getTableHeader().setForeground(Color.WHITE);
-		tblDiaDiem.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
-		tblDiaDiem.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		tblDiaDiem.getColumnModel().getColumn(0).setPreferredWidth(300);
-		tblDiaDiem.getColumnModel().getColumn(1).setPreferredWidth(600);
-		tblDiaDiem.setSize(MAXIMIZED_HORIZ, 150);
-		rightRenderer = new DefaultTableCellRenderer();
-		rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
-		tblDiaDiem.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
-		tblScroll = new JScrollPane(tblDiaDiem,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		modelPT = new DefaultTableModel(cols3, 0);
+		tblPTien = new JTable(modelPT);
+		tblPTien.setFont(new Font("Arial", Font.PLAIN, 14));
+		tblPTien.getTableHeader().setBackground(new Color(0, 0, 204));
+		tblPTien.getTableHeader().setForeground(Color.WHITE);
+		tblPTien.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+		tblPTien.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tblPTien.getColumnModel().getColumn(0).setPreferredWidth(300);
+		tblPTien.getColumnModel().getColumn(1).setPreferredWidth(470);
+		tblPTien.setSize(MAXIMIZED_HORIZ, 150);
+		tblScroll = new JScrollPane(tblPTien,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ, 100));
 		panelThongTin.add(tblScroll);
 		panelThongTin.add(Box.createVerticalStrut(35));
 		
+		dd_bus = new DiaDiem_Bus();
+		showDataOnTableDiemKH();
+		showDataOnTableDiemKT();
 		
 		btnTrangChu.addActionListener(this);
 		btnTour.addActionListener(this);
 		btnDiaDiem.addActionListener(this);
 		btnNhanVien.addActionListener(this);
+		btnThem.addActionListener(this);
+		btnThem1.addActionListener(this);
+		btnSua.addActionListener(this);
+		btnSua1.addActionListener(this);
+		btnXoa.addActionListener(this);
+		btnXoa1.addActionListener(this);
+		btnReset.addActionListener(this);
+		btnReset1.addActionListener(this);
+		tblDiaDiemKH.addMouseListener(this);
+		tblDiaDiemKT.addMouseListener(this);
+		
 	}
 	
 	
+	public boolean validData() {
+		String maDiemKH = txtMaDiemKH.getText().trim();
+		String tenDiemKH = txtTenDiemKH.getText().trim();
+		String maDiemDL = txtMaDiemDL.getText().trim();
+		String tenDiemDL = txtTenDiemDL.getText().trim();
+		String maPT = txtMaPT.getText().trim();
+		String tenPT = txtTenPT.getText().trim();
+		
+		return true;
+	}
 	
+	public void showDataOnTableDiemKH() {
+	    DefaultTableModel model = (DefaultTableModel) tblDiaDiemKH.getModel();
+	    model.getDataVector().removeAllElements();
+	    ArrayList<DiaDiem> dsDD = dd_bus.getAllDiemDi();
+	    for (DiaDiem dd : dsDD) {
+	        Object[] row = { dd.getMaDiaDiem(),dd.getTenDiaDiem()};
+	        model.addRow(row);
+	    }
+	}
 	
+	public void showDataOnTableDiemKT() {
+	    DefaultTableModel model = (DefaultTableModel) tblDiaDiemKT.getModel();
+	    ArrayList<DiaDiem> dsDD = dd_bus.getAllDiemDuLich();
+	    for (DiaDiem dd : dsDD) {
+	        Object[] row = { dd.getMaDiaDiem(),dd.getTenDiaDiem()};
+	        model.addRow(row);
+	    }
+	}
 	
+	public void XoaHetTableKH() {
+		DefaultTableModel dm = (DefaultTableModel) tblDiaDiemKH.getModel();
+		dm.getDataVector().removeAllElements();
+	}
 	
+	public void XoaHetTableKT() {
+		DefaultTableModel dm = (DefaultTableModel) tblDiaDiemKT.getModel();
+		dm.getDataVector().removeAllElements();
+	}
+	
+	private void suaThongTinDDKH() {                                          
+        DiaDiem dd = new DiaDiem();
+        dd.setMaDiaDiem(txtMaDiemKH.getText().trim());
+        dd.setTenDiaDiem(txtTenDiemKH.getText().trim());
+        if (dd_bus.updateDiaDiem(dd)) {
+            JOptionPane.showMessageDialog(this, "Cập nhật thông tin tên địa điểm thành công!");
+            XoaHetTableKH();
+            showDataOnTableDiemKH();
+        } else {
+            JOptionPane.showMessageDialog(this, "Cập nhật thông tin tên địa điểm thất bại!!!");
+        }
+    }
+	private void suaThongTinDDDL() {                                          
+        DiaDiem dd = new DiaDiem();
+        dd.setMaDiaDiem(txtMaDiemDL.getText().trim());
+        dd.setTenDiaDiem(txtTenDiemDL.getText().trim());
+        if (dd_bus.updateDiaDiem(dd)) {
+            JOptionPane.showMessageDialog(this, "Cập nhật thông tin tên địa điểm thành công!");
+            XoaHetTableKT();
+            showDataOnTableDiemKT();
+        } else {
+            JOptionPane.showMessageDialog(this, "Cập nhật thông tin tên địa điểm thất bại!!!");
+        }
+    }
+	
+	public void xoaDDKH() {
+		int row = tblDiaDiemKH.getSelectedRow();
+		if (row != -1) {
+			int con = JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa địa điểm này?", "Thông báo",
+					JOptionPane.YES_NO_OPTION);
+			if (con == JOptionPane.YES_OPTION) {
+				String maXoa = tblDiaDiemKH.getValueAt(row, 0).toString();
+				if (dd_bus.deleteDiaDiem(maXoa)) {
+					JOptionPane.showMessageDialog(this, "Xóa thành công");
+					modelDDKH.removeRow(row);
+				} else {
+					JOptionPane.showMessageDialog(this, "Xóa thất bại");
+				}
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Bạn chưa chon địa điểm cần xóa");
+		}
+	}
+	
+	public void resetDKH() {
+		txtMaDiemKH.setText(null);
+		txtTenDiemKH.setText(null);
+	}
+	public void resetDKT() {
+		txtMaDiemDL.setText(null);
+		txtTenDiemDL.setText(null);
+	}
+	public String generateMaDiaDiemKH() {
+	    Random random = new Random();
+	    int n = random.nextInt(900) + 100;
+	    return "DKH" + n;
+	}
+	
+	public boolean themDiaDiemKH() {
+	    String tenDiaDiem = txtTenDiemKH.getText().trim();
+	    DiaDiem dd = new DiaDiem(generateMaDiaDiemKH(), tenDiaDiem);
+	    DiaDiem_Bus diaDiemBus = new DiaDiem_Bus();
+	    boolean result = diaDiemBus.themDiaDiem(dd);
+	    if (result) {
+	        JOptionPane.showMessageDialog(this, "Thêm địa điểm thành công");
+	        XoaHetTableKH();
+	        showDataOnTableDiemKH();
+	    } else {
+	        JOptionPane.showMessageDialog(this, "Thêm địa điểm thất bại!");
+	    }
+	    return result;
+	}
+	
+	public String generateMaDiaDiemDL() {
+	    Random random = new Random();
+	    int n = random.nextInt(900) + 100;
+	    return "DDL" + n;
+	}
+	
+	public boolean themDiaDiemDL() {
+	    String tenDiaDiem = txtTenDiemDL.getText().trim();
+	    DiaDiem dd = new DiaDiem(generateMaDiaDiemDL(), tenDiaDiem);
+	    DiaDiem_Bus diaDiemBus = new DiaDiem_Bus();
+	    boolean result = diaDiemBus.themDiaDiem(dd);
+	    if (result) {
+	        JOptionPane.showMessageDialog(this, "Thêm địa điểm thành công");
+	        XoaHetTableKT();
+	        showDataOnTableDiemKT();
+	    } else {
+	        JOptionPane.showMessageDialog(this, "Thêm địa điểm thất bại!");
+	    }
+	    return result;
+	}
 	
 	
 	public static void main(String[] args) {
@@ -349,15 +495,39 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		}else if(o==btnTour) {
 			setVisible(false);
 			new QuanLiTour_GUI().setVisible(true);
+		}else if(o==btnThem) {
+			themDiaDiemKH();
+		}else if(o==btnThem1) {
+			themDiaDiemDL();
 		}
-		
+		else if(o==btnSua) {
+			suaThongTinDDKH();
+		}else if(o==btnSua1) {
+			suaThongTinDDDL();
+		}else if(o==btnXoa) {
+			xoaDDKH();
+		}else if(o==btnReset) {
+			resetDKH();
+		}else if(o==btnReset1) {
+			resetDKT();
+		}
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		int row = tblDiaDiemKH.getSelectedRow();
+	    if (row != -1) {
+	        txtMaDiemKH.setText(modelDDKH.getValueAt(row, 0).toString());
+	        txtTenDiemKH.setText(modelDDKH.getValueAt(row, 1).toString());
+	    }
+	    
+	    int row1 = tblDiaDiemKT.getSelectedRow();
+	    if (row1 != -1) {
+	        txtMaDiemDL.setText(modelDDKT.getValueAt(row1, 0).toString());
+	        txtTenDiemDL.setText(modelDDKT.getValueAt(row1, 1).toString());
+	    }
 	}
+	
 
 	@Override
 	public void mousePressed(MouseEvent e) {
