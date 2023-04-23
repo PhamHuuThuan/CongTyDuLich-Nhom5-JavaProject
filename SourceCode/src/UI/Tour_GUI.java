@@ -14,6 +14,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -80,6 +82,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 	private JTableHeader tblHead;
 	private ArrayList<TourDuLich> dsTour;
 	private ArrayList<DiaDiem> dsDiemDi, dsDiemDen;
+	private JFrame frameDatTour;
 	private Tour_Bus tourBus;
 	private HoaDon_Bus hdBus;
 	private DiaDiem_Bus ddBus;
@@ -491,7 +494,11 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		}else if(o==btnTim) {
 			timTour();
 		}else if(o==btnDatTour) {
-			
+			int index = tblTour.getSelectedRow();
+			if(index!=-1) {
+				frameDatTour = new DatTour_GUI(dsTour.get(index));
+				frameDatTour.setVisible(true);
+			}
 		}
 		
 	}
