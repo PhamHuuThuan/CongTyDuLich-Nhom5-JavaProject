@@ -5,25 +5,26 @@ import java.util.Objects;
 
 public class KhachHang{
 	private String maKH;
-	private String tenKH;
 	private String sdt;
+	private String tenKH;
 	private String email;
 	private String diaChi;
-	public KhachHang(String maKH, String tenKH, String sdt, String email, String diaChi) {
-		super();
-		this.maKH = maKH;
-		this.tenKH = tenKH;
-		this.sdt = sdt;
-		this.email = email;
-		this.diaChi = diaChi;
-	}
+	
 	public KhachHang(String maKH) {
-		super();
 		this.maKH = maKH;
 	}
+	
 	public KhachHang() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+	public KhachHang(String maKH, String sdt, String tenKH, String email, String diaChi) {
+		super();
+		this.maKH = maKH;
+		this.sdt = sdt;
+		this.tenKH = tenKH;
+		this.email = email;
+		this.diaChi = diaChi;
 	}
 	public String getMaKH() {
 		return maKH;

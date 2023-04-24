@@ -347,7 +347,6 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		
 	}
 	
-	
 	public void showDataOnTableDiemKH() {
 	    DefaultTableModel model = (DefaultTableModel) tblDiaDiemKH.getModel();
 	    model.getDataVector().removeAllElements();

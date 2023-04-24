@@ -17,6 +17,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -24,21 +25,27 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import BUS.KhachHang_Bus;
+import Entity.DiaDiem;
 import Entity.KhachHang;
 
 public class KhachHang_GUI extends JFrame implements MouseListener,ActionListener{
-	private JButton btnTrangChu, btnTour, btnDonHang, btnKH, btnQuanLi, btnNhanVien,btnSua;
+	private JButton btnTrangChu, btnTour, btnDonHang, btnKH, btnQuanLi, btnNhanVien,btnSua,btnRefresh;
 	private JTextField txtMaKH,txtTenKH,txtSdt,txtEmail,txtDiaChi;
 	private JTable tblKH;
 	private DefaultTableModel modelKH;
 	private KhachHang_Bus kh_bus;
 	private ArrayList<KhachHang> dsKhachHang;
-	
+	private JComboBox<String> cmbMaKH,cmbAddress;
 	
 	public KhachHang_GUI() {
 		setTitle("Vietour - Phan mem quan li tour du lich");
@@ -178,10 +185,10 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 		btnSua.setBackground(new Color(30, 144, 255));
 		btnSua.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
 		panelAdd.add(pnButtonTop);
-		panelAdd.add(Box.createVerticalStrut(200));		
+		panelAdd.add(Box.createVerticalStrut(150));		
 		
 
-		String cols[] = {"Mã KH", "Tên KH", "SĐT", "Email", "Địa Chỉ"};
+		String cols[] = {"Mã KH", "SĐT", "Tên KH", "Email", "Địa Chỉ"};
 		modelKH = new DefaultTableModel(cols, 0);
 		tblKH = new JTable(modelKH);
 		tblKH.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -190,17 +197,129 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 		tblKH.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
 		tblKH.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tblKH.getColumnModel().getColumn(0).setPreferredWidth(100);
-		tblKH.getColumnModel().getColumn(1).setPreferredWidth(240);
-		tblKH.getColumnModel().getColumn(2).setPreferredWidth(155);
+		tblKH.getColumnModel().getColumn(1).setPreferredWidth(155);
+		tblKH.getColumnModel().getColumn(2).setPreferredWidth(240);
 		tblKH.getColumnModel().getColumn(3).setPreferredWidth(240);
 		tblKH.getColumnModel().getColumn(4).setPreferredWidth(220);
 		tblKH.setSize(MAXIMIZED_HORIZ, 150);
 		tblKH.setRowHeight(25);
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 		rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
-		tblKH.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
+		tblKH.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
 		JScrollPane tblScroll = new JScrollPane(tblKH,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS , JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		add(tblScroll,BorderLayout.CENTER);
+		
+		//Lọc theo maKH
+		JLabel lblFilterByMaKH = new JLabel("Lọc theo MaKH:");
+		JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		filterPanel.add(lblFilterByMaKH);
+		filterPanel.add(cmbMaKH = new JComboBox<String>());
+		kh_bus = new KhachHang_Bus();
+		dsKhachHang = kh_bus.getAllKH();
+		for(KhachHang kh : dsKhachHang) {
+			cmbMaKH.addItem(kh.getMaKH());
+		}
+		cmbMaKH.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String selectedMaKH = cmbMaKH.getSelectedItem().toString();
+				TableRowSorter<TableModel> sorter = new TableRowSorter<>(modelKH);
+				tblKH.setRowSorter(sorter);
+				sorter.setRowFilter(RowFilter.regexFilter("(?i)" + selectedMaKH,0));
+			}
+		});
+				
+		// Lọc theo tên Khach hang	
+		JLabel lblFilterByName = new JLabel("Lọc theo tên KH:");
+		JTextField txtFilterByName = new JTextField(15);
+		txtFilterByName.getDocument().addDocumentListener(new DocumentListener() {
+
+		    @Override
+		    public void removeUpdate(DocumentEvent e) {
+		        filterByName();
+		    }
+
+		    @Override
+		    public void insertUpdate(DocumentEvent e) {
+		        filterByName();
+		    }
+
+		    @Override
+		    public void changedUpdate(DocumentEvent e) {
+		        filterByName();
+		    }
+
+		    private void filterByName() {
+		        String filterText = txtFilterByName.getText();
+		        TableRowSorter<TableModel> sorter = new TableRowSorter<>(modelKH);
+		        tblKH.setRowSorter(sorter);
+		        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + filterText, 2));
+		    }
+		});
+		filterPanel.add(Box.createHorizontalStrut(30));
+		filterPanel.add(lblFilterByName);
+		filterPanel.add(txtFilterByName);
+		
+		// Lọc theo email
+		JLabel lblFilterByEmail = new JLabel("Lọc theo Email:");
+		JTextField txtFilterByEmail = new JTextField(15);
+		txtFilterByEmail.getDocument().addDocumentListener(new DocumentListener() {
+
+		    @Override
+		    public void removeUpdate(DocumentEvent e) {
+		        filterByEmail();
+		    }
+
+		    @Override
+		    public void insertUpdate(DocumentEvent e) {
+		    	filterByEmail();
+		    }
+
+		    @Override
+		    public void changedUpdate(DocumentEvent e) {
+		    	filterByEmail();
+		    }
+
+		    private void filterByEmail(){
+		        String filterText = txtFilterByEmail.getText();
+		        TableRowSorter<TableModel> sorter = new TableRowSorter<>(modelKH);
+		        tblKH.setRowSorter(sorter);
+		        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + filterText, 3));
+		    }
+		});
+		filterPanel.add(Box.createHorizontalStrut(30));
+		filterPanel.add(lblFilterByEmail);
+		filterPanel.add(txtFilterByEmail);
+		
+		//Lọc theo địa chỉ
+		JLabel lblFilterByAddress = new JLabel("Lọc theo địa chỉ:");
+		filterPanel.add(Box.createHorizontalStrut(30));
+		filterPanel.add(lblFilterByAddress);
+		filterPanel.add(cmbAddress = new JComboBox<String>());
+		kh_bus = new KhachHang_Bus();
+		dsKhachHang = kh_bus.getAllKH();
+		for(KhachHang kh : dsKhachHang) {
+			cmbAddress.addItem(kh.getDiaChi());
+		}
+		cmbAddress.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        String selectedAddress = cmbAddress.getSelectedItem().toString();
+		        TableRowSorter<TableModel> sorter = new TableRowSorter<>(modelKH);
+		        tblKH.setRowSorter(sorter);
+		        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + selectedAddress, 4));
+		    }
+		});
+		
+		// quay lại
+		JLabel lblRefresh = new JLabel("Refresh:");
+		btnRefresh = new JButton("Quay lại");
+		filterPanel.add(Box.createHorizontalStrut(30));
+		filterPanel.add(lblRefresh);
+		filterPanel.add(btnRefresh);
+		add(filterPanel, BorderLayout.SOUTH);
+		
+		
 		
 		btnTrangChu.addActionListener(this);
 		btnTour.addActionListener(this);
@@ -209,6 +328,7 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 		btnNhanVien.addActionListener(this);
 		btnSua.addActionListener(this);
 		btnKH.addActionListener(this);
+		btnRefresh.addActionListener(this);
 		tblKH.addMouseListener(this);
 		
 		kh_bus = new KhachHang_Bus();
@@ -270,6 +390,9 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 			new KhachHang_GUI().setVisible(true);
 		}else if(o==btnSua) {
 			suaThongTinKH();
+		}else if(o==btnRefresh) {
+			XoaHetTable();
+			showDataOnTable();
 		}
 		
 	}
@@ -278,8 +401,8 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 	public void mouseClicked(MouseEvent e) {
 		int row = tblKH.getSelectedRow();
 		txtMaKH.setText(modelKH.getValueAt(row, 0).toString());
-		txtTenKH.setText(modelKH.getValueAt(row, 1).toString());
-		txtSdt.setText(modelKH.getValueAt(row, 2).toString());
+		txtSdt.setText(modelKH.getValueAt(row, 1).toString());
+		txtTenKH.setText(modelKH.getValueAt(row, 2).toString());
 		txtEmail.setText(modelKH.getValueAt(row, 3).toString());
 		txtDiaChi.setText(modelKH.getValueAt(row, 4).toString());
 	}
