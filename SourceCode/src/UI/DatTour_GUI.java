@@ -46,6 +46,7 @@ import org.jdatepicker.impl.UtilDateModel;
 import BUS.HoaDon_Bus;
 import BUS.KhachHang_Bus;
 import Entity.KhachHang;
+import Entity.NhanVien;
 import Entity.ThanhVien;
 import Entity.TourDuLich;
 import Util.CodeGenerator;
@@ -63,13 +64,15 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 	private HoaDon_Bus hdBus;
 	private KhachHang_Bus khBus;
 	private CodeGenerator sinhMa;
-	public DatTour_GUI(TourDuLich tour) {
+	private NhanVien nv;
+	public DatTour_GUI(TourDuLich tour, NhanVien nv) {
 		setSize(1000, 750);
 		setLocationRelativeTo(null);
 		setUndecorated(true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setResizable(false);
 		this.tour = tour;
+		this.nv = nv;
 		hdBus = new HoaDon_Bus();
 		khBus = new KhachHang_Bus();
 		sinhMa = new CodeGenerator();
@@ -294,7 +297,7 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		String timeNow = timeFormat.format(new Date());
 		panelThongTinHD.add(new JLabel(timeNow));
 		panelThongTinHD.add(new JLabel("Tên nhân viên:"));
-		panelThongTinHD.add(new JLabel("Nguyễn Văn A"));
+		panelThongTinHD.add(new JLabel(nv.getTenNV()));
 		panelThongTinHD.add(new JLabel("Tên khách hàng:"));
 		panelThongTinHD.add(new JLabel("..."));
 		
@@ -386,9 +389,6 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		btnSua.addActionListener(this);
 		btnXoa.addActionListener(this);
 	
-	}
-	public static void main(String[] args) {
-		new DatTour_GUI(null).setVisible(true);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {

@@ -45,6 +45,7 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 		setSize(1200,750);
 		setLocationRelativeTo(null);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("img/travel.png"));
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
 		createGUI();
 	}
@@ -57,7 +58,7 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 		panelHead.add(btnTrangChu = new JButton("Trang chủ", imgHome));
 		btnTrangChu.setFont(new Font("Arial", Font.BOLD, 14));
 		btnTrangChu.setBorder(new EmptyBorder(10, 10, 10, 10));
-		btnTrangChu.setBackground(new Color(255, 165, 0));
+		btnTrangChu.setBackground(new Color(60, 179, 113));
 		btnTrangChu.setForeground(new Color(255, 255, 255));
 		
 		ImageIcon imgTour = new ImageIcon("img/search.png");
@@ -90,7 +91,7 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 		btnKH.setFont(new Font("Arial", Font.BOLD, 14));
 		btnKH.setBackground(Color.WHITE);
 		btnKH.setBorder(new EmptyBorder(10, 10, 10, 10));
-		btnKH.setBackground(new Color(60, 179, 113));
+		btnKH.setBackground(new Color(255, 165, 0));
 		btnKH.setForeground(new Color(255, 255, 255));
 		btnKH.setPreferredSize(btnKH.getPreferredSize());
 
@@ -213,15 +214,6 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 		kh_bus = new KhachHang_Bus();
 		showDataOnTable();
 		
-	}
-	
-	public boolean validData() {
-		String tenKH = txtTenKH.getText().trim();
-		String sdt = txtSdt.getText().trim();
-		String email = txtEmail.getText().trim();
-		String diaChi = txtDiaChi.getText().trim();
-				
-		return true;
 	}
 	
 	public void showDataOnTable() {

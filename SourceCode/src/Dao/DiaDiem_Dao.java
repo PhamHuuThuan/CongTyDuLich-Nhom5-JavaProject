@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import ConnectDB.ConnectDB;
 import Entity.DiaDiem;
@@ -60,29 +61,29 @@ public class DiaDiem_Dao {
 		}
 		return null;
 	}
+
 	public boolean themDiaDiem(DiaDiem dd) {
-		ConnectDB.getInstance();
-		PreparedStatement statement = null;
-		int n=0;
-		try {
-			Connection con = ConnectDB.getConnection();
-			statement = con.prepareStatement("insert into DiaDiem values(?, ?)");
-			statement.setString(1, dd.getMaDiaDiem());
-			statement.setString(2, dd.getTenDiaDiem());
-			n = statement.executeUpdate();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally{
-			try {
-				statement.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return n>0;
+	    ConnectDB.getInstance();
+	    PreparedStatement statement = null;
+	    int n = 0;
+	    try {
+	        Connection con = ConnectDB.getConnection();
+	        statement = con.prepareStatement("insert into DiaDiem values(?, ?)");
+	        statement.setString(1, dd.getMaDiaDiem());
+	        statement.setString(2, dd.getTenDiaDiem());
+	        n = statement.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            statement.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return n > 0;
 	}
+
 	public boolean updateDiaDiem(DiaDiem dd) {
 		ConnectDB.getInstance();
 		PreparedStatement stmt = null;
