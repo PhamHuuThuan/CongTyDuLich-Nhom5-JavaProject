@@ -38,6 +38,8 @@ import BUS.DiaDiem_Bus;
 import BUS.KhachHang_Bus;
 import Entity.DiaDiem;
 import Entity.KhachHang;
+import Entity.TourDuLich;
+import Util.CodeGenerator;
 
 public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 	private JButton btnTrangChu, btnTour, btnDiaDiem, btnThongKe, btnNhanVien;
@@ -48,6 +50,7 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 	private JButton btnThem,btnThem1,btnThem2, btnSua,btnSua1,btnSua2, btnXoa, btnXoa1, btnXoa2, btnReset, btnReset1, btnReset2;
 	private DiaDiem_Bus dd_bus;
 	private ArrayList<DiaDiem> dsDiaDiem;
+	private CodeGenerator maDiemKHGenerator,maDiemDLGenerator;
 	
 	public DiaDiem_GUI() {
 		setTitle("Vietour - Phần mềm quản lí tour du lịch");
@@ -321,6 +324,9 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		panelThongTin.add(Box.createVerticalStrut(35));
 		
 		dd_bus = new DiaDiem_Bus();
+		maDiemKHGenerator = new CodeGenerator();
+		maDiemDLGenerator = new CodeGenerator();
+		
 		showDataOnTableDiemKH();
 		showDataOnTableDiemKT();
 		
@@ -342,17 +348,6 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 	}
 	
 	
-	public boolean validData() {
-		String maDiemKH = txtMaDiemKH.getText().trim();
-		String tenDiemKH = txtTenDiemKH.getText().trim();
-		String maDiemDL = txtMaDiemDL.getText().trim();
-		String tenDiemDL = txtTenDiemDL.getText().trim();
-		String maPT = txtMaPT.getText().trim();
-		String tenPT = txtTenPT.getText().trim();
-		
-		return true;
-	}
-	
 	public void showDataOnTableDiemKH() {
 	    DefaultTableModel model = (DefaultTableModel) tblDiaDiemKH.getModel();
 	    model.getDataVector().removeAllElements();
@@ -365,6 +360,7 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 	
 	public void showDataOnTableDiemKT() {
 	    DefaultTableModel model = (DefaultTableModel) tblDiaDiemKT.getModel();
+	    model.getDataVector().removeAllElements();
 	    ArrayList<DiaDiem> dsDD = dd_bus.getAllDiemDuLich();
 	    for (DiaDiem dd : dsDD) {
 	        Object[] row = { dd.getMaDiaDiem(),dd.getTenDiaDiem()};
@@ -426,6 +422,25 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		}
 	}
 	
+	public void xoaDDDL() {
+		int row = tblDiaDiemKT.getSelectedRow();
+		if (row != -1) {
+			int con = JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa địa điểm này?", "Thông báo",
+					JOptionPane.YES_NO_OPTION);
+			if (con == JOptionPane.YES_OPTION) {
+				String maXoa = tblDiaDiemKT.getValueAt(row, 0).toString();
+				if (dd_bus.deleteDiaDiem(maXoa)) {
+					JOptionPane.showMessageDialog(this, "Xóa thành công");
+					modelDDKT.removeRow(row);
+				} else {
+					JOptionPane.showMessageDialog(this, "Xóa thất bại");
+				}
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Bạn chưa chon địa điểm cần xóa");
+		}
+	}
+	
 	public void resetDKH() {
 		txtMaDiemKH.setText(null);
 		txtTenDiemKH.setText(null);
@@ -434,46 +449,67 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		txtMaDiemDL.setText(null);
 		txtTenDiemDL.setText(null);
 	}
-	public String generateMaDiaDiemKH() {
-	    Random random = new Random();
-	    int n = random.nextInt(900) + 100;
-	    return "DKH" + n;
+	
+	public boolean validData() {
+		String maDiemKH = txtMaDiemKH.getText().trim();
+		String tenDiemKH = txtTenDiemKH.getText().trim();
+		String maDiemDL = txtMaDiemDL.getText().trim();
+		String tenDiemDL = txtTenDiemDL.getText().trim();
+		String maPT = txtMaPT.getText().trim();
+		String tenPT = txtTenPT.getText().trim();
+		
+		return true;
+	}
+	public DiaDiem convertTableToDDKH() {
+		String maDiemKH = txtMaDiemKH.getText().trim();
+		String tenDiemKH = txtTenDiemKH.getText().trim();
+		
+		String maDDKH ="";
+		if(txtMaDiemKH.getText().trim()==null || txtMaDiemKH.getText().length()==0) {
+			maDDKH = maDiemKHGenerator.generateMaDiaDiemKH();
+		}else {
+			maDDKH = txtMaDiemKH.getText().trim();
+		}
+		return new DiaDiem(maDDKH, tenDiemKH);
 	}
 	
-	public boolean themDiaDiemKH() {
-	    String tenDiaDiem = txtTenDiemKH.getText().trim();
-	    DiaDiem dd = new DiaDiem(generateMaDiaDiemKH(), tenDiaDiem);
-	    DiaDiem_Bus diaDiemBus = new DiaDiem_Bus();
-	    boolean result = diaDiemBus.themDiaDiem(dd);
-	    if (result) {
-	        JOptionPane.showMessageDialog(this, "Thêm địa điểm thành công");
-	        XoaHetTableKH();
-	        showDataOnTableDiemKH();
-	    } else {
-	        JOptionPane.showMessageDialog(this, "Thêm địa điểm thất bại!");
-	    }
-	    return result;
+	public void themDiaDiemKH() {
+		if(validData()) {
+			DiaDiem diaDiem = convertTableToDDKH();
+			if(dd_bus.themDiaDiem(diaDiem)) {
+				 JOptionPane.showMessageDialog(this, "Thêm địa điểm thành công");
+			     XoaHetTableKH();
+			     showDataOnTableDiemKH();
+			}else {
+				JOptionPane.showMessageDialog(this, "Thêm thất bại! Trùng mã!");
+			}
+		}
 	}
 	
-	public String generateMaDiaDiemDL() {
-	    Random random = new Random();
-	    int n = random.nextInt(900) + 100;
-	    return "DDL" + n;
+	public DiaDiem convertTableToDDDL() {
+		String maDiemDL = txtMaDiemDL.getText().trim();
+		String tenDiemDL = txtTenDiemDL.getText().trim();
+		
+		String maDDDL ="";
+		if(txtMaDiemDL.getText().trim()==null || txtMaDiemDL.getText().length()==0) {
+			maDDDL = maDiemDLGenerator.generateMaDiaDiemDL();
+		}else {
+			maDDDL = txtMaDiemDL.getText().trim();
+		}
+		return new DiaDiem(maDDDL, tenDiemDL);
 	}
 	
-	public boolean themDiaDiemDL() {
-	    String tenDiaDiem = txtTenDiemDL.getText().trim();
-	    DiaDiem dd = new DiaDiem(generateMaDiaDiemDL(), tenDiaDiem);
-	    DiaDiem_Bus diaDiemBus = new DiaDiem_Bus();
-	    boolean result = diaDiemBus.themDiaDiem(dd);
-	    if (result) {
-	        JOptionPane.showMessageDialog(this, "Thêm địa điểm thành công");
-	        XoaHetTableKT();
-	        showDataOnTableDiemKT();
-	    } else {
-	        JOptionPane.showMessageDialog(this, "Thêm địa điểm thất bại!");
-	    }
-	    return result;
+	public void themDiaDiemDL() {
+		if(validData()) {
+			DiaDiem diaDiem = convertTableToDDDL();
+			if(dd_bus.themDiaDiem(diaDiem)) {
+				 JOptionPane.showMessageDialog(this, "Thêm địa điểm thành công");
+			     XoaHetTableKT();
+			     showDataOnTableDiemKT();
+			}else {
+				JOptionPane.showMessageDialog(this, "Thêm thất bại! Trùng mã!");
+			}
+		}
 	}
 	
 	
@@ -506,6 +542,8 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 			suaThongTinDDDL();
 		}else if(o==btnXoa) {
 			xoaDDKH();
+		}else if(o==btnXoa1) {
+			xoaDDDL();
 		}else if(o==btnReset) {
 			resetDKH();
 		}else if(o==btnReset1) {
