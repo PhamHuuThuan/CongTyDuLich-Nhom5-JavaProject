@@ -169,4 +169,19 @@ public class DiaDiem_Dao {
 		}
 		return dsDD;
 	}
+	public String getMaDDMax() {
+		String maDD = "";
+		ConnectDB.getInstance();
+		try {
+			Connection con = ConnectDB.getConnection();
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select max(MaDiaDiem) as MAX from DiaDiem");
+			while(rs.next())
+				maDD = rs.getString("MAX");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return maDD;
+	}
 }

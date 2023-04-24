@@ -24,4 +24,7 @@ public class DiaDiem_Bus {
 	public boolean deleteDiaDiem(String maDiaDiem) {
         return dd_Dao.deleteDiaDiem(maDiaDiem);
     }
+	public String getMaDDMax() {
+		return dd_Dao.getMaDDMax();
+	}
 }

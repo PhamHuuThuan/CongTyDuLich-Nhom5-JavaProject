@@ -622,7 +622,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 			new Home_GUI(nv).setVisible(true);
 		}else if(o==btnDiaDiem) {
 			setVisible(false);
-			new DiaDiem_GUI().setVisible(true);
+			new DiaDiem_GUI(nv).setVisible(true);
 		}else if(o==btnNhanVien){
 			
 		}else if(o==btnTour) {
