@@ -39,7 +39,11 @@ import BUS.KhachHang_Bus;
 import BUS.PhuongTien_Bus;
 import Entity.DiaDiem;
 import Entity.KhachHang;
+<<<<<<< HEAD
 import Entity.PhuongTien;
+=======
+import Entity.NhanVien;
+>>>>>>> fcfc3dbd1647fbe39274aff664b0383b617ca6fa
 import Entity.TourDuLich;
 import Util.CodeGenerator;
 
@@ -52,17 +56,23 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 	private JButton btnThem,btnThem1,btnThem2, btnSua,btnSua1,btnSua2, btnXoa, btnXoa1, btnXoa2, btnReset, btnReset1, btnReset2;
 	private DiaDiem_Bus dd_bus = new DiaDiem_Bus();
 	private ArrayList<DiaDiem> dsDiaDiem;
+<<<<<<< HEAD
 	private PhuongTien_Bus pt_bus = new PhuongTien_Bus();
 	private ArrayList<PhuongTien> dsPhuongTien;
 	private CodeGenerator maDiemKHGenerator,maDiemDLGenerator,maPTGenerator = new CodeGenerator();
+=======
+	private CodeGenerator maDiemKHGenerator,maDiemDLGenerator;
+	private NhanVien nv;
+>>>>>>> fcfc3dbd1647fbe39274aff664b0383b617ca6fa
 	
-	public DiaDiem_GUI() {
+	public DiaDiem_GUI(NhanVien nv) {
 		setTitle("Vietour - Phần mềm quản lí tour du lịch");
 		setSize(1100, 750);
 		setLocationRelativeTo(null);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("img/travel.png"));
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
+		this.nv = nv;
 		createGUI();
 	}
 	public void createGUI() {
@@ -113,7 +123,7 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		
 		panelHead.add(Box.createHorizontalStrut(20));
 		ImageIcon imgUser = new ImageIcon("img/user.png");
-		panelHead.add(btnNhanVien = new JButton(": Nguyễn Văn A", imgUser));
+		panelHead.add(btnNhanVien = new JButton(": "+nv.getTenNV(), imgUser));
 		btnNhanVien.setBackground(new Color(250,  128, 144));
 		btnNhanVien.setForeground(Color.WHITE);
 		btnNhanVien.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
@@ -193,9 +203,15 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		tblDiaDiemKH.getColumnModel().getColumn(1).setPreferredWidth(470);
 		tblDiaDiemKH.setSize(MAXIMIZED_HORIZ, 150);
 		JScrollPane tblScroll = new JScrollPane(tblDiaDiemKH,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+<<<<<<< HEAD
 		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ, 130));
 		panelThongTin.add(tblScroll);
 		panelThongTin.add(Box.createVerticalStrut(70));
+=======
+		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ, 300));
+		panelThongTin.add(tblScroll);
+		panelThongTin.add(Box.createVerticalStrut(50));
+>>>>>>> fcfc3dbd1647fbe39274aff664b0383b617ca6fa
 		
 		//Diem du lich
 		panelAdd.add(Box.createVerticalStrut(30));
@@ -258,9 +274,15 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		tblDiaDiemKT.getColumnModel().getColumn(1).setPreferredWidth(470);
 		tblDiaDiemKT.setSize(MAXIMIZED_HORIZ, 150);
 		tblScroll = new JScrollPane(tblDiaDiemKT,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+<<<<<<< HEAD
 		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ, 135));
 		panelThongTin.add(tblScroll);
 		panelThongTin.add(Box.createVerticalStrut(70));
+=======
+		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ, 300));
+		panelThongTin.add(tblScroll);
+		panelThongTin.add(Box.createVerticalStrut(50));
+>>>>>>> fcfc3dbd1647fbe39274aff664b0383b617ca6fa
 		
 		
 		//Phuong tien
@@ -323,9 +345,13 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		tblPTien.getColumnModel().getColumn(1).setPreferredWidth(470);
 		tblPTien.setSize(MAXIMIZED_HORIZ, 150);
 		tblScroll = new JScrollPane(tblPTien,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+<<<<<<< HEAD
 		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ,100));
+=======
+		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ, 300));
+>>>>>>> fcfc3dbd1647fbe39274aff664b0383b617ca6fa
 		panelThongTin.add(tblScroll);
-		panelThongTin.add(Box.createVerticalStrut(35));
+		panelThongTin.add(Box.createVerticalStrut(10));
 		
 		showDataOnTableDiemKH();
 		showDataOnTableDiemKT();
@@ -567,6 +593,7 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		}
 	}
 	
+<<<<<<< HEAD
 	public PhuongTien convertTableToPT() {
 		String maPT = txtMaPT.getText().trim();
 		String tenPT = txtTenPT.getText().trim();
@@ -597,20 +624,22 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		new DiaDiem_GUI().setVisible(true);
 	}
 	
+=======
+>>>>>>> fcfc3dbd1647fbe39274aff664b0383b617ca6fa
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if(o==btnTrangChu) {
 			setVisible(false);
-			new Home_GUI().setVisible(true);
+			new Home_GUI(nv).setVisible(true);
 		}else if(o==btnDiaDiem) {
 			setVisible(false);
-			new DiaDiem_GUI().setVisible(true);
+			new DiaDiem_GUI(nv).setVisible(true);
 		}else if(o==btnNhanVien){
 			
 		}else if(o==btnTour) {
 			setVisible(false);
-			new QuanLiTour_GUI().setVisible(true);
+			new QuanLiTour_GUI(nv).setVisible(true);
 		}else if(o==btnThem) {
 			themDiaDiemKH();
 		}else if(o==btnThem1) {

@@ -35,6 +35,7 @@ import javax.swing.table.TableRowSorter;
 
 import BUS.KhachHang_Bus;
 import Entity.KhachHang;
+import Entity.NhanVien;
 
 public class KhachHang_GUI extends JFrame implements MouseListener,ActionListener{
 	private JButton btnTrangChu, btnTour, btnDonHang, btnKH, btnQuanLi, btnNhanVien,btnSua;
@@ -44,14 +45,16 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 	private KhachHang_Bus kh_bus;
 	private ArrayList<KhachHang> dsKhachHang;
 	private JComboBox<String> cmbMaKH,cmbAddress;
+	private NhanVien nv;
 	
-	public KhachHang_GUI() {
+	public KhachHang_GUI(NhanVien nv) {
 		setTitle("Vietour - Phan mem quan li tour du lich");
 		setSize(1200,750);
 		setLocationRelativeTo(null);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("img/travel.png"));
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
+		this.nv = nv;
 		createGUI();
 	}
 	public void createGUI() {
@@ -356,28 +359,24 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
         }
     }
 	
-	public static void main(String[] args) {
-		new KhachHang_GUI().setVisible(true);
-	}
-	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if(o==btnTrangChu) {
-			new Home_GUI().setVisible(true);
+			new Home_GUI(nv).setVisible(true);
 		}else if(o==btnDonHang) {
 			
 		}else if(o==btnQuanLi){
 			setVisible(false);
-			new QuanLiTour_GUI().setVisible(true);
+			new QuanLiTour_GUI(nv).setVisible(true);
 		}else if(o==btnTour) {
 			setVisible(false);
-			new Tour_GUI().setVisible(true);
+			new Tour_GUI(nv).setVisible(true);
 		}else if(o==btnNhanVien){
 			
 		}else if(o==btnKH){
 			setVisible(false);
-			new KhachHang_GUI().setVisible(true);
+			new KhachHang_GUI(nv).setVisible(true);
 		}else if(o==btnSua) {
 			suaThongTinKH();
 		}

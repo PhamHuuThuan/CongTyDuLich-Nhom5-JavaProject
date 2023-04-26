@@ -15,6 +15,7 @@ public class KhachHang_Bus {
 	public boolean updateKhachHang(KhachHang kh) {
 		return khachHang_Dao.updateKhachHang(kh);
 	}
+<<<<<<< HEAD
 	public ArrayList<KhachHang> searchByAddress(String address) {
 	    ArrayList<KhachHang> result = new ArrayList<>();
 	    for (KhachHang kh : getAllKH()) {
@@ -23,5 +24,9 @@ public class KhachHang_Bus {
 	        }
 	    }
 	    return result;
+=======
+	public String getMaKHMax() {
+		return khachHang_Dao.getMaKHMax();
+>>>>>>> fcfc3dbd1647fbe39274aff664b0383b617ca6fa
 	}
 }

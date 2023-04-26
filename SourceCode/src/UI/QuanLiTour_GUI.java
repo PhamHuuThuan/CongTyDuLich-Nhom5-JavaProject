@@ -69,6 +69,7 @@ import BUS.HoaDon_Bus;
 import BUS.Tour_Bus;
 import ConnectDB.ConnectDB;
 import Entity.DiaDiem;
+import Entity.NhanVien;
 import Entity.TourDuLich;
 import Util.CodeGenerator;
 
@@ -94,13 +95,15 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 	private ArrayList<TourDuLich> dsTour;
 	private ArrayList<String> dsAnh;
 	private CodeGenerator maTourGenerator;
+	private NhanVien nv;
 	
-	public QuanLiTour_GUI() {
+	public QuanLiTour_GUI(NhanVien nv) {
 		setTitle("Vietour - Phan mem quan li tour du lich");
 		setSize(1200, 820);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("img/travel.png"));
+		this.nv = nv;
 		createGUI();
 		
 	}
@@ -163,7 +166,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		
 		panelHead.add(Box.createHorizontalStrut(20));
 		ImageIcon imgUser = new ImageIcon("img/user.png");
-		panelHead.add(btnNhanVien = new JButton(": Nguyễn Văn A", imgUser));
+		panelHead.add(btnNhanVien = new JButton(": "+nv.getTenNV(), imgUser));
 		btnNhanVien.setBackground(new Color(250,  128, 144));
 		btnNhanVien.setForeground(Color.WHITE);
 		btnNhanVien.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
@@ -616,15 +619,15 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		Object o = e.getSource();
 		if(o==btnTrangChu) {
 			setVisible(false);
-			new Home_GUI().setVisible(true);
+			new Home_GUI(nv).setVisible(true);
 		}else if(o==btnDiaDiem) {
 			setVisible(false);
-			new DiaDiem_GUI().setVisible(true);
+			new DiaDiem_GUI(nv).setVisible(true);
 		}else if(o==btnNhanVien){
 			
 		}else if(o==btnTour) {
 			setVisible(false);
-			new Tour_GUI().setVisible(true);	
+			new QuanLiTour_GUI(nv).setVisible(true);	
 		}else if(o==btnAnh1) {
 			String strAnh1 = selectImg();
 			btnAnh1.setText(strAnh1);
@@ -683,9 +686,6 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		}else if(o==btnTim) {
 			timTour();
 		}
-	}
-	public static void main(String[] args) {
-		new QuanLiTour_GUI().setVisible(true);
 	}
 	@Override
 	public void mouseClicked(MouseEvent e) {

@@ -10,6 +10,8 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -22,14 +24,18 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+import Entity.NhanVien;
+
 public class Home_GUI extends JFrame implements ActionListener{
 	private JButton btnTrangChu, btnTour, btnDonHang, btnKH, btnQuanLi, btnNhanVien;
-	public Home_GUI() {
+	private NhanVien nv;
+	public Home_GUI(NhanVien nv) {
 		setTitle("Vietour - Phan mem quan li tour du lich");
 		setSize(1200, 820);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("img/travel.png"));
+		this.nv = nv;
 		createGUI();
 	}
 	public void createGUI() {
@@ -90,7 +96,7 @@ public class Home_GUI extends JFrame implements ActionListener{
 		
 		panelHead.add(Box.createHorizontalStrut(20));
 		ImageIcon imgUser = new ImageIcon("img/user.png");
-		panelHead.add(btnNhanVien = new JButton(": Nguyễn Văn A", imgUser));
+		panelHead.add(btnNhanVien = new JButton(": "+nv.getTenNV(), imgUser));
 		btnNhanVien.setBackground(new Color(250,  128, 144));
 		btnNhanVien.setForeground(Color.WHITE);
 		btnNhanVien.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
@@ -116,28 +122,28 @@ public class Home_GUI extends JFrame implements ActionListener{
 		btnKH.addActionListener(this);
 	}
 	public static void main(String[] args) {
-		new Home_GUI().setVisible(true);
+		NhanVien nv = new NhanVien("NV001", "0123456789", "12345", "Phạm Hữu Thuận", java.sql.Date.valueOf(LocalDate.of(2003, 5, 14)), true, "064xxxxxxxxx",  java.sql.Date.valueOf(LocalDate.of(2023, 3, 15)));
+		new Home_GUI(nv).setVisible(true);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if(o==btnTrangChu) {
 			setVisible(false);
-			new Home_GUI().setVisible(true);
+			new Home_GUI(nv).setVisible(true);
 		}else if(o==btnDonHang) {
 			
 		}else if(o==btnQuanLi){
 			setVisible(false);
-			new QuanLiTour_GUI().setVisible(true);
+			new QuanLiTour_GUI(nv).setVisible(true);
 		}else if(o==btnTour) {
 			setVisible(false);
-			new Tour_GUI().setVisible(true);
+			new Tour_GUI(nv).setVisible(true);
 		}else if(o==btnNhanVien){
 			
 		}else if(o==btnKH){
 			setVisible(false);
-			new KhachHang_GUI().setVisible(true);
+			new KhachHang_GUI(nv).setVisible(true);
 		}
-		
 	}
 }

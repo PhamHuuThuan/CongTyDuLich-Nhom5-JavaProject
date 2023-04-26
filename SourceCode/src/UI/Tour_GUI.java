@@ -62,6 +62,7 @@ import BUS.HoaDon_Bus;
 import BUS.Tour_Bus;
 import ConnectDB.ConnectDB;
 import Entity.DiaDiem;
+import Entity.NhanVien;
 import Entity.TourDuLich;
 import Util.CodeGenerator;
 
@@ -86,8 +87,9 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 	private Tour_Bus tourBus;
 	private HoaDon_Bus hdBus;
 	private DiaDiem_Bus ddBus;
+	private NhanVien nv;
 	
-	public Tour_GUI() {
+	public Tour_GUI(NhanVien nv) {
 		setTitle("Vietour - Phan mem quan li tour du lich");
 		setSize(1200, 820);
 		setLocationRelativeTo(null);
@@ -98,6 +100,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		tourBus = new Tour_Bus();
 		hdBus = new HoaDon_Bus();
 		ddBus = new DiaDiem_Bus();
+		this.nv = nv;
 		try {
 			ConnectDB.getInstance().connect();
 		} catch (SQLException e) {
@@ -164,7 +167,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		
 		panelHead.add(Box.createHorizontalStrut(20));
 		ImageIcon imgUser = new ImageIcon("img/user.png");
-		panelHead.add(btnNhanVien = new JButton(": Nguyễn Văn A", imgUser));
+		panelHead.add(btnNhanVien = new JButton(": "+nv.getTenNV(), imgUser));
 		btnNhanVien.setBackground(new Color(250,  128, 144));
 		btnNhanVien.setForeground(Color.WHITE);
 		btnNhanVien.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
@@ -473,20 +476,20 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		Object o = e.getSource();
 		if(o==btnTrangChu) {
 			setVisible(false);
-			new Home_GUI().setVisible(true);
+			new Home_GUI(nv).setVisible(true);
 		}else if(o==btnDonHang) {
 			
 		}else if(o==btnQuanLi){
 			setVisible(false);
-			new QuanLiTour_GUI().setVisible(true);
+			new QuanLiTour_GUI(nv).setVisible(true);
 		}else if(o==btnTour) {
 			setVisible(false);
-			new Tour_GUI().setVisible(true);
+			new Tour_GUI(nv).setVisible(true);
 		}else if(o==btnNhanVien){
 			
 		}else if(o==btnKH){
 			setVisible(false);
-			new KhachHang_GUI().setVisible(true);
+			new KhachHang_GUI(nv).setVisible(true);
 		}else if(o==btnLoc) {
 			locTour();
 		}else if(o==btnReset) {
@@ -496,14 +499,11 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		}else if(o==btnDatTour) {
 			int index = tblTour.getSelectedRow();
 			if(index!=-1) {
-				frameDatTour = new DatTour_GUI(dsTour.get(index));
+				frameDatTour = new DatTour_GUI(dsTour.get(index), nv);
 				frameDatTour.setVisible(true);
 			}
 		}
 		
-	}
-	public static void main(String[] args) {
-		new Tour_GUI().setVisible(true);
 	}
 	@Override
 	public void mouseClicked(MouseEvent e) {
