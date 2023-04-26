@@ -18,4 +18,12 @@ public class KhachHang_Bus {
 	public String getMaKHMax() {
 		return khachHang_Dao.getMaKHMax();
 	}
+	public boolean addKhachHang(KhachHang kh) {
+		if(khachHang_Dao.getKhachHangTheoSDT(kh.getSdt())==null)
+			return khachHang_Dao.addKhachHang(kh);
+		return false;
+	}
+	public KhachHang getKhachHangTheoSDT(String sdt) {
+		return khachHang_Dao.getKhachHangTheoSDT(sdt);
+	}
 }

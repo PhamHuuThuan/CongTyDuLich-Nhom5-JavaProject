@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 import ConnectDB.ConnectDB;
 import Entity.KhachHang;
-import Entity.ThanhVien;
 	public class KhachHang_Dao {
 	    public KhachHang_Dao() {
 	        
@@ -38,7 +37,6 @@ import Entity.ThanhVien;
 	        }
 	        return dsKH;
 	    }
-
 	    public boolean updateKhachHang(KhachHang kh) {
 	        ConnectDB.getInstance();
 	        PreparedStatement stmt = null;
@@ -51,6 +49,30 @@ import Entity.ThanhVien;
 		            stmt.setString(3, kh.getEmail());
 		            stmt.setString(4, kh.getDiaChi());
 		            stmt.setString(5, kh.getMaKH());
+		            n = stmt.executeUpdate();
+	            } catch (SQLException e) {
+	            	e.printStackTrace();
+	            } finally {
+	            try {
+	            	stmt.close();
+	            } catch (SQLException e) {
+	            	e.printStackTrace();
+	            }
+	            }
+	        return n > 0;
+	    }
+	    public boolean addKhachHang(KhachHang kh) {
+	        ConnectDB.getInstance();
+	        PreparedStatement stmt = null;
+	        int n=0;
+	        try {
+		            Connection con = ConnectDB.getConnection();
+		            stmt = con.prepareStatement("insert into KhachHang values(?, ?, ?, ?, ?)");
+		            stmt.setString(1, kh.getMaKH());
+		            stmt.setString(2, kh.getSdt());
+		            stmt.setString(3, kh.getTenKH());
+		            stmt.setString(4, kh.getEmail());
+		            stmt.setString(5, kh.getDiaChi());
 		            n = stmt.executeUpdate();
 	            } catch (SQLException e) {
 	            	e.printStackTrace();
@@ -78,14 +100,14 @@ import Entity.ThanhVien;
 			}
 			return maKH;
 		}
-	    public KhachHang getKhachHangTheoMa(String maKhachHang) throws ParseException {
+	    public KhachHang getKhachHangTheoSDT(String sdt){
 			PreparedStatement statement = null;
 			try {
 				ConnectDB.getInstance();
 				Connection con = ConnectDB.getConnection();
-				String sql = "Select * from KhachHang where MaKH like ?";
+				String sql = "Select * from KhachHang where SDT = ?";
 				statement = con.prepareStatement(sql);
-				statement.setString(1, "%"+maKhachHang+"%");
+				statement.setString(1, sdt);
 				ResultSet rs = statement.executeQuery();
 				while(rs.next()) {
 					 String maKH = rs.getString("MaKH");

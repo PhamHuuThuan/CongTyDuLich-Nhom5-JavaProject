@@ -2,12 +2,14 @@ package Util;
 
 import BUS.KhachHang_Bus;
 import BUS.DiaDiem_Bus;
+import BUS.HoaDon_Bus;
 import BUS.Tour_Bus;
 
 public class CodeGenerator {
 	Tour_Bus tourBus = new Tour_Bus();
 	KhachHang_Bus khBus = new KhachHang_Bus();
 	DiaDiem_Bus ddBus = new DiaDiem_Bus();
+	HoaDon_Bus hdBus = new HoaDon_Bus();
 	public String sinhMaTour() {
 		String maNew = "T";
 		String maPre = tourBus.getMaTourMax();
@@ -29,6 +31,22 @@ public class CodeGenerator {
 		String maPre = khBus.getMaKHMax();
 		if(maPre==null||maPre.trim().length()==0)
 			return "KH001";
+		int ma = Integer.parseInt(maPre.substring(2));
+		int i = 100;
+		while(ma<i && i>0) {
+			maNew+='0';
+			i/=10;
+		}
+		if((ma+1)%10==0)
+			maNew = maNew.substring(0, maNew.length()-1);
+		maNew += String.valueOf(ma+1);
+		return maNew;
+	}
+	public String sinhMaHD(){
+		String maNew = "HD";
+		String maPre = hdBus.getMaHoaDonMax();
+		if(maPre==null||maPre.trim().length()==0)
+			return "HD001";
 		int ma = Integer.parseInt(maPre.substring(2));
 		int i = 100;
 		while(ma<i && i>0) {

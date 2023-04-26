@@ -163,4 +163,19 @@ public class HoaDon_Dao {
 		}
 		return soLuongDat;
 	}
+	public String getMaHoaDonMax(){
+		String maHDMax = "";
+		ConnectDB.getInstance();
+		try {
+			Connection con = ConnectDB.getConnection();
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select max(SoHoaDon) as MAX from HoaDon");
+			while(rs.next())
+				maHDMax = rs.getString("MAX");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return maHDMax;
+	}
 }

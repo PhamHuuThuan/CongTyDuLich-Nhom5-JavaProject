@@ -7,4 +7,7 @@ public class HoaDon_Bus {
 	public int getSoLuongKhach(String maTour) {
 		return hd_Dao.soLuongDat(maTour);
 	}
+	public String getMaHoaDonMax() {
+		return hd_Dao.getMaHoaDonMax();
+	}
 }

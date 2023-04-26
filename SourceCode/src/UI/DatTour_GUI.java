@@ -30,6 +30,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -45,6 +46,7 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import BUS.HoaDon_Bus;
 import BUS.KhachHang_Bus;
+import Entity.HoaDon;
 import Entity.KhachHang;
 import Entity.NhanVien;
 import Entity.ThanhVien;
@@ -52,7 +54,7 @@ import Entity.TourDuLich;
 import Util.CodeGenerator;
 
 public class DatTour_GUI extends JFrame implements ActionListener{
-	private JButton btnThanhToan, btnClose, btnTao, btnThem, btnSua, btnXoa;
+	private JButton btnThanhToan, btnClose, btnTao, btnThem, btnSua, btnXoa, btnDaCoKH;
 	private TourDuLich tour;
 	private JTextField txtHoTenKH, txtEmail, txtSDT, txtDiaChi, txtHoTenTV;
 	private JLabel lblSoHD, lblNgayTao, lblTenKH, lblSoKhach, lblNguoiLon, lblTreEm, lblThanhTien;
@@ -65,6 +67,8 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 	private KhachHang_Bus khBus;
 	private CodeGenerator sinhMa;
 	private NhanVien nv;
+	private HoaDon hd;
+	private KhachHang kh;
 	public DatTour_GUI(TourDuLich tour, NhanVien nv) {
 		setSize(1000, 750);
 		setLocationRelativeTo(null);
@@ -73,6 +77,7 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		setResizable(false);
 		this.tour = tour;
 		this.nv = nv;
+		this.hd = new HoaDon();
 		hdBus = new HoaDon_Bus();
 		khBus = new KhachHang_Bus();
 		sinhMa = new CodeGenerator();
@@ -210,6 +215,10 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		pnTaoKH.add(btnTao=new JButton("Tạo khách hàng"));
 		btnTao.setForeground(Color.WHITE);
 		btnTao.setBackground(new Color(30, 144, 255));
+		pnTaoKH.add(Box.createHorizontalStrut(20));
+		pnTaoKH.add(btnDaCoKH=new JButton("Đã Có Thông Tin"));
+		btnDaCoKH.setForeground(Color.WHITE);
+		btnDaCoKH.setBackground(new Color(30, 144, 255));
 		
 		JPanel pnThongTinKhach = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		panelCenter.add(pnThongTinKhach);
@@ -224,7 +233,7 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		JPanel pnHoTen = new JPanel(new GridLayout(2, 1));
 		pnNhapKhach.add(pnHoTen);
 		pnHoTen.add(new JLabel("Họ và tên"));
-		pnHoTen.add(txtHoTenKH= new JTextField(20));
+		pnHoTen.add(txtHoTenTV= new JTextField(20));
 		
 		JPanel pnGioiTinh = new JPanel(new GridLayout(2, 1));
 		pnNhapKhach.add(Box.createHorizontalStrut(10));
@@ -291,7 +300,8 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		panelThanhToan.add(panelThongTinHD);
 		panelThongTinHD.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 0));
 		panelThongTinHD.add(new JLabel("Hóa đơn số:"));
-		panelThongTinHD.add(new JLabel("HD14"));
+		hd.setSoHoaDon(sinhMa.sinhMaHD());
+		panelThongTinHD.add(new JLabel(hd.getSoHoaDon()));
 		panelThongTinHD.add(new JLabel("Ngày tạo:"));
 		SimpleDateFormat timeFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
 		String timeNow = timeFormat.format(new Date());
@@ -299,7 +309,7 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		panelThongTinHD.add(new JLabel("Tên nhân viên:"));
 		panelThongTinHD.add(new JLabel(nv.getTenNV()));
 		panelThongTinHD.add(new JLabel("Tên khách hàng:"));
-		panelThongTinHD.add(new JLabel("..."));
+		panelThongTinHD.add(lblTenKH = new JLabel("..."));
 		
 		JPanel pnLine = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		pnLine.add(new JLabel("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"));
@@ -388,7 +398,7 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		btnThem.addActionListener(this);
 		btnSua.addActionListener(this);
 		btnXoa.addActionListener(this);
-	
+		btnDaCoKH.addActionListener(this);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -396,10 +406,29 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		if(o == btnClose) {
 			dispose();
 		}else if(o == btnTao) {
-			KhachHang kh = convertKH();
-			System.out.println(kh.getMaKH());
+			if(validDataKH()) {
+				KhachHang khNew = convertKH();
+				if(khBus.addKhachHang(khNew)) {
+					kh = khNew;
+					lblTenKH.setText(khNew.getTenKH());
+					JOptionPane.showMessageDialog(this, "Tạo thành công!");
+				}else {
+					JOptionPane.showMessageDialog(this, "Tạo thất bại! Sđt đã được sử dụng hoặc đã có lỗi xảy ra!");
+				}
+			}
+		}else if(o==btnDaCoKH) {
+			String sdt = JOptionPane.showInputDialog(null, "Nhập số điện thoại");
+			kh = khBus.getKhachHangTheoSDT(sdt);
+			if(kh!=null) {
+				txtHoTenKH.setText(kh.getTenKH());
+				txtSDT.setText(kh.getSdt());
+				txtEmail.setText(kh.getEmail());
+				txtDiaChi.setText(kh.getDiaChi());
+				lblTenKH.setText(kh.getTenKH());
+			}else {
+				JOptionPane.showMessageDialog(this, "Không tìm thấy!");
+			}
 		}
-		
 	}
 	public boolean validDataKH() {
 		String tenKH = txtHoTenKH.getText().trim();
@@ -423,6 +452,6 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		String mail = txtEmail.getText().trim();
 		String diaChi = txtDiaChi.getText().trim();
 		String maKH = sinhMa.sinhMaKH();
-		return new KhachHang(maKH, tenKH, sdt, mail, diaChi);
+		return new KhachHang(maKH, sdt, tenKH, mail, diaChi);
 	}
 }
