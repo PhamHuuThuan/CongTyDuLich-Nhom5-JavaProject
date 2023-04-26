@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import Dao.DiaDiem_Dao;
 import Entity.DiaDiem;
-import Entity.KhachHang;
-import Entity.TourDuLich;
 
 public class DiaDiem_Bus {
 	DiaDiem_Dao dd_Dao = new DiaDiem_Dao();

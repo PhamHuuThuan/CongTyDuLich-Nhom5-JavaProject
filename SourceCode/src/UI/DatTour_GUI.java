@@ -454,4 +454,5 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		String maKH = sinhMa.sinhMaKH();
 		return new KhachHang(maKH, sdt, tenKH, mail, diaChi);
 	}
+	
 }

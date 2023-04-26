@@ -15,6 +15,15 @@ public class KhachHang_Bus {
 	public boolean updateKhachHang(KhachHang kh) {
 		return khachHang_Dao.updateKhachHang(kh);
 	}
+	public ArrayList<KhachHang> searchByAddress(String address) {
+	    ArrayList<KhachHang> result = new ArrayList<>();
+	    for (KhachHang kh : getAllKH()) {
+	        if (kh.getDiaChi().equals(address)) {
+	            result.add(kh);
+	        }
+	    }
+	    return result;
+	}
 	public String getMaKHMax() {
 		return khachHang_Dao.getMaKHMax();
 	}

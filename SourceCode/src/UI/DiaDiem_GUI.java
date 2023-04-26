@@ -36,8 +36,10 @@ import javax.swing.table.DefaultTableModel;
 
 import BUS.DiaDiem_Bus;
 import BUS.KhachHang_Bus;
+import BUS.PhuongTien_Bus;
 import Entity.DiaDiem;
 import Entity.KhachHang;
+import Entity.PhuongTien;
 import Entity.NhanVien;
 import Entity.TourDuLich;
 import Util.CodeGenerator;
@@ -49,9 +51,11 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 	private JTable tblDiaDiemKH,tblDiaDiemKT,tblPTien;
 	private DefaultTableModel modelDDKH,modelDDKT,modelPT;
 	private JButton btnThem,btnThem1,btnThem2, btnSua,btnSua1,btnSua2, btnXoa, btnXoa1, btnXoa2, btnReset, btnReset1, btnReset2;
-	private DiaDiem_Bus dd_bus;
+	private DiaDiem_Bus dd_bus = new DiaDiem_Bus();
 	private ArrayList<DiaDiem> dsDiaDiem;
-	private CodeGenerator maDiemKHGenerator,maDiemDLGenerator;
+	private PhuongTien_Bus pt_bus = new PhuongTien_Bus();
+	private ArrayList<PhuongTien> dsPhuongTien;
+	private CodeGenerator maDiemKHGenerator,maDiemDLGenerator,maPTGenerator = new CodeGenerator();
 	private NhanVien nv;
 	
 	public DiaDiem_GUI(NhanVien nv) {
@@ -192,6 +196,9 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		tblDiaDiemKH.getColumnModel().getColumn(1).setPreferredWidth(470);
 		tblDiaDiemKH.setSize(MAXIMIZED_HORIZ, 150);
 		JScrollPane tblScroll = new JScrollPane(tblDiaDiemKH,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ, 130));
+		panelThongTin.add(tblScroll);
+		panelThongTin.add(Box.createVerticalStrut(70));
 		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ, 300));
 		panelThongTin.add(tblScroll);
 		panelThongTin.add(Box.createVerticalStrut(50));
@@ -257,7 +264,9 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		tblDiaDiemKT.getColumnModel().getColumn(1).setPreferredWidth(470);
 		tblDiaDiemKT.setSize(MAXIMIZED_HORIZ, 150);
 		tblScroll = new JScrollPane(tblDiaDiemKT,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ, 300));
+		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ, 135));
+		panelThongTin.add(tblScroll);
+		panelThongTin.add(Box.createVerticalStrut(70));
 		panelThongTin.add(tblScroll);
 		panelThongTin.add(Box.createVerticalStrut(50));
 		
@@ -322,16 +331,13 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		tblPTien.getColumnModel().getColumn(1).setPreferredWidth(470);
 		tblPTien.setSize(MAXIMIZED_HORIZ, 150);
 		tblScroll = new JScrollPane(tblPTien,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ, 300));
+		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ,100));
 		panelThongTin.add(tblScroll);
 		panelThongTin.add(Box.createVerticalStrut(10));
 		
-		dd_bus = new DiaDiem_Bus();
-		maDiemKHGenerator = new CodeGenerator();
-		maDiemDLGenerator = new CodeGenerator();
-		
 		showDataOnTableDiemKH();
 		showDataOnTableDiemKT();
+		showDataOnTablePTien();
 		
 		btnTrangChu.addActionListener(this);
 		btnTour.addActionListener(this);
@@ -339,15 +345,19 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		btnNhanVien.addActionListener(this);
 		btnThem.addActionListener(this);
 		btnThem1.addActionListener(this);
+		btnThem2.addActionListener(this);
 		btnSua.addActionListener(this);
 		btnSua1.addActionListener(this);
+		btnSua2.addActionListener(this);
 		btnXoa.addActionListener(this);
 		btnXoa1.addActionListener(this);
+		btnXoa2.addActionListener(this);
 		btnReset.addActionListener(this);
 		btnReset1.addActionListener(this);
+		btnReset2.addActionListener(this);
 		tblDiaDiemKH.addMouseListener(this);
 		tblDiaDiemKT.addMouseListener(this);
-		
+		tblPTien.addMouseListener(this);
 	}
 	
 	public void showDataOnTableDiemKH() {
@@ -370,6 +380,16 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 	    }
 	}
 	
+	public void showDataOnTablePTien() {
+	    DefaultTableModel model = (DefaultTableModel) tblPTien.getModel();
+	    model.getDataVector().removeAllElements();
+	    ArrayList<PhuongTien> dsPT = pt_bus.getAllPhuongTien();
+	    for (PhuongTien pt : dsPT) {
+	        Object[] row = { pt.getMaPT(),pt.getTenPT()};
+	        model.addRow(row);
+	    }
+	}
+	
 	public void XoaHetTableKH() {
 		DefaultTableModel dm = (DefaultTableModel) tblDiaDiemKH.getModel();
 		dm.getDataVector().removeAllElements();
@@ -380,16 +400,21 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		dm.getDataVector().removeAllElements();
 	}
 	
+	public void XoaHetTablePT() {
+		DefaultTableModel dm = (DefaultTableModel) tblPTien.getModel();
+		dm.getDataVector().removeAllElements();
+	}
+	
 	private void suaThongTinDDKH() {                                          
         DiaDiem dd = new DiaDiem();
         dd.setMaDiaDiem(txtMaDiemKH.getText().trim());
         dd.setTenDiaDiem(txtTenDiemKH.getText().trim());
         if (dd_bus.updateDiaDiem(dd)) {
-            JOptionPane.showMessageDialog(this, "Cập nhật thông tin tên địa điểm thành công!");
+            JOptionPane.showMessageDialog(this, "Cập nhật tên địa điểm khởi hành thành công!");
             XoaHetTableKH();
             showDataOnTableDiemKH();
         } else {
-            JOptionPane.showMessageDialog(this, "Cập nhật thông tin tên địa điểm thất bại!!!");
+            JOptionPane.showMessageDialog(this, "Cập nhật tên địa điểm khởi hành thất bại!!!");
         }
     }
 	private void suaThongTinDDDL() {                                          
@@ -397,11 +422,24 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
         dd.setMaDiaDiem(txtMaDiemDL.getText().trim());
         dd.setTenDiaDiem(txtTenDiemDL.getText().trim());
         if (dd_bus.updateDiaDiem(dd)) {
-            JOptionPane.showMessageDialog(this, "Cập nhật thông tin tên địa điểm thành công!");
+            JOptionPane.showMessageDialog(this, "Cập nhật tên địa điểm du lịch thành công!");
             XoaHetTableKT();
             showDataOnTableDiemKT();
         } else {
-            JOptionPane.showMessageDialog(this, "Cập nhật thông tin tên địa điểm thất bại!!!");
+            JOptionPane.showMessageDialog(this, "Cập nhật tên địa điểm du lịch thất bại!!!");
+        }
+    }
+	
+	private void suaThongTinPT() {                                          
+       PhuongTien pt = new PhuongTien();
+        pt.setMaPT(txtMaPT.getText().trim());
+        pt.setTenPT(txtTenPT.getText().trim());
+        if (pt_bus.updatePhuongTien(pt)) {
+            JOptionPane.showMessageDialog(this, "Cập nhật tên phương tiện thành công!");
+            XoaHetTablePT();
+            showDataOnTablePTien();
+        } else {
+            JOptionPane.showMessageDialog(this, "Cập nhật tên phương tiện thất bại!!!");
         }
     }
 	
@@ -413,14 +451,14 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 			if (con == JOptionPane.YES_OPTION) {
 				String maXoa = tblDiaDiemKH.getValueAt(row, 0).toString();
 				if (dd_bus.deleteDiaDiem(maXoa)) {
-					JOptionPane.showMessageDialog(this, "Xóa thành công");
+					JOptionPane.showMessageDialog(this, "Xóa địa điểm khởi hành thành công");
 					modelDDKH.removeRow(row);
 				} else {
-					JOptionPane.showMessageDialog(this, "Xóa thất bại");
+					JOptionPane.showMessageDialog(this, "Xóa địa điểm khởi hành thất bại !!!!");
 				}
 			}
 		} else {
-			JOptionPane.showMessageDialog(this, "Bạn chưa chon địa điểm cần xóa");
+			JOptionPane.showMessageDialog(this, "Bạn chưa chọn địa điểm cần xóa");
 		}
 	}
 	
@@ -432,14 +470,33 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 			if (con == JOptionPane.YES_OPTION) {
 				String maXoa = tblDiaDiemKT.getValueAt(row, 0).toString();
 				if (dd_bus.deleteDiaDiem(maXoa)) {
-					JOptionPane.showMessageDialog(this, "Xóa thành công");
+					JOptionPane.showMessageDialog(this, "Xóa địa điểm du lịch thành công");
 					modelDDKT.removeRow(row);
 				} else {
-					JOptionPane.showMessageDialog(this, "Xóa thất bại");
+					JOptionPane.showMessageDialog(this, "Xóa địa điểm du lịch thất bại !!!!");
 				}
 			}
 		} else {
-			JOptionPane.showMessageDialog(this, "Bạn chưa chon địa điểm cần xóa");
+			JOptionPane.showMessageDialog(this, "Bạn chưa chọn địa điểm cần xóa");
+		}
+	}
+	
+	public void xoaPT() {
+		int row = tblPTien.getSelectedRow();
+		if (row != -1) {
+			int con = JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa phương tiện này?", "Thông báo",
+					JOptionPane.YES_NO_OPTION);
+			if (con == JOptionPane.YES_OPTION) {
+				String maXoa = tblPTien.getValueAt(row, 0).toString();
+				if (pt_bus.deletePhuongTien(maXoa)) {
+					JOptionPane.showMessageDialog(this, "Xóa phương tiện thành công");
+					modelPT.removeRow(row);
+				} else {
+					JOptionPane.showMessageDialog(this, "Xóa phương tiện thất bại !!!");
+				}
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Bạn chưa chọn phương tiện cần xóa");
 		}
 	}
 	
@@ -450,6 +507,10 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 	public void resetDKT() {
 		txtMaDiemDL.setText(null);
 		txtTenDiemDL.setText(null);
+	}
+	public void resetPT() {
+		txtMaPT.setText(null);
+		txtTenPT.setText(null);
 	}
 	
 	public boolean validData() {
@@ -514,6 +575,31 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		}
 	}
 	
+	public PhuongTien convertTableToPT() {
+		String maPT = txtMaPT.getText().trim();
+		String tenPT = txtTenPT.getText().trim();
+		
+		String maPTien ="";
+		if(txtMaPT.getText().trim()==null || txtMaPT.getText().length()==0) {
+			maPT = maPTGenerator.generateMaPTien();
+		}else {
+			maPTien = txtMaPT.getText().trim();
+		}
+		return new PhuongTien(maPT, tenPT);
+	}
+	
+	public void themPTien() {
+		if(validData()) {
+			PhuongTien phuongTien = convertTableToPT();
+			if(pt_bus.themPhuongTien(phuongTien)) {
+				 JOptionPane.showMessageDialog(this, "Thêm phương tiện thành công");
+			     XoaHetTablePT();
+			     showDataOnTablePTien();
+			}else {
+				JOptionPane.showMessageDialog(this, "Thêm phương tiện! Trùng mã!");
+			}
+		}
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
@@ -532,19 +618,26 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 			themDiaDiemKH();
 		}else if(o==btnThem1) {
 			themDiaDiemDL();
-		}
-		else if(o==btnSua) {
+		}else if(o==btnThem2) {
+			themPTien();
+		}else if(o==btnSua) {
 			suaThongTinDDKH();
 		}else if(o==btnSua1) {
 			suaThongTinDDDL();
+		}else if(o==btnSua2) {
+			suaThongTinPT();
 		}else if(o==btnXoa) {
 			xoaDDKH();
 		}else if(o==btnXoa1) {
 			xoaDDDL();
+		}else if(o==btnXoa2) {
+			xoaPT();
 		}else if(o==btnReset) {
 			resetDKH();
 		}else if(o==btnReset1) {
 			resetDKT();
+		}else if(o==btnReset2) {
+			resetPT();
 		}
 	}
 
@@ -560,6 +653,12 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 	    if (row1 != -1) {
 	        txtMaDiemDL.setText(modelDDKT.getValueAt(row1, 0).toString());
 	        txtTenDiemDL.setText(modelDDKT.getValueAt(row1, 1).toString());
+	    }
+	    
+	    int row2 = tblPTien.getSelectedRow();
+	    if (row2 != -1) {
+	        txtMaPT.setText(modelPT.getValueAt(row2, 0).toString());
+	        txtTenPT.setText(modelPT.getValueAt(row2, 1).toString());
 	    }
 	}
 	
