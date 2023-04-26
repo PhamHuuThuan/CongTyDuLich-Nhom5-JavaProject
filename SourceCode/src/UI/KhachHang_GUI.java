@@ -2,7 +2,6 @@ package UI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -35,11 +34,10 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import BUS.KhachHang_Bus;
-import Entity.DiaDiem;
 import Entity.KhachHang;
 
 public class KhachHang_GUI extends JFrame implements MouseListener,ActionListener{
-	private JButton btnTrangChu, btnTour, btnDonHang, btnKH, btnQuanLi, btnNhanVien,btnSua,btnRefresh;
+	private JButton btnTrangChu, btnTour, btnDonHang, btnKH, btnQuanLi, btnNhanVien,btnSua;
 	private JTextField txtMaKH,txtTenKH,txtSdt,txtEmail,txtDiaChi;
 	private JTable tblKH;
 	private DefaultTableModel modelKH;
@@ -187,7 +185,7 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 		panelAdd.add(pnButtonTop);
 		panelAdd.add(Box.createVerticalStrut(150));		
 		
-
+		
 		String cols[] = {"Mã KH", "SĐT", "Tên KH", "Email", "Địa Chỉ"};
 		modelKH = new DefaultTableModel(cols, 0);
 		tblKH = new JTable(modelKH);
@@ -230,7 +228,7 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 		});
 				
 		// Lọc theo tên Khach hang	
-		JLabel lblFilterByName = new JLabel("Lọc theo tên KH:");
+		JLabel lblFilterByName = new JLabel("Tìm theo tên KH:");
 		JTextField txtFilterByName = new JTextField(15);
 		txtFilterByName.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -256,12 +254,12 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 		        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + filterText, 2));
 		    }
 		});
-		filterPanel.add(Box.createHorizontalStrut(30));
+		filterPanel.add(Box.createHorizontalStrut(50));
 		filterPanel.add(lblFilterByName);
 		filterPanel.add(txtFilterByName);
 		
 		// Lọc theo email
-		JLabel lblFilterByEmail = new JLabel("Lọc theo Email:");
+		JLabel lblFilterByEmail = new JLabel("Tìm theo Email:");
 		JTextField txtFilterByEmail = new JTextField(15);
 		txtFilterByEmail.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -287,7 +285,7 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 		        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + filterText, 3));
 		    }
 		});
-		filterPanel.add(Box.createHorizontalStrut(30));
+		filterPanel.add(Box.createHorizontalStrut(50));
 		filterPanel.add(lblFilterByEmail);
 		filterPanel.add(txtFilterByEmail);
 		
@@ -306,17 +304,11 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 		    public void actionPerformed(ActionEvent e) {
 		        String selectedAddress = cmbAddress.getSelectedItem().toString();
 		        TableRowSorter<TableModel> sorter = new TableRowSorter<>(modelKH);
-		        tblKH.setRowSorter(sorter);
 		        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + selectedAddress, 4));
+		        tblKH.setRowSorter(sorter);
+		        sorter.sort();
 		    }
 		});
-		
-		// quay lại
-		JLabel lblRefresh = new JLabel("Refresh:");
-		btnRefresh = new JButton("Quay lại");
-		filterPanel.add(Box.createHorizontalStrut(30));
-		filterPanel.add(lblRefresh);
-		filterPanel.add(btnRefresh);
 		add(filterPanel, BorderLayout.SOUTH);
 		
 		
@@ -328,9 +320,7 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 		btnNhanVien.addActionListener(this);
 		btnSua.addActionListener(this);
 		btnKH.addActionListener(this);
-		btnRefresh.addActionListener(this);
 		tblKH.addMouseListener(this);
-		
 		kh_bus = new KhachHang_Bus();
 		showDataOnTable();
 		
@@ -390,9 +380,6 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 			new KhachHang_GUI().setVisible(true);
 		}else if(o==btnSua) {
 			suaThongTinKH();
-		}else if(o==btnRefresh) {
-			XoaHetTable();
-			showDataOnTable();
 		}
 		
 	}
@@ -400,11 +387,13 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		int row = tblKH.getSelectedRow();
-		txtMaKH.setText(modelKH.getValueAt(row, 0).toString());
-		txtSdt.setText(modelKH.getValueAt(row, 1).toString());
-		txtTenKH.setText(modelKH.getValueAt(row, 2).toString());
-		txtEmail.setText(modelKH.getValueAt(row, 3).toString());
-		txtDiaChi.setText(modelKH.getValueAt(row, 4).toString());
+		if (row >= 0) {
+			txtMaKH.setText(modelKH.getValueAt(row, 0).toString());
+			txtSdt.setText(modelKH.getValueAt(row, 1).toString());
+			txtTenKH.setText(modelKH.getValueAt(row, 2).toString());
+			txtEmail.setText(modelKH.getValueAt(row, 3).toString());
+			txtDiaChi.setText(modelKH.getValueAt(row, 4).toString());
+		}
 	}
 
 	@Override
