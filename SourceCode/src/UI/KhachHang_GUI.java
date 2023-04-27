@@ -373,6 +373,7 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 			setVisible(false);
 			new Tour_GUI(nv).setVisible(true);
 		}else if(o==btnNhanVien){
+			setVisible(false);
 			new NhanVien_GUI(nv).setVisible(true);
 		}else if(o==btnKH){
 			setVisible(false);

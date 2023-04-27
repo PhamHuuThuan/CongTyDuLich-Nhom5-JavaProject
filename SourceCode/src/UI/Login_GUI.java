@@ -108,6 +108,7 @@ public class Login_GUI extends JFrame implements ActionListener{
 			JOptionPane.showMessageDialog(this, "SĐT hoặc mật khẩu không chính xác!");
 			return;
 		}
+		setVisible(false);
 		new Home_GUI(nv).setVisible(true);
 	}
 	public boolean validData() {
