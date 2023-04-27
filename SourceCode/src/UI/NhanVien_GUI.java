@@ -26,6 +26,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import Entity.NhanVien;
+
 public class NhanVien_GUI extends JFrame implements ActionListener, MouseListener{
 	private JButton btnSua, btnTrangChu, btnTour, btnDonHang, btnKhachHang, btnQuanLy, btnNhanVien;
 	private JLabel lblMaNV, lblSdt, lblMatKhau, lblTenNV, lblNgaySinh, lblGioiTinh, lblCCCD, lblNgayVL;
@@ -34,14 +36,15 @@ public class NhanVien_GUI extends JFrame implements ActionListener, MouseListene
 	private JRadioButton radNam, radNu;
 	private ButtonGroup group;
 	private JPanel pCenter;
-	public NhanVien_GUI() {
+	private NhanVien nv;
+	public NhanVien_GUI(NhanVien nv) {
 		setTitle("Thông tin nhân viên");
 		setSize(1200, 820);
 		setLocationRelativeTo(null);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("Img//travel.png"));
+		this.nv = nv;
 		createGUI();
 	}
-	
 	public void createGUI() {
 		JPanel pHeader = new JPanel();
 		pHeader.setLayout(new FlowLayout());
@@ -212,10 +215,6 @@ public class NhanVien_GUI extends JFrame implements ActionListener, MouseListene
 		
 		
 	}
-	
-	public static void main(String[] args) {
-		new NhanVien_GUI().setVisible(true);
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -223,15 +222,15 @@ public class NhanVien_GUI extends JFrame implements ActionListener, MouseListene
 		Object o = e.getSource();
 		if(o==btnTrangChu) {
 			setVisible(false);
-			new Home_GUI().setVisible(true);
+			new Home_GUI(nv).setVisible(true);
 		}else if(o==btnDonHang) {
 			
 		}else if(o==btnQuanLy){
 			setVisible(false);
-			new QuanLiTour_GUI().setVisible(true);
+			new QuanLiTour_GUI(nv).setVisible(true);
 		}else if(o==btnTour) {
 			setVisible(false);
-			new Tour_GUI().setVisible(true);
+			new Tour_GUI(nv).setVisible(true);
 		}else if(o==btnNhanVien){
 			
 		}else if(o==btnKhachHang){

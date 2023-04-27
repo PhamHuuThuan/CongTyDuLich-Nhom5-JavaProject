@@ -115,7 +115,7 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 		
 		panelHead.add(Box.createHorizontalStrut(20));
 		ImageIcon imgUser = new ImageIcon("img/user.png");
-		panelHead.add(btnNhanVien = new JButton(": Nguyễn Văn A", imgUser));
+		panelHead.add(btnNhanVien = new JButton(": " + nv.getTenNV(), imgUser));
 		btnNhanVien.setBackground(new Color(250,  128, 144));
 		btnNhanVien.setForeground(Color.WHITE);
 		btnNhanVien.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
@@ -373,7 +373,7 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 			setVisible(false);
 			new Tour_GUI(nv).setVisible(true);
 		}else if(o==btnNhanVien){
-			
+			new NhanVien_GUI(nv).setVisible(true);
 		}else if(o==btnKH){
 			setVisible(false);
 			new KhachHang_GUI(nv).setVisible(true);

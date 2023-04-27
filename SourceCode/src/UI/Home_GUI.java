@@ -140,7 +140,7 @@ public class Home_GUI extends JFrame implements ActionListener{
 			setVisible(false);
 			new Tour_GUI(nv).setVisible(true);
 		}else if(o==btnNhanVien){
-			
+			new NhanVien_GUI(nv).setVisible(true);
 		}else if(o==btnKH){
 			setVisible(false);
 			new KhachHang_GUI(nv).setVisible(true);

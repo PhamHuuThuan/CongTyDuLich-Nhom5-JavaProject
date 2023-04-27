@@ -689,6 +689,8 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 			reset();
 		}else if(o==btnTim) {
 			timTour();
+		}else if(o==btnNhanVien) {
+			new NhanVien_GUI(nv).setVisible(true);
 		}
 	}
 	@Override
