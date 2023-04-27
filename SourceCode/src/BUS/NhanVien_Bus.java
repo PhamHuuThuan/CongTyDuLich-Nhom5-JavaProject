@@ -8,4 +8,7 @@ public class NhanVien_Bus {
 	public boolean updateNhanVien(NhanVien nv) {
 		return nhanvien_dao.updateNhanVien(nv);
 	}
+	public NhanVien getNhanVien(String sdt, String pass) {
+		return nhanvien_dao.getNhanVien(sdt, pass);
+	}
 }
