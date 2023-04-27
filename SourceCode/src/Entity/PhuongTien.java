@@ -1,5 +1,7 @@
 package Entity;
 
+import java.util.Objects;
+
 public class PhuongTien {
 	private String maPT;
 	private String tenPT;
@@ -28,6 +30,24 @@ public class PhuongTien {
 	public void setTenPT(String tenPT) {
 		this.tenPT = tenPT;
 	}
-	
+	@Override
+	public String toString() {
+		return tenPT;
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(maPT);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PhuongTien other = (PhuongTien) obj;
+		return Objects.equals(maPT, other.maPT);
+	}
 	
 }

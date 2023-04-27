@@ -194,12 +194,8 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		tblDiaDiemKH.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tblDiaDiemKH.getColumnModel().getColumn(0).setPreferredWidth(300);
 		tblDiaDiemKH.getColumnModel().getColumn(1).setPreferredWidth(470);
-		tblDiaDiemKH.setSize(MAXIMIZED_HORIZ, 150);
 		JScrollPane tblScroll = new JScrollPane(tblDiaDiemKH,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ, 130));
-		panelThongTin.add(tblScroll);
-		panelThongTin.add(Box.createVerticalStrut(70));
-		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ, 300));
 		panelThongTin.add(tblScroll);
 		panelThongTin.add(Box.createVerticalStrut(50));
 		
@@ -266,8 +262,6 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		tblScroll = new JScrollPane(tblDiaDiemKT,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ, 135));
 		panelThongTin.add(tblScroll);
-		panelThongTin.add(Box.createVerticalStrut(70));
-		panelThongTin.add(tblScroll);
 		panelThongTin.add(Box.createVerticalStrut(50));
 		
 		
@@ -329,9 +323,8 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		tblPTien.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tblPTien.getColumnModel().getColumn(0).setPreferredWidth(300);
 		tblPTien.getColumnModel().getColumn(1).setPreferredWidth(470);
-		tblPTien.setSize(MAXIMIZED_HORIZ, 150);
 		tblScroll = new JScrollPane(tblPTien,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ,100));
+		tblScroll.setPreferredSize(new Dimension(MAXIMIZED_HORIZ,150));
 		panelThongTin.add(tblScroll);
 		panelThongTin.add(Box.createVerticalStrut(10));
 		

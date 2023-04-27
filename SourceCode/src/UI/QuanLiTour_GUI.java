@@ -66,10 +66,12 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import BUS.DiaDiem_Bus;
 import BUS.HoaDon_Bus;
+import BUS.PhuongTien_Bus;
 import BUS.Tour_Bus;
 import ConnectDB.ConnectDB;
 import Entity.DiaDiem;
 import Entity.NhanVien;
+import Entity.PhuongTien;
 import Entity.TourDuLich;
 import Util.CodeGenerator;
 
@@ -82,7 +84,9 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 	private JTableHeader tblHead;
 	private JButton btnTim;
 	private JTextField txtMaTour, txtTenTour, txtGia ,txtTim;
-	private JComboBox<String> cmbPhuongTien, cmbDiemKH, cmbDiemDen, cmbKhachSan;
+	private JComboBox<PhuongTien> cmbPhuongTien;
+	private JComboBox<DiaDiem> cmbDiemKH, cmbDiemDen;
+	private JComboBox<String> cmbKhachSan;
 	private SpinnerModel modelSpin;
 	private JSpinner spinSoCho;
 	private JDatePickerImpl ngayKH, ngayKT;
@@ -90,8 +94,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 	private DiaDiem_Bus dd_Bus;
 	private Tour_Bus tour_Bus;
 	private HoaDon_Bus hd_Bus;
-	private ArrayList<DiaDiem> dsDiemDi;
-	private ArrayList<DiaDiem> dsDiemDen;
+	private PhuongTien_Bus ptBus;
 	private ArrayList<TourDuLich> dsTour;
 	private ArrayList<String> dsAnh;
 	private CodeGenerator maTourGenerator;
@@ -104,10 +107,6 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("img/travel.png"));
 		this.nv = nv;
-		createGUI();
-		
-	}
-	public void createGUI() {
 		try {
 			ConnectDB.getInstance().connect();
 		} catch (SQLException e) {
@@ -117,7 +116,12 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		hd_Bus  = new HoaDon_Bus();
 		dd_Bus = new DiaDiem_Bus();
 		tour_Bus = new Tour_Bus();
+		ptBus = new PhuongTien_Bus();
 		maTourGenerator = new CodeGenerator();
+		createGUI();
+		
+	}
+	public void createGUI() {
 		//menu
 		JPanel panelHead = new JPanel();
 		panelHead.setLayout(new FlowLayout());
@@ -272,9 +276,10 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		pnPT.add(lblPT);
 		panelAdd.add(pnPT);
 		panelAdd.add(Box.createVerticalStrut(5));
-		String phuongTien[] = {"Xe khách", "Máy bay", "Xe bus", "Tàu"};
-		panelAdd.add(cmbPhuongTien= new JComboBox<>(phuongTien));
-		panelAdd.add(Box.createVerticalStrut(5));
+		panelAdd.add(cmbPhuongTien = new JComboBox<PhuongTien>());
+		for(PhuongTien pt : ptBus.getAllPhuongTien()) {
+			cmbPhuongTien.addItem(pt);
+		}
 		
 		JPanel pnDiemDi = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel lblDiemDi = new JLabel("Điểm khởi hành");
@@ -283,11 +288,11 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		pnDiemDi.add(lblDiemDi);
 		panelAdd.add(pnDiemDi);
 		panelAdd.add(Box.createVerticalStrut(5));
-		panelAdd.add(cmbDiemKH = new JComboBox<String>());
-		dsDiemDi = dd_Bus.getAllDiemDi();
-		for(DiaDiem dd : dsDiemDi) {
-			cmbDiemKH.addItem(dd.getTenDiaDiem());
+		panelAdd.add(cmbDiemKH = new JComboBox<DiaDiem>());
+		for(DiaDiem dd : dd_Bus.getAllDiemDi()) {
+			cmbDiemKH.addItem(dd);
 		}
+		
 		panelAdd.add(Box.createVerticalStrut(5));
 		
 		JPanel pnDiemDen = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -297,10 +302,9 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		pnDiemDen.add(lblDiemDen);
 		panelAdd.add(pnDiemDen);
 		panelAdd.add(Box.createVerticalStrut(5));
-		panelAdd.add(cmbDiemDen = new JComboBox<String>());
-		dsDiemDen = dd_Bus.getAllDiemDuLich();
-		for(DiaDiem dd : dsDiemDen) {
-			cmbDiemDen.addItem(dd.getTenDiaDiem());
+		panelAdd.add(cmbDiemDen = new JComboBox<DiaDiem>());
+		for(DiaDiem dd : dd_Bus.getAllDiemDuLich()) {
+			cmbDiemDen.addItem(dd);
 		}
 		panelAdd.add(Box.createVerticalStrut(5));
 		
@@ -692,16 +696,24 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		Object o = e.getSource();
 		if(o==tblTour) {
 			int r = tblTour.getSelectedRow();
-			updateChiTiet(r);
 	
 			txtMaTour.setText(dsTour.get(r).getMaTour());
 			txtTenTour.setText(dsTour.get(r).getTenTour());
 			txtAInputMoTa.setText(dsTour.get(r).getMoTa());
 			spinSoCho.setValue(dsTour.get(r).getSoCho());
-			cmbDiemDen.setSelectedItem(dsTour.get(r).getDiemDen().getTenDiaDiem());
-			cmbDiemKH.setSelectedItem(dsTour.get(r).getDiemKH().getTenDiaDiem());
+			for(int i=0; i<cmbDiemKH.getItemCount();i++) {
+				if(cmbDiemKH.getItemAt(i).getMaDiaDiem().equalsIgnoreCase(dsTour.get(r).getDiemKH().getMaDiaDiem()))
+					cmbDiemKH.setSelectedIndex(i);
+			}
+			for(int i=0; i<cmbDiemDen.getItemCount();i++) {
+				if(cmbDiemDen.getItemAt(i).getMaDiaDiem().equalsIgnoreCase(dsTour.get(r).getDiemDen().getMaDiaDiem()))
+					cmbDiemDen.setSelectedIndex(i);
+			}
 			cmbKhachSan.setSelectedItem(dsTour.get(r).getKhachSan());
-			cmbPhuongTien.setSelectedItem(dsTour.get(r).getPhuongTien());
+			for(int i=0; i<cmbPhuongTien.getItemCount();i++) {
+				if(cmbPhuongTien.getItemAt(i).getMaPT().equalsIgnoreCase(dsTour.get(r).getPhuongTien()))
+					cmbPhuongTien.setSelectedIndex(i);
+			}
 			txtGia.setText(String.valueOf(dsTour.get(r).getGia()));
 			
 			Calendar calendar = Calendar.getInstance();
@@ -720,6 +732,8 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 			modelDate = (UtilDateModel) ngayKT.getModel();
 			modelDate.setDate(year, month, day);
 			modelDate.setSelected(true);
+			
+			updateChiTiet(r);
 			
 			dsAnh = dsTour.get(r).getDsAnh();
 		}else if(o==tblHead) {
@@ -865,9 +879,9 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		year = model.getYear();
 		calendar.set(year, month, day);
 		java.sql.Date dateKT = new java.sql.Date(calendar.getTimeInMillis());
-		String phuongTien = cmbPhuongTien.getSelectedItem().toString();
-		DiaDiem diemKH = dsDiemDi.get(cmbDiemKH.getSelectedIndex());
-		DiaDiem diemKT = dsDiemDen.get(cmbDiemDen.getSelectedIndex());
+		PhuongTien phuongTien = (PhuongTien) cmbPhuongTien.getSelectedItem();
+		DiaDiem diemKH = (DiaDiem) cmbDiemKH.getSelectedItem();
+		DiaDiem diemKT = (DiaDiem) cmbDiemDen.getSelectedItem();
 		String khachSan = cmbKhachSan.getSelectedItem().toString();
 		double gia = Double.parseDouble(txtGia.getText().trim());
 		String maTour ="";
@@ -876,7 +890,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		}else {
 			maTour = txtMaTour.getText().trim();
 		}
-		return new TourDuLich(maTour, tenTour, moTa, soCho, phuongTien, dateKH, dateKT, diemKH, diemKT, khachSan, gia, dsAnh);
+		return new TourDuLich(maTour, tenTour, moTa, soCho, phuongTien.getMaPT(), dateKH, dateKT, diemKH, diemKT, khachSan, gia, dsAnh);
 	}
 	public void updateChiTiet(int r) {
 		lblTitleTour.setText("["+tblModel.getValueAt(r, 0)+"] "+ tblModel.getValueAt(r, 1));
@@ -919,7 +933,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		lblCho.setText(String.valueOf(soCho-hd_Bus.getSoLuongKhach(dsTour.get(r).getMaTour())));
 		
 		txtAMoTa.setText(dsTour.get(r).getMoTa());
-		lblPhuongTien.setText(dsTour.get(r).getPhuongTien());
+		lblPhuongTien.setText(cmbPhuongTien.getSelectedItem().toString());
 		lblKhachSan.setText(dsTour.get(r).getKhachSan());
 		lblNoiDen.setText(dsTour.get(r).getDiemDen().getTenDiaDiem());
 		

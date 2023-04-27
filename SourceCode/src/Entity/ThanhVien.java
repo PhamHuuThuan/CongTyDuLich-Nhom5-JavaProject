@@ -10,6 +10,7 @@ public class ThanhVien {
 	private boolean gioiTinh;
 	private Date ngaySinh;
 	private boolean luaTuoi;
+	private HoaDon hd;
 	public String getMaTV() {
 		return maTV;
 	}
@@ -40,21 +41,28 @@ public class ThanhVien {
 	public void setLuaTuoi(boolean luaTuoi) {
 		this.luaTuoi = luaTuoi;
 	}
-	public ThanhVien(String maTV, String tenTV, boolean gioiTinh, Date ngaySinh, boolean luaTuoi) {
+	public HoaDon getHd() {
+		return hd;
+	}
+	public void setHd(HoaDon hd) {
+		this.hd = hd;
+	}
+	public ThanhVien(String maTV) {
+		super();
+		this.maTV = maTV;
+	}
+	public ThanhVien(String maTV, String tenTV, boolean gioiTinh, Date ngaySinh, boolean luaTuoi, HoaDon hd) {
 		super();
 		this.maTV = maTV;
 		this.tenTV = tenTV;
 		this.gioiTinh = gioiTinh;
 		this.ngaySinh = ngaySinh;
 		this.luaTuoi = luaTuoi;
+		this.hd = hd;
 	}
 	public ThanhVien() {
 		super();
 		// TODO Auto-generated constructor stub
-	}
-	public ThanhVien(String maTV) {
-		super();
-		this.maTV = maTV;
 	}
 	@Override
 	public int hashCode() {
@@ -71,6 +79,4 @@ public class ThanhVien {
 		ThanhVien other = (ThanhVien) obj;
 		return Objects.equals(maTV, other.maTV);
 	}
-	
-	
 }

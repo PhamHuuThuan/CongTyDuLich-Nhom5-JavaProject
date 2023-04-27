@@ -59,10 +59,12 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import BUS.DiaDiem_Bus;
 import BUS.HoaDon_Bus;
+import BUS.PhuongTien_Bus;
 import BUS.Tour_Bus;
 import ConnectDB.ConnectDB;
 import Entity.DiaDiem;
 import Entity.NhanVien;
+import Entity.PhuongTien;
 import Entity.TourDuLich;
 import Util.CodeGenerator;
 
@@ -72,9 +74,9 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 	private JTextArea txtAMoTa;
 	private JLabel lblTourTim, lblTitleTour, lblGia, lblKhoiHanh, lblTime, lblNoiKH, lblCho, lblKhachSan, lblPhuongTien,lblNoiDen;
 	private JLabel lblHinh1, lblHinh2, lblHinh3, lblHinh4;
-	private JComboBox<String> cmbDi, cmbDen;
+	private JComboBox<DiaDiem> cmbDi, cmbDen;
 	private JComboBox<Integer> cmbSoNgay;
-	private JComboBox<String> cmbPhuongTien;
+	private JComboBox<PhuongTien> cmbPhuongTien;
 	private JDatePickerImpl datePicker;
 	private SpinnerModel modelSpin;
 	private JSpinner spinner;
@@ -82,11 +84,11 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 	private JTable tblTour;
 	private JTableHeader tblHead;
 	private ArrayList<TourDuLich> dsTour;
-	private ArrayList<DiaDiem> dsDiemDi, dsDiemDen;
 	private JFrame frameDatTour;
 	private Tour_Bus tourBus;
 	private HoaDon_Bus hdBus;
 	private DiaDiem_Bus ddBus;
+	private PhuongTien_Bus ptBus;
 	private NhanVien nv;
 	
 	public Tour_GUI(NhanVien nv) {
@@ -100,6 +102,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		tourBus = new Tour_Bus();
 		hdBus = new HoaDon_Bus();
 		ddBus = new DiaDiem_Bus();
+		ptBus = new PhuongTien_Bus();
 		this.nv = nv;
 		try {
 			ConnectDB.getInstance().connect();
@@ -183,20 +186,18 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		lblDiemDi.setFont(new Font("Arial", Font.BOLD, 14));
 		lblDiemDi.setForeground(new Color(0, 102, 204));
 		panelSearch.add(lblDiemDi);
-		panelSearch.add(cmbDi = new JComboBox<String>());
-		dsDiemDi = ddBus.getAllDiemDi();
-		for(DiaDiem dd : dsDiemDi) {
-			cmbDi.addItem(dd.getTenDiaDiem());
+		panelSearch.add(cmbDi = new JComboBox<DiaDiem>());
+		for(DiaDiem dd : ddBus.getAllDiemDi()) {
+			cmbDi.addItem(dd);
 		}
 		
 		JLabel lblDiemDen = new JLabel("Điểm đến");
 		lblDiemDen.setFont(new Font("Arial", Font.BOLD, 14));
 		lblDiemDen.setForeground(new Color(0, 102, 204));
 		panelSearch.add(lblDiemDen);
-		panelSearch.add(cmbDen = new JComboBox<String>());
-		dsDiemDen = ddBus.getAllDiemDuLich();
-		for(DiaDiem dd : dsDiemDen) {
-			cmbDen.addItem(dd.getTenDiaDiem());
+		panelSearch.add(cmbDen = new JComboBox<DiaDiem>());
+		for(DiaDiem dd : ddBus.getAllDiemDuLich()) {
+			cmbDen.addItem(dd);
 		}
 		
 		JLabel lblSoNgay = new JLabel("Số ngày");
@@ -233,8 +234,10 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		lblPT.setFont(new Font("Arial", Font.BOLD, 14));
 		lblPT.setForeground(new Color(0, 102, 204));
 		panelSearch.add(lblPT);
-		String phuongTien[] = {"Xe khách", "Máy bay", "Xe bus", "Tàu"};
-		panelSearch.add(cmbPhuongTien = new JComboBox<String>(phuongTien));
+		panelSearch.add(cmbPhuongTien = new JComboBox<PhuongTien>());
+		for(PhuongTien pt : ptBus.getAllPhuongTien()) {
+			cmbPhuongTien.addItem(pt);
+		}
 		
 		JPanel panelBtn = new JPanel(new FlowLayout());
 		panelBtn.add(btnLoc = new JButton("Lọc kết quả"));
@@ -652,11 +655,11 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		}
 	}
 	public void locTour() {
-		String diemDi = dsDiemDi.get(cmbDi.getSelectedIndex()).getMaDiaDiem();
-		String diemDen = dsDiemDen.get(cmbDen.getSelectedIndex()).getMaDiaDiem();
+		DiaDiem diemDi = (DiaDiem) cmbDi.getSelectedItem();
+		DiaDiem diemDen = (DiaDiem) cmbDen.getSelectedItem();
 		int soNgay = Integer.parseInt(cmbSoNgay.getSelectedItem().toString());
 		int soNguoi = Integer.parseInt(spinner.getValue().toString());
-		String phuongTien = cmbPhuongTien.getSelectedItem().toString();
+		PhuongTien phuongTien = (PhuongTien) cmbPhuongTien.getSelectedItem();
 		
 		DateModel<?> model = datePicker.getModel();
 		int day = model.getDay();
@@ -667,8 +670,8 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		calendar.set(year, month, day);
 		java.sql.Date date = new java.sql.Date(calendar.getTimeInMillis());
 		
-		ArrayList<TourDuLich>	dsLoc = tourBus.locTour(diemDi, diemDen, soNgay, date, soNguoi, phuongTien);
-		if(dsLoc!=null) {
+		ArrayList<TourDuLich>	dsLoc = tourBus.locTour(diemDi.getMaDiaDiem(), diemDen.getMaDiaDiem(), soNgay, date, soNguoi, phuongTien.getMaPT());
+		if(dsLoc.size()==0) {
 			dsTour = dsLoc;
 			dataArrayToTable(dsTour);
 			lblTourTim.setText( "Đã tìm được "+dsLoc.size()+" Tour phù hợp.");

@@ -27,8 +27,7 @@ public class HoaDon_Dao {
 			ResultSet rs = statement.executeQuery(query);
 			while(rs.next()) {
 				String soHD = rs.getString("SoHoaDon");
-				String ngayLapStr = rs.getString("NgayLapHD");
-				Date ngayLap = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(ngayLapStr);
+				java.sql.Timestamp ngayLap = rs.getTimestamp("NgayLapHD");
 				HoaDon hd = new HoaDon(soHD,ngayLap);
 				dsHD.add(hd);
 			}
@@ -50,8 +49,7 @@ public class HoaDon_Dao {
 			ResultSet rs = statement.executeQuery();
 			while(rs.next()) {
 				String soHD = rs.getString("SoHoaDon");
-				String ngayLapStr = rs.getString("NgayLapHD");
-				Date ngayLap = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(ngayLapStr);
+				java.sql.Timestamp ngayLap = rs.getTimestamp("NgayLapHD");
 				HoaDon hd = new HoaDon(soHD,ngayLap);
 				return hd;
 			}
@@ -75,7 +73,7 @@ public class HoaDon_Dao {
 			Connection con = ConnectDB.getConnection();
 			statement = con.prepareStatement("insert into HoaDon values(?, ?)");
 			statement.setString(1, hd.getSoHoaDon());
-			statement.setDate(2, hd.getNgayTaoHD());
+			statement.setTimestamp(2, hd.getNgayTaoHD());
 			n = statement.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -98,7 +96,7 @@ public class HoaDon_Dao {
 			Connection con = ConnectDB.getConnection();
 			stmt = con.prepareStatement("Update HoaDon Set NgayLapHD=? where SoHoaDon=?");
 			stmt.setString(1, hd.getSoHoaDon());
-			stmt.setDate(2, hd.getNgayTaoHD());
+			stmt.setTimestamp(2, hd.getNgayTaoHD());
 			n = stmt.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
