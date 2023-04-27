@@ -9,7 +9,7 @@ public class TourDuLich {
 	private String tenTour;
 	private String moTa;
 	private int soCho;
-	private String phuongTien;
+	private PhuongTien phuongTien;
 	private Date ngayDi;
 	private Date ngayKetThuc;
 	private DiaDiem diemKH;
@@ -24,7 +24,7 @@ public class TourDuLich {
 	public TourDuLich(String maTour) {
 		this.maTour = maTour;
 	}
-	public TourDuLich(String maTour, String tenTour, String moTa, int soCho, String phuongTien, Date ngayDi,
+	public TourDuLich(String maTour, String tenTour, String moTa, int soCho, PhuongTien phuongTien, Date ngayDi,
 			Date ngayKetThuc, DiaDiem diemKH, DiaDiem diemDen, String khachSan, double gia, ArrayList<String> dsAnh) {
 		super();
 		this.maTour = maTour;
@@ -100,12 +100,12 @@ public class TourDuLich {
 	}
 
 
-	public String getPhuongTien() {
+	public PhuongTien getPhuongTien() {
 		return phuongTien;
 	}
 
 
-	public void setPhuongTien(String phuongTien) {
+	public void setPhuongTien(PhuongTien phuongTien) {
 		this.phuongTien = phuongTien;
 	}
 

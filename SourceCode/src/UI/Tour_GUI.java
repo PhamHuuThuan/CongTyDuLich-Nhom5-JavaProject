@@ -556,7 +556,9 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 			lblCho.setText(String.valueOf(soCho-hdBus.getSoLuongKhach(dsTour.get(r).getMaTour())));
 			
 			txtAMoTa.setText(dsTour.get(r).getMoTa());
-			lblPhuongTien.setText(dsTour.get(r).getPhuongTien());
+			for(int i=0; i< cmbPhuongTien.getItemCount(); i++)
+				if(cmbPhuongTien.getItemAt(i).getMaPT().equalsIgnoreCase(dsTour.get(r).getPhuongTien().getMaPT()))
+					lblPhuongTien.setText(cmbPhuongTien.getItemAt(i).getTenPT());
 			lblKhachSan.setText(dsTour.get(r).getKhachSan());
 			lblNoiDen.setText(dsTour.get(r).getDiemDen().getTenDiaDiem());
 			

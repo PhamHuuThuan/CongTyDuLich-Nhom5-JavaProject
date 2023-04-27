@@ -12,6 +12,7 @@ import java.util.List;
 
 import ConnectDB.ConnectDB;
 import Entity.DiaDiem;
+import Entity.PhuongTien;
 import Entity.TourDuLich;
 
 public class TourDuLich_Dao {
@@ -36,7 +37,7 @@ public class TourDuLich_Dao {
 				String[] array = rs.getString("Anh").split(";");
 				List<String> list = Arrays.asList(array);
 				ArrayList<String> dsAnh = new ArrayList<>(list);
-				TourDuLich tour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getString("MoTa"), rs.getInt("SoCho"), rs.getString("PhuongTien"), rs.getDate("NgayDi"), rs.getDate("NgayKetThuc"), diemKH, diemKT, rs.getString("KhachSan"), rs.getDouble("Gia"), dsAnh);
+				TourDuLich tour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getString("MoTa"), rs.getInt("SoCho"), new PhuongTien(rs.getString("PhuongTien")), rs.getDate("NgayDi"), rs.getDate("NgayKetThuc"), diemKH, diemKT, rs.getString("KhachSan"), rs.getDouble("Gia"), dsAnh);
 				dsTour.add(tour);
 			}
 		} catch (SQLException e) {
@@ -56,7 +57,7 @@ public class TourDuLich_Dao {
 			stmt.setString(2, x.getTenTour());
 			stmt.setString(3, x.getMoTa());
 			stmt.setInt(4, x.getSoCho());
-			stmt.setString(5, x.getPhuongTien());
+			stmt.setString(5, x.getPhuongTien().getMaPT());
 			stmt.setDate(6, x.getNgayDi());
 			stmt.setDate(7, x.getNgayKetThuc());
 			stmt.setString(8, x.getDiemKH().getMaDiaDiem());
@@ -118,7 +119,7 @@ public class TourDuLich_Dao {
 			stmt.setString(1, tourNew.getTenTour());
 			stmt.setString(2, tourNew.getMoTa());
 			stmt.setInt(3, tourNew.getSoCho());
-			stmt.setString(4, tourNew.getPhuongTien());
+			stmt.setString(4, tourNew.getPhuongTien().getMaPT());
 			stmt.setDate(5, tourNew.getNgayDi());
 			stmt.setDate(6, tourNew.getNgayKetThuc());
 			stmt.setString(7, tourNew.getDiemKH().getMaDiaDiem());
@@ -184,7 +185,7 @@ public class TourDuLich_Dao {
 				String[] array = rs.getString("Anh").split(";");
 				List<String> list = Arrays.asList(array);
 				ArrayList<String> dsAnh = new ArrayList<>(list);
-				TourDuLich tour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getString("MoTa"), rs.getInt("SoCho"), rs.getString("PhuongTien"), rs.getDate("NgayDi"), rs.getDate("NgayKetThuc"), diemKH, diemKT, rs.getString("KhachSan"), rs.getDouble("Gia"), dsAnh);
+				TourDuLich tour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getString("MoTa"), rs.getInt("SoCho"), new PhuongTien(rs.getString("PhuongTien")), rs.getDate("NgayDi"), rs.getDate("NgayKetThuc"), diemKH, diemKT, rs.getString("KhachSan"), rs.getDouble("Gia"), dsAnh);
 				dsTour.add(tour);
 			}
 		} catch (SQLException e) {
@@ -221,7 +222,7 @@ public class TourDuLich_Dao {
 				String[] array = rs.getString("Anh").split(";");
 				List<String> list = Arrays.asList(array);
 				ArrayList<String> dsAnh = new ArrayList<>(list);
-				TourDuLich tour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getString("MoTa"), rs.getInt("SoCho"), rs.getString("PhuongTien"), rs.getDate("NgayDi"), rs.getDate("NgayKetThuc"), diemKH, diemKT, rs.getString("KhachSan"), rs.getDouble("Gia"), dsAnh);
+				TourDuLich tour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getString("MoTa"), rs.getInt("SoCho"), new PhuongTien(rs.getString("PhuongTien")), rs.getDate("NgayDi"), rs.getDate("NgayKetThuc"), diemKH, diemKT, rs.getString("KhachSan"), rs.getDouble("Gia"), dsAnh);
 				dsTour.add(tour);
 			}
 		} catch (SQLException e) {

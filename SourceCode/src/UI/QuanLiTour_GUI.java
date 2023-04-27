@@ -628,7 +628,8 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 			setVisible(false);
 			new DiaDiem_GUI(nv).setVisible(true);
 		}else if(o==btnNhanVien){
-			
+			setVisible(false);
+			new NhanVien_GUI(nv).setVisible(true);
 		}else if(o==btnTour) {
 			setVisible(false);
 			new QuanLiTour_GUI(nv).setVisible(true);	
@@ -689,9 +690,6 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 			reset();
 		}else if(o==btnTim) {
 			timTour();
-		}else if(o==btnNhanVien) {
-			setVisible(false);
-			new NhanVien_GUI(nv).setVisible(true);
 		}
 	}
 	@Override
@@ -714,7 +712,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 			}
 			cmbKhachSan.setSelectedItem(dsTour.get(r).getKhachSan());
 			for(int i=0; i<cmbPhuongTien.getItemCount();i++) {
-				if(cmbPhuongTien.getItemAt(i).getMaPT().equalsIgnoreCase(dsTour.get(r).getPhuongTien()))
+				if(cmbPhuongTien.getItemAt(i).getMaPT().equalsIgnoreCase(dsTour.get(r).getPhuongTien().getMaPT()))
 					cmbPhuongTien.setSelectedIndex(i);
 			}
 			txtGia.setText(String.valueOf(dsTour.get(r).getGia()));
@@ -893,7 +891,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		}else {
 			maTour = txtMaTour.getText().trim();
 		}
-		return new TourDuLich(maTour, tenTour, moTa, soCho, phuongTien.getMaPT(), dateKH, dateKT, diemKH, diemKT, khachSan, gia, dsAnh);
+		return new TourDuLich(maTour, tenTour, moTa, soCho, phuongTien, dateKH, dateKT, diemKH, diemKT, khachSan, gia, dsAnh);
 	}
 	public void updateChiTiet(int r) {
 		lblTitleTour.setText("["+tblModel.getValueAt(r, 0)+"] "+ tblModel.getValueAt(r, 1));

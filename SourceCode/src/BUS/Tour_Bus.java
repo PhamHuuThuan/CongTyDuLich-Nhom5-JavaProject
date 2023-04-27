@@ -60,7 +60,7 @@ public class Tour_Bus {
 	}
 	public boolean addTour(TourDuLich tour) {
 		boolean kq = tour_Dao.addTour(tour);
-		if(kq == true) {
+		if(kq) {
 			luuImage(tour);
 			tour_Dao.updateDSAnh(tour.getMaTour(), tour.getDsAnh());
 			sendEmail(tour);
@@ -115,11 +115,12 @@ public class Tour_Bus {
 				   msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(kh.getEmail()));
 				   msg.setSubject("VIETOUR - ["+tour.getMaTour()+"] "+tour.getTenTour()+ " <<New Tour>>");
 				   msg.setText("Xin chào "+ kh.getTenKH()+"!\n"
-					   +tour.getMoTa()+"\n"
-					   +"Ngày khởi hành: "+tour.getNgayDi()+"\n"
-					   +"Điểm đến: "+ tour.getDiemDen().getTenDiaDiem()+"\n"
-					   +"Phương tiện: "+tour.getPhuongTien()+"\n"
-					   +"Hãy cùng VIETOUR khám phá ngay nào!");
+						   +"["+tour.getMaTour()+"] "+tour.getTenTour()+ " <<New Tour>>"
+						   +"Mô tả: "+tour.getMoTa()+"\n"
+						   +"Ngày khởi hành: "+tour.getNgayDi()+"\n"
+						   +"Lịch trình: "+ tour.getDiemKH().getTenDiaDiem() +" - "+tour.getDiemDen().getTenDiaDiem()+"\n"
+						   +"Phương tiện: "+tour.getPhuongTien().getTenPT()+"\n"
+						   +"Hãy cùng VIETOUR khám phá ngay nào!");
 				   Transport.send(msg);
 			   }
 			} catch (AddressException e) {

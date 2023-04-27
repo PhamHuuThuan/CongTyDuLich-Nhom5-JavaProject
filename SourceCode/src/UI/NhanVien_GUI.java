@@ -79,7 +79,7 @@ public class NhanVien_GUI extends JFrame implements ActionListener, FocusListene
 		
 		ImageIcon imgTour = new ImageIcon("Img/search.png");
 		pHeader.add(Box.createHorizontalStrut(20));
-		pHeader.add(btnTour = new JButton("Tuor", imgTour));
+		pHeader.add(btnTour = new JButton("Tour", imgTour));
 		btnTour.setFont(new Font("Arial",Font.BOLD,14));
 		btnTour.setBackground(Color.WHITE);
 		btnTour.setBorder(new EmptyBorder(10,10,10,10));
