@@ -9,12 +9,15 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -25,29 +28,33 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import org.jdatepicker.DateModel;
 import org.jdatepicker.impl.DateComponentFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import BUS.NhanVien_Bus;
 import Entity.NhanVien;
 
-public class NhanVien_GUI extends JFrame implements ActionListener{
+public class NhanVien_GUI extends JFrame implements ActionListener, FocusListener{
 	private JButton btnSua, btnLogout, btnTrangChu, btnTour, btnDonHang, btnKhachHang, btnQuanLy, btnNhanVien;
 	private JLabel lblMaNV, lblSdt, lblMatKhau, lblTenNV, lblNgaySinh, lblGioiTinh, lblCCCD, lblNgayVL;
-	private JTextField txtMaNV, txtSdt, txtTenNV, txtCCCD, txtNgayVL;
+	private JTextField txtMaNV, txtSdt, txtTenNV, txtCCCD;
 	private JPasswordField password;
 	private JRadioButton radNam, radNu;
 	private JDatePickerImpl ngaySinh, ngayVL;
 	private ButtonGroup group;
 	private JPanel pCenter;
 	private NhanVien nv;
+	private NhanVien_Bus nvBus;
 	public NhanVien_GUI(NhanVien nv) {
 		setTitle("Thông tin nhân viên");
 		setSize(1200, 820);
@@ -55,6 +62,7 @@ public class NhanVien_GUI extends JFrame implements ActionListener{
 		setIconImage(Toolkit.getDefaultToolkit().getImage("Img//travel.png"));
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.nv = nv;
+		nvBus = new NhanVien_Bus();
 		createGUI();
 	}
 	public void createGUI() {
@@ -66,7 +74,7 @@ public class NhanVien_GUI extends JFrame implements ActionListener{
 		pHeader.add(btnTrangChu = new JButton("Trang Chủ", imgHome));
 		btnTrangChu.setFont(new Font("Arial", Font.BOLD, 14));
 		btnTrangChu.setBorder(new EmptyBorder(10,10,10,10));
-		btnTrangChu.setBackground(new Color(255,165,0));
+		btnTrangChu.setBackground(new Color(60,179,113));
 		btnTrangChu.setForeground(new Color(255,255,255));
 		
 		ImageIcon imgTour = new ImageIcon("Img/search.png");
@@ -116,7 +124,7 @@ public class NhanVien_GUI extends JFrame implements ActionListener{
 		pHeader.add(Box.createHorizontalStrut(20));
 		ImageIcon imgUser = new ImageIcon("Img/user.png");
 		pHeader.add(btnNhanVien = new JButton(":"+ nv.getTenNV(), imgUser));
-		btnNhanVien.setBackground(new Color(250, 128, 144));
+		btnNhanVien.setBackground(new Color(255,165,0));
 		btnNhanVien.setForeground(Color.WHITE);
 		btnNhanVien.setBorder(BorderFactory.createEmptyBorder(5,10,5,10));
 		btnNhanVien.setFont(new Font("Arial", Font.BOLD, 12));
@@ -183,7 +191,6 @@ public class NhanVien_GUI extends JFrame implements ActionListener{
 		txtTenNV = new JTextField();
 		txtSdt = new JTextField();
 		txtCCCD = new JTextField();
-		txtNgayVL = new JTextField();
 		radNam = new JRadioButton("Nam", true);
 		radNu = new JRadioButton("Nữ");
 		group = new ButtonGroup();
@@ -193,6 +200,7 @@ public class NhanVien_GUI extends JFrame implements ActionListener{
 		b0.add(lblTitle);
 		b1.add(lblMaNV);
 		b1.add(txtMaNV);
+		txtMaNV.setEditable(false);
 		b2.add(lblMatKhau);
 		b2.add(password);
 		b3.add(lblTenNV);
@@ -205,8 +213,8 @@ public class NhanVien_GUI extends JFrame implements ActionListener{
 		properties.put("text.today", "Today");
 		properties.put("text.month", "Month");
 		properties.put("text.year", "Year");
-		JDatePanelImpl datePanelKH = new JDatePanelImpl(model, properties);
-		ngaySinh = new JDatePickerImpl(datePanelKH, new DateComponentFormatter());
+		JDatePanelImpl datePanel = new JDatePanelImpl(model, properties);
+		ngaySinh = new JDatePickerImpl(datePanel, new DateComponentFormatter());
 		b5.add(ngaySinh);
 		b5.add(Box.createHorizontalStrut(10));
 		b5.add(lblGioiTinh);
@@ -215,7 +223,13 @@ public class NhanVien_GUI extends JFrame implements ActionListener{
 		b6.add(lblCCCD);
 		b6.add(txtCCCD);
 		b7.add(lblNgayVL);
-		ngayVL = new JDatePickerImpl(datePanelKH, new DateComponentFormatter());
+		UtilDateModel model1 = new UtilDateModel();
+		Properties properties1 = new Properties();
+		properties1.put("text.today", "Today");
+		properties1.put("text.month", "Month");
+		properties1.put("text.year", "Year");
+		JDatePanelImpl datePanelVL = new JDatePanelImpl(model1, properties1);
+		ngayVL = new JDatePickerImpl(datePanelVL, new DateComponentFormatter());
 		b7.add(ngayVL);
 		b7.add(Box.createHorizontalStrut(165));
 		b8.add(btnSua = new JButton("Cập nhật thông tin"));
@@ -265,8 +279,11 @@ public class NhanVien_GUI extends JFrame implements ActionListener{
 		btnLogout.setBackground(new Color(255, 127, 80));
 		btnLogout.setForeground(new Color(255, 255, 255));
 		
-		ImageIcon member = new ImageIcon("Img/member.jpg");
-		JLabel lblMember = new JLabel(member);
+		ImageIcon hinh2 = new ImageIcon("img/EMP.jpg");
+		Image image2 = hinh2.getImage();
+		Image scaledImage2 = image2.getScaledInstance(1200, 125, Image.SCALE_SMOOTH);
+		ImageIcon scaledIcon2 = new ImageIcon(scaledImage2);
+		JLabel lblMember = new JLabel(scaledIcon2);
 		add(lblMember, BorderLayout.SOUTH);
 		
 		txtMaNV.setText(nv.getMaNV());
@@ -274,6 +291,7 @@ public class NhanVien_GUI extends JFrame implements ActionListener{
 		txtSdt.setText(nv.getSoDT());
 		txtCCCD.setText(nv.getCccd());
 		password.setText(nv.getMatKhau());
+		password.setEchoChar('*');
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(nv.getNgaySinh());
 		int year = calendar.get(Calendar.YEAR);
@@ -290,6 +308,7 @@ public class NhanVien_GUI extends JFrame implements ActionListener{
 		UtilDateModel modelDate1 = (UtilDateModel) ngayVL.getModel();
 		modelDate1.setSelected(true);
 		modelDate1.setDate(year, month, day);
+		ngayVL.getComponent(1).setEnabled(false);
 		
 		if(nv.getGioiTinh())
 			radNam.setSelected(true);
@@ -304,6 +323,7 @@ public class NhanVien_GUI extends JFrame implements ActionListener{
 		btnKhachHang.addActionListener(this);
 		btnSua.addActionListener(this);
 		btnLogout.addActionListener(this);
+		password.addFocusListener(this);
 		
 	}
 	public static void main(String[] args) {
@@ -332,12 +352,90 @@ public class NhanVien_GUI extends JFrame implements ActionListener{
 			setVisible(false);
 			new KhachHang_GUI(nv).setVisible(true);
 		}else if(o==btnSua){
-			
+			if(validData()) {
+				NhanVien nv = convertNhanVien();
+				if(nvBus.updateNhanVien(nv)) {
+					JOptionPane.showMessageDialog(this, "Update thành công!");
+				}else {
+					JOptionPane.showMessageDialog(this, "Thất bại! Đã xảy ra lỗi trong quá trình thực hiện.");
+				}
+			}
 		}else if(o==btnLogout) {
 			setVisible(false);
 			new Login_GUI().setVisible(true);
 		}
 		
 	}
+	public boolean validData() {
+		String tenNV = txtTenNV.getText().trim();
+		String sdt = txtSdt.getText().trim();
+		String cccd = txtCCCD.getText().trim();
+		String matKhau = password.getText().trim();
+		
+		boolean ptTenNV = Pattern.matches("[a-zA-Z0-9aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆ\r\n"
+				+ "fFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTu\r\n"
+				+ "UùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ _']+", tenNV);
+		boolean ptSdt = Pattern.matches("[0-9]{10,11}", sdt);
+		boolean ptCCCD = Pattern.matches("[0-9]{12}", cccd);
+		boolean ptMatKhau = Pattern.matches("[a-zA-Z0-9 @#$%^&+=_]{4,}", matKhau);
+		if(!ptTenNV) {
+			JOptionPane.showMessageDialog(this, "Lỗi! Tên chỉ được nhập chữ và kí tự khoảng trắng hoặc '");
+			txtTenNV.requestFocus();
+			return false;
+		}
+		if(!ptSdt) {
+			JOptionPane.showMessageDialog(this, "Lỗi! SDT chỉ được nhập số và độ dài từ 10-11 kí tự");
+			txtSdt.requestFocus();
+			return false;
+		}
+		if(!ptCCCD) {
+			JOptionPane.showMessageDialog(this, "Lỗi! CCCD chỉ được nhập số và độ dài 12 kí tự");
+			txtCCCD.requestFocus();
+			return false;
+		}
+		if(!ptMatKhau) {
+			JOptionPane.showMessageDialog(this, "Lỗi! Pwd chỉ được nhập số, chữ và @#$%^&+=_. Độ dài từ 4 kí tự trở lên");
+			password.requestFocus();
+			return false;
+		}
+		return true;
+	}
+	public NhanVien convertNhanVien() {
+		String maNV = txtMaNV.getText().trim();
+		String tenNV = txtTenNV.getText().trim();
+		String sdt = txtSdt.getText().trim();
+		String cccd = txtCCCD.getText().trim();
+		String matKhau = password.getText().trim();
+		boolean gt = radNam.isSelected()?true:false;
+		
+		DateModel<?> model = ngaySinh.getModel();
+		int day = model.getDay();
+		int month = model.getMonth();
+		int year = model.getYear();
 
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year, month, day);
+		java.sql.Date ngaySinhSQL = new java.sql.Date(calendar.getTimeInMillis());
+		
+		model = ngayVL.getModel();
+		day = model.getDay();
+		month = model.getMonth();
+		year = model.getYear();
+		calendar.set(year, month, day);
+		java.sql.Date ngayVLSQL = new java.sql.Date(calendar.getTimeInMillis());
+		
+		return new NhanVien(maNV, sdt, matKhau, tenNV, ngaySinhSQL, gt, cccd, ngayVLSQL);
+	}
+	@Override
+	public void focusGained(FocusEvent e) {
+		Object o = e.getSource();
+		if(o==password)
+			password.setEchoChar((char)0);
+	}
+	@Override
+	public void focusLost(FocusEvent e) {
+		Object o = e.getSource();
+		if(o==password)
+			password.setEchoChar('*');
+	}
 }

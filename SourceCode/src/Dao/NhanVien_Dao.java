@@ -19,7 +19,7 @@ public class NhanVien_Dao {
 		int n=0;
 		try {
 			Connection con = ConnectDB.getConnection();
-			st = con.prepareStatement("UPDATE NhanVien SET soDT=?, matKhau=?, tenNV=?, ngaySinh=?, gioiTinh=?, cccd=?, ngayVL=? where maNV=?");
+			st = con.prepareStatement("UPDATE NhanVien SET SDT=?, MatKhau=?, TenNV=?, NgaySinh=?, GioiTinh=?, CCCD=?, NgayVaoLam=? where MaNV=?");
 			st.setString(1, nv.getSoDT());
 			st.setString(2, nv.getMatKhau());
 			st.setString(3, nv.getTenNV());
@@ -27,6 +27,7 @@ public class NhanVien_Dao {
 			st.setBoolean(5, nv.getGioiTinh());
 			st.setString(6, nv.getCccd());
 			st.setDate(7, nv.getNgayVL());
+			st.setString(8, nv.getMaNV());
 			n = st.executeUpdate();
 		} catch (SQLException e) {
 			// TODO: handle exception
