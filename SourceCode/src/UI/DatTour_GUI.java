@@ -13,11 +13,13 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
 import java.util.regex.Pattern;
@@ -39,6 +41,7 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.table.DefaultTableModel;
 
+import org.jdatepicker.DateModel;
 import org.jdatepicker.impl.DateComponentFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -46,6 +49,7 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import BUS.HoaDon_Bus;
 import BUS.KhachHang_Bus;
+import BUS.ThanhVien_Bus;
 import Entity.HoaDon;
 import Entity.KhachHang;
 import Entity.NhanVien;
@@ -62,13 +66,14 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 	private JDatePickerImpl ngaySinh;
 	private DefaultTableModel modelTV;
 	private JTable tblTV;
-	private ArrayList<ThanhVien> dsTV;
 	private HoaDon_Bus hdBus;
 	private KhachHang_Bus khBus;
+	private ThanhVien_Bus tvBus;
 	private CodeGenerator sinhMa;
 	private NhanVien nv;
 	private HoaDon hd;
 	private KhachHang kh;
+	private ArrayList<ThanhVien> dsTV;
 	public DatTour_GUI(TourDuLich tour, NhanVien nv) {
 		setSize(1000, 750);
 		setLocationRelativeTo(null);
@@ -77,10 +82,21 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		setResizable(false);
 		this.tour = tour;
 		this.nv = nv;
-		this.hd = new HoaDon();
+		sinhMa = new CodeGenerator();
+		SimpleDateFormat timeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		String timeNow = timeFormat.format(new Date());
+		java.util.Date utilDate;
+		try {
+			utilDate = timeFormat.parse(timeNow);
+			java.sql.Timestamp sqlTimestamp  = new java.sql.Timestamp(utilDate.getTime());
+			this.hd = new HoaDon(sinhMa.sinhMaHD(), sqlTimestamp);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		hdBus = new HoaDon_Bus();
 		khBus = new KhachHang_Bus();
-		sinhMa = new CodeGenerator();
+		tvBus = new ThanhVien_Bus();
 		dsTV = new ArrayList<ThanhVien>();
 		createGUI();
 	}
@@ -261,7 +277,7 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		pnNhapKhach.add(pnLuaTuoi);
 		pnLuaTuoi.add(new JLabel("Lứa tuổi"));
 		String luaTuoi[] = {"Trẻ em", "Người lớn"};
-		pnLuaTuoi.add(cmbGioiTinh = new JComboBox<>(luaTuoi));
+		pnLuaTuoi.add(cmbLuaTuoi = new JComboBox<>(luaTuoi));
 		
 		//tao button them sua xoa khach hang
 		JPanel panelButton = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -300,12 +316,10 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		panelThanhToan.add(panelThongTinHD);
 		panelThongTinHD.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 0));
 		panelThongTinHD.add(new JLabel("Hóa đơn số:"));
-		hd.setSoHoaDon(sinhMa.sinhMaHD());
+
 		panelThongTinHD.add(new JLabel(hd.getSoHoaDon()));
 		panelThongTinHD.add(new JLabel("Ngày tạo:"));
-		SimpleDateFormat timeFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
-		String timeNow = timeFormat.format(new Date());
-		panelThongTinHD.add(new JLabel(timeNow));
+		panelThongTinHD.add(new JLabel(hd.getNgayTaoHD().toString()));
 		panelThongTinHD.add(new JLabel("Tên nhân viên:"));
 		panelThongTinHD.add(new JLabel(nv.getTenNV()));
 		panelThongTinHD.add(new JLabel("Tên khách hàng:"));
@@ -428,6 +442,17 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 			}else {
 				JOptionPane.showMessageDialog(this, "Không tìm thấy!");
 			}
+		}else if(o==btnThem) {
+			if(validDataTV()) {
+				ThanhVien newTV = convertTV();
+				if(tvBus.addThanhVien(newTV)) {
+					addRowTable(newTV);
+					dsTV.add(newTV);
+					JOptionPane.showMessageDialog(this, "Thêm thành công!");
+				}else {
+					JOptionPane.showMessageDialog(this, "Thêm thất bại! Đã có lỗi xảy ra!");
+				}
+			}
 		}
 	}
 	public boolean validDataKH() {
@@ -454,5 +479,33 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		String maKH = sinhMa.sinhMaKH();
 		return new KhachHang(maKH, sdt, tenKH, mail, diaChi);
 	}
-	
+	public boolean validDataTV() {
+		String hoTen = txtHoTenTV.getText().trim();
+		return true;
+	}
+	public ThanhVien convertTV() {
+		String hoTen = txtHoTenTV.getText().trim();
+		
+		boolean gioiTinh = false;
+		if(cmbGioiTinh.getSelectedItem().toString().equalsIgnoreCase("Nam"))
+			gioiTinh = true;
+		
+		boolean luaTuoi = false;
+		if(cmbLuaTuoi.getSelectedItem().toString().equalsIgnoreCase("Người lớn"))
+			luaTuoi = true;
+		
+		DateModel<?> model = ngaySinh.getModel();
+		int day = model.getDay();
+		int month = model.getMonth();
+		int year = model.getYear();
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year, month, day);
+		java.sql.Date date = new java.sql.Date(calendar.getTimeInMillis());
+		
+		return new ThanhVien(sinhMa.sinhMaTV(), hoTen, gioiTinh, date, luaTuoi, hd);
+	}
+	public void addRowTable(ThanhVien tv) {
+		modelTV.addRow(new Object[] {tv.getMaTV(), tv.getTenTV(), tv.isGioiTinh()?"Nam":"Nữ",tv.getNgaySinh(), tv.isLuaTuoi()?"Người lớn":"Trẻ em"});
+	}
 }

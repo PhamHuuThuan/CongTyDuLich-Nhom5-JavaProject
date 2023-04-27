@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import ConnectDB.ConnectDB;
+import Entity.HoaDon;
 import Entity.ThanhVien;
 
 public class ThanhVien_Dao {
@@ -32,7 +33,8 @@ public class ThanhVien_Dao {
 				String ngaySinhStr = rs.getString("NgaySinh");
 				Date ngaySinh = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(ngaySinhStr);
 				boolean luaTuoi = rs.getBoolean("LuaTuoi");
-				ThanhVien tv = new ThanhVien(maTV,tenTV,gioiTinh,ngaySinh,luaTuoi);
+				HoaDon hd = new HoaDon(rs.getString("MaHD"));
+				ThanhVien tv = new ThanhVien(maTV, tenTV, gioiTinh, ngaySinh, luaTuoi, hd);
 				dsTV.add(tv);
 			}
 		}
@@ -56,8 +58,8 @@ public class ThanhVien_Dao {
 				boolean gioiTinh = rs.getBoolean("GioiTinh");
 				String ngaySinhStr = rs.getString("NgaySinh");
 				Date ngaySinh = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(ngaySinhStr);
-				boolean luaTuoi = rs.getBoolean("LuaTuoi");
-				ThanhVien tv = new ThanhVien(maTV,tenTV,gioiTinh,ngaySinh,luaTuoi);
+				HoaDon hd = new HoaDon(rs.getString("MaHD"));
+				ThanhVien tv = new ThanhVien(maTV, tenTV, gioiTinh, ngaySinh, gioiTinh, hd);
 				return tv;
 			}
 		} catch (SQLException e) {
@@ -78,12 +80,13 @@ public class ThanhVien_Dao {
 		int n=0;
 		try {
 			Connection con = ConnectDB.getConnection();
-			statement = con.prepareStatement("insert into ThanhVien values(?, ?, ?, ?, ?)");
+			statement = con.prepareStatement("insert into ThanhVien values(?, ?, ?, ?, ?, ?)");
 			statement.setString(1, tv.getMaTV());
-			statement.setString(2, tv.getTenTV());
-			statement.setBoolean(3, tv.isGioiTinh());
-			statement.setDate(4, tv.getNgaySinh());
-			statement.setBoolean(5, tv.isLuaTuoi());
+			statement.setString(2, tv.getHd().getSoHoaDon());
+			statement.setString(3, tv.getTenTV());
+			statement.setBoolean(4, tv.isGioiTinh());
+			statement.setDate(5, tv.getNgaySinh());
+			statement.setBoolean(6, tv.isLuaTuoi());
 			n = statement.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -150,5 +153,29 @@ public class ThanhVien_Dao {
 			}
 		}
 		return n>0;
+	}
+	public String getMaxTVMax(){
+		String maMax = null;
+		PreparedStatement statement = null;
+		try {
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+			String sql = "Select MAX(MaTV) as MAX from ThanhVien";
+			statement = con.prepareStatement(sql);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next())
+				maMax = rs.getString("MAX");
+			return maMax;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				statement.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 }

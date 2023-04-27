@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class HoaDon{
 	private String soHoaDon;
-	private Date ngayTaoHD;
+	private java.sql.Timestamp ngayTaoHD;
 	ArrayList<ThanhVien> dsTV;
 	private TourDuLich tour;
 	private KhachHang kh;
@@ -15,7 +15,7 @@ public class HoaDon{
 	public double tinhThanhTien() {
 		return dsTV.size()*tour.getGia()*VAT;
 	}
-	public HoaDon(String soHoaDon, Date ngayTaoHD, ArrayList<ThanhVien> dsTV, TourDuLich tour, KhachHang kh) {
+	public HoaDon(String soHoaDon, java.sql.Timestamp ngayTaoHD, ArrayList<ThanhVien> dsTV, TourDuLich tour, KhachHang kh) {
 		super();
 		this.soHoaDon = soHoaDon;
 		this.ngayTaoHD = ngayTaoHD;
@@ -27,7 +27,7 @@ public class HoaDon{
 		this.soHoaDon = soHoaDon;
 	}
 	
-	public HoaDon(String soHoaDon,Date ngayTaoHD) {
+	public HoaDon(String soHoaDon,java.sql.Timestamp ngayTaoHD) {
 		this.soHoaDon = soHoaDon;
 		this.ngayTaoHD = ngayTaoHD;
 	}
@@ -41,10 +41,10 @@ public class HoaDon{
 	public void setSoHoaDon(String soHoaDon) {
 		this.soHoaDon = soHoaDon;
 	}
-	public Date getNgayTaoHD() {
+	public java.sql.Timestamp getNgayTaoHD() {
 		return ngayTaoHD;
 	}
-	public void setNgayTaoHD(Date ngayTaoHD) {
+	public void setNgayTaoHD(java.sql.Timestamp ngayTaoHD) {
 		this.ngayTaoHD = ngayTaoHD;
 	}
 	public ArrayList<ThanhVien> getDsTV() {
