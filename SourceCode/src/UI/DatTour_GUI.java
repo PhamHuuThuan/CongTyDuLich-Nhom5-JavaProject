@@ -493,7 +493,7 @@ public class DatTour_GUI extends JFrame implements ActionListener, MouseListener
 			xoaTV();
 		}else if(o==btnThanhToan) {
 			if(checkThanhToan()) {
-				
+				new HoaDon_GUI(hd, nv, tour, kh).setVisible(true);;
 			}
 		}
 	}

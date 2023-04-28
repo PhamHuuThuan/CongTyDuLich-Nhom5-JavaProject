@@ -37,6 +37,10 @@ public class HoaDon{
 		this.tour = tour;
 		this.nv = nv;
 	}
+	public HoaDon(String soHoaDon,java.sql.Timestamp ngayTaoHD) {
+		this.soHoaDon = soHoaDon;
+		this.ngayTaoHD = ngayTaoHD;
+	}
 	public String getSoHoaDon() {
 		return soHoaDon;
 	}
