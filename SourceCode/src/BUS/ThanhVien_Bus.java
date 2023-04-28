@@ -13,4 +13,10 @@ public class ThanhVien_Bus {
 	public boolean addThanhVien(ThanhVien tv) {
 		return tvDao.addThanhVien(tv);
 	}
+	public boolean updateThanhVien(ThanhVien tv) {
+		return tvDao.updateThanhVien(tv);
+	}
+	public boolean deleteThanhVien(String maThanhVien) {
+		return tvDao.deleteThanhVien(maThanhVien);
+	}
 }

@@ -10,30 +10,32 @@ public class HoaDon{
 	ArrayList<ThanhVien> dsTV;
 	private TourDuLich tour;
 	private KhachHang kh;
-	private final float VAT = 0.1f;
+	private NhanVien nv;
+	private final float VAT = 1.1f;
 	
 	public double tinhThanhTien() {
-		return dsTV.size()*tour.getGia()*VAT;
+		return Math.round(dsTV.size()*tour.getGia()*VAT);
 	}
-	public HoaDon(String soHoaDon, java.sql.Timestamp ngayTaoHD, ArrayList<ThanhVien> dsTV, TourDuLich tour, KhachHang kh) {
+	public HoaDon(String soHoaDon, java.sql.Timestamp ngayTaoHD, ArrayList<ThanhVien> dsTV, TourDuLich tour, KhachHang kh, NhanVien nv) {
 		super();
 		this.soHoaDon = soHoaDon;
 		this.ngayTaoHD = ngayTaoHD;
 		this.dsTV = dsTV;
 		this.tour = tour;
 		this.kh = kh;
+		this.nv = nv;
+	}
+	public HoaDon() {
+		
 	}
 	public HoaDon(String soHoaDon) {
 		this.soHoaDon = soHoaDon;
 	}
-	
-	public HoaDon(String soHoaDon,java.sql.Timestamp ngayTaoHD) {
+	public HoaDon(String soHoaDon,java.sql.Timestamp ngayTaoHD, TourDuLich tour,NhanVien nv) {
 		this.soHoaDon = soHoaDon;
 		this.ngayTaoHD = ngayTaoHD;
-	}
-	
-	public HoaDon() {
-		
+		this.tour = tour;
+		this.nv = nv;
 	}
 	public String getSoHoaDon() {
 		return soHoaDon;
@@ -64,6 +66,12 @@ public class HoaDon{
 	}
 	public void setKh(KhachHang kh) {
 		this.kh = kh;
+	}
+	public NhanVien getNv() {
+		return nv;
+	}
+	public void setNv(NhanVien nv) {
+		this.nv = nv;
 	}
 	@Override
 	public int hashCode() {

@@ -429,12 +429,12 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		tblHead.setFont(new Font("Arial", Font.BOLD, 14));
 		tblTour.setTableHeader(tblHead);
 		tblTour.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		tblTour.getColumnModel().getColumn(0).setPreferredWidth(100);
+		tblTour.getColumnModel().getColumn(0).setPreferredWidth(80);
 		tblTour.getColumnModel().getColumn(1).setPreferredWidth(350);
 		tblTour.getColumnModel().getColumn(2).setPreferredWidth(100);
 		tblTour.getColumnModel().getColumn(3).setPreferredWidth(125);
 		tblTour.getColumnModel().getColumn(4).setPreferredWidth(125);
-		tblTour.getColumnModel().getColumn(5).setPreferredWidth(150);
+		tblTour.getColumnModel().getColumn(5).setPreferredWidth(160);
 		tblTour.setSize(MAXIMIZED_HORIZ, 150);
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 		rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);

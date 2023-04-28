@@ -22,6 +22,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -503,8 +504,10 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		}else if(o==btnDatTour) {
 			int index = tblTour.getSelectedRow();
 			if(index!=-1) {
-				frameDatTour = new DatTour_GUI(dsTour.get(index), nv);
-				frameDatTour.setVisible(true);
+				if(validData()) {
+					frameDatTour = new DatTour_GUI(dsTour.get(index), nv);
+					frameDatTour.setVisible(true);
+				}
 			}else {
 				JOptionPane.showMessageDialog(this, "Vui lòng chọn Tour muốn đặt!");
 			}
@@ -517,10 +520,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		if(o==tblTour) {
 			int r = tblTour.getSelectedRow();
 			lblTitleTour.setText("["+tblModel.getValueAt(r, 0)+"] "+ tblModel.getValueAt(r, 1));
-			double number = Double.parseDouble(tblModel.getValueAt(r, 5).toString());
-			DecimalFormat formatter = new DecimalFormat("#,###");
-			String formattedNumber = formatter.format(number);
-			lblGia.setText(formattedNumber+"đ/khách");
+			lblGia.setText(tblModel.getValueAt(r, 5).toString()+"đ/khách");
 			
 			//format Ngay di
 			String timeKH = tblModel.getValueAt(r, 3).toString();
@@ -540,8 +540,8 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 			java.util.Date startDate = null, endDate = null;
 			
 			try {
-				startDate = inputFormat.parse(tblModel.getValueAt(r, 3).toString());
-				endDate = inputFormat.parse(tblModel.getValueAt(r, 4).toString());
+				startDate = inputFormat.parse(dsTour.get(r).getNgayDi().toString());
+				endDate = inputFormat.parse(dsTour.get(r).getNgayKetThuc().toString());
 			} catch (ParseException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -618,8 +618,10 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 	}
 	public void dataArrayToTable(ArrayList<TourDuLich> dsTour) {
 		tblModel.setRowCount(0);
+		SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
+		DecimalFormat df = new DecimalFormat("#,###.##");
 		for(TourDuLich x : dsTour) {
-			tblModel.addRow(new Object[] {x.getMaTour(), x.getTenTour(), x.getSoCho(), x.getNgayDi(), x.getNgayKetThuc(), x.getGia()});
+			tblModel.addRow(new Object[] {x.getMaTour(), x.getTenTour(), x.getSoCho(), outputFormat.format(x.getNgayDi()) , outputFormat.format(x.getNgayKetThuc()) , df.format(x.getGia()) });
 		}
 	}
 	public void paintColumnSelected(int col) {
@@ -681,6 +683,20 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		}else {
 			lblTourTim.setText( "Không tìm thấy tour phù hợp !");
 		}
+	}
+	public boolean validData() {
+		int index = tblTour.getSelectedRow();
+		if(Date.valueOf(LocalDate.now()).after(dsTour.get(index).getNgayDi())) {
+			JOptionPane.showMessageDialog(this, "Tour đã đi! Không thể đặt!");
+			return false;
+		}
+		int soCho = dsTour.get(index).getSoCho();
+		int conLai = soCho-hdBus.getSoLuongKhach(dsTour.get(index).getMaTour());
+		if(conLai<=0) {
+			JOptionPane.showMessageDialog(this, "Đã hết chỗ!");
+			return false;
+		}
+		return true;
 	}
 	@Override
 	public void mousePressed(MouseEvent e) {

@@ -13,6 +13,9 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -57,7 +60,7 @@ import Entity.ThanhVien;
 import Entity.TourDuLich;
 import Util.CodeGenerator;
 
-public class DatTour_GUI extends JFrame implements ActionListener{
+public class DatTour_GUI extends JFrame implements ActionListener, MouseListener{
 	private JButton btnThanhToan, btnClose, btnTao, btnThem, btnSua, btnXoa, btnDaCoKH;
 	private TourDuLich tour;
 	private JTextField txtHoTenKH, txtEmail, txtSDT, txtDiaChi, txtHoTenTV;
@@ -89,7 +92,7 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		try {
 			utilDate = timeFormat.parse(timeNow);
 			java.sql.Timestamp sqlTimestamp  = new java.sql.Timestamp(utilDate.getTime());
-			this.hd = new HoaDon(sinhMa.sinhMaHD(), sqlTimestamp);
+			this.hd = new HoaDon(sinhMa.sinhMaHD(), sqlTimestamp, tour,nv);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -371,22 +374,23 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		pnHanhKhach.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 20));
 		panelThanhToan.add(pnHanhKhach);
 		pnHanhKhach.add(new JLabel("Hành khách"));
-		pnHanhKhach.add(lblSoKhach = new JLabel("... người"));
+		pnHanhKhach.add(lblSoKhach = new JLabel("0 người"));
 		pnHanhKhach.add(new JLabel("Người lớn"));
-		pnHanhKhach.add(lblNguoiLon = new JLabel("... người"));
+		pnHanhKhach.add(lblNguoiLon = new JLabel("0 người"));
 		pnHanhKhach.add(new JLabel("Trẻ em"));
-		pnHanhKhach.add(lblTreEm = new JLabel("... người"));
+		pnHanhKhach.add(lblTreEm = new JLabel("0 người"));
 		JLabel lblGiaTD = new JLabel("Giá Tour");
-		lblGiaTD.setFont(new Font("Arial", Font.PLAIN, 18));
+		lblGiaTD.setFont(new Font("Arial", Font.PLAIN, 16));
 		pnHanhKhach.add(lblGiaTD);
-		JLabel lblGia = new JLabel(tour.getGia()+"đ");
-		lblGia.setFont(new Font("Arial", Font.PLAIN, 18));
+		DecimalFormat df = new DecimalFormat("#,###.##");
+		JLabel lblGia = new JLabel(df.format(tour.getGia())+"đ");
+		lblGia.setFont(new Font("Arial", Font.PLAIN, 16));
 		pnHanhKhach.add(lblGia);
 		JLabel lblTTTD = new JLabel("Thành tiền");
-		lblTTTD.setFont(new Font("Arial", Font.PLAIN, 18));
+		lblTTTD.setFont(new Font("Arial", Font.PLAIN, 16));
 		pnHanhKhach.add(lblTTTD);
-		pnHanhKhach.add(lblThanhTien = new JLabel("...đ"));
-		lblThanhTien.setFont(new Font("Arial", Font.PLAIN, 18));
+		pnHanhKhach.add(lblThanhTien = new JLabel("0 đ"));
+		lblThanhTien.setFont(new Font("Arial", Font.PLAIN, 16));
 		
 		//tao phan button
 		JPanel panelBtnThanhToan = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -413,11 +417,16 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 		btnSua.addActionListener(this);
 		btnXoa.addActionListener(this);
 		btnDaCoKH.addActionListener(this);
+		
+		tblTV.addMouseListener(this);
+
+		hdBus.themHoaDon(hd);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if(o == btnClose) {
+			hdBus.deleteHoaDon(hd.getSoHoaDon());
 			dispose();
 		}else if(o == btnTao) {
 			if(validDataKH()) {
@@ -426,6 +435,8 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 					kh = khNew;
 					lblTenKH.setText(khNew.getTenKH());
 					JOptionPane.showMessageDialog(this, "Tạo thành công!");
+					hd.setKh(khNew);
+					hdBus.updateHoaDon(hd);
 				}else {
 					JOptionPane.showMessageDialog(this, "Tạo thất bại! Sđt đã được sử dụng hoặc đã có lỗi xảy ra!");
 				}
@@ -439,6 +450,8 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 				txtEmail.setText(kh.getEmail());
 				txtDiaChi.setText(kh.getDiaChi());
 				lblTenKH.setText(kh.getTenKH());
+				hd.setKh(kh);
+				hdBus.updateHoaDon(hd);
 			}else {
 				JOptionPane.showMessageDialog(this, "Không tìm thấy!");
 			}
@@ -448,10 +461,39 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 				if(tvBus.addThanhVien(newTV)) {
 					addRowTable(newTV);
 					dsTV.add(newTV);
+					hd.setDsTV(dsTV);
+					lblSoKhach.setText(dsTV.size()+" người");
+					int soTre = getSoTreEm();
+					lblTreEm.setText(soTre+" người");
+					lblNguoiLon.setText((dsTV.size()-soTre)+" người");
+					DecimalFormat df = new DecimalFormat("#,###.##");
+					lblThanhTien.setText(df.format(hd.tinhThanhTien())+" đ");
 					JOptionPane.showMessageDialog(this, "Thêm thành công!");
 				}else {
 					JOptionPane.showMessageDialog(this, "Thêm thất bại! Đã có lỗi xảy ra!");
 				}
+			}
+		}else if(o==btnSua) {
+			if(validDataTV()) {
+				ThanhVien newTV = convertTV();
+				if(tvBus.updateThanhVien(newTV)) {
+					dsTV.set(dsTV.indexOf(newTV), newTV);
+					hd.setDsTV(dsTV);
+					dataToTable(dsTV);
+					int soTre = getSoTreEm();
+					lblTreEm.setText(soTre+" người");
+					lblNguoiLon.setText((dsTV.size()-soTre)+" người");
+					JOptionPane.showMessageDialog(this, "Update thành công!");
+				}else {
+					JOptionPane.showMessageDialog(this, "Update thất bại! Đã có lỗi xảy ra!");
+				}
+			}
+		}
+		else if(o==btnXoa) {
+			xoaTV();
+		}else if(o==btnThanhToan) {
+			if(checkThanhToan()) {
+				
 			}
 		}
 	}
@@ -507,5 +549,97 @@ public class DatTour_GUI extends JFrame implements ActionListener{
 	}
 	public void addRowTable(ThanhVien tv) {
 		modelTV.addRow(new Object[] {tv.getMaTV(), tv.getTenTV(), tv.isGioiTinh()?"Nam":"Nữ",tv.getNgaySinh(), tv.isLuaTuoi()?"Người lớn":"Trẻ em"});
+	}
+	public void dataToTable(ArrayList<ThanhVien> ds) {
+		modelTV.setRowCount(0);
+		for(ThanhVien tv: ds)
+			addRowTable(tv);
+	}
+	public void xoaTV() {
+		int index = tblTV.getSelectedRow();
+		if(index!=-1) {
+			String maTV = tblTV.getValueAt(index, 0).toString();
+			if(JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa thành viên "+maTV, "Cảnh báo!", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
+				if(tvBus.deleteThanhVien(maTV)) {
+					modelTV.removeRow(index);
+					dsTV.remove(index);
+					lblSoKhach.setText(dsTV.size()+"");
+					int soTre = getSoTreEm();
+					lblTreEm.setText(soTre+" người");
+					lblNguoiLon.setText((dsTV.size()-soTre)+" người");
+					hd.setDsTV(dsTV);
+					DecimalFormat df = new DecimalFormat("#,###.##");
+					lblThanhTien.setText(df.format(hd.tinhThanhTien())+" đ");
+					JOptionPane.showMessageDialog(this, "Xóa thành công!");
+				}else {
+					JOptionPane.showMessageDialog(this, "Xóa thất bại! Đã xảy ra lỗi!");
+				}
+			}
+		}else {
+			JOptionPane.showMessageDialog(this, "Vui lòng chọn thành viên cần xóa!");
+		}
+	}
+	public int getSoTreEm() {
+		int tre = 0;
+		for(ThanhVien tv: dsTV) {
+			if(!tv.isLuaTuoi())
+				tre++;
+		}
+		return tre;
+	}
+	public boolean checkThanhToan() {
+		if(kh==null) {
+			JOptionPane.showMessageDialog(this, "Chưa có khách hàng! Cần thêm khách hàng");
+			return false;
+		}
+		if(dsTV.size()==0) {
+			JOptionPane.showMessageDialog(this, "Chưa thêm thành viên!");
+			return false;
+		}
+		if(dsTV.size()-getSoTreEm()==0) {
+			JOptionPane.showMessageDialog(this, "Cần ít nhất một người lớn đi cùng!");
+			return false;
+		}
+		int soCho = tour.getSoCho();
+		if((soCho-hdBus.getSoLuongKhach(tour.getMaTour()))<0) {
+			JOptionPane.showMessageDialog(this, "Số thành viên vượt quá số chỗ còn nhận!");
+			return false;
+		}
+		return true;
+	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		int index = tblTV.getSelectedRow();
+		txtHoTenTV.setText(tblTV.getValueAt(index, 1).toString());
+		cmbGioiTinh.setSelectedItem(tblTV.getValueAt(index, 2).toString());
+		cmbLuaTuoi.setSelectedItem(tblTV.getValueAt(index, 4).toString());
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(dsTV.get(index).getNgaySinh());
+		int year = calendar.get(Calendar.YEAR);
+		int month = calendar.get(Calendar.MONTH);
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		UtilDateModel modelDate = (UtilDateModel) ngaySinh.getModel();
+		modelDate.setSelected(true);
+		modelDate.setDate(year, month, day);
+	}
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

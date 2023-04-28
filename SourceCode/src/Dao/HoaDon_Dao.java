@@ -12,6 +12,8 @@ import java.util.ArrayList;
 
 import ConnectDB.ConnectDB;
 import Entity.HoaDon;
+import Entity.NhanVien;
+import Entity.TourDuLich;
 
 public class HoaDon_Dao {
 	public HoaDon_Dao() {
@@ -28,7 +30,7 @@ public class HoaDon_Dao {
 			while(rs.next()) {
 				String soHD = rs.getString("SoHoaDon");
 				java.sql.Timestamp ngayLap = rs.getTimestamp("NgayLapHD");
-				HoaDon hd = new HoaDon(soHD,ngayLap);
+				HoaDon hd = new HoaDon(soHD,ngayLap, new TourDuLich(rs.getString("MaTour")),new NhanVien(rs.getString("MaNV")));
 				dsHD.add(hd);
 			}
 			
@@ -50,7 +52,7 @@ public class HoaDon_Dao {
 			while(rs.next()) {
 				String soHD = rs.getString("SoHoaDon");
 				java.sql.Timestamp ngayLap = rs.getTimestamp("NgayLapHD");
-				HoaDon hd = new HoaDon(soHD,ngayLap);
+				HoaDon hd = new HoaDon(soHD,ngayLap, new TourDuLich(rs.getString("MaTour")),new NhanVien(rs.getString("MaNV")));
 				return hd;
 			}
 		} catch (SQLException e) {
@@ -71,9 +73,18 @@ public class HoaDon_Dao {
 		int n=0;
 		try {
 			Connection con = ConnectDB.getConnection();
-			statement = con.prepareStatement("insert into HoaDon values(?, ?)");
+			statement = con.prepareStatement("insert into HoaDon values(?, ?, ?, ?, ?)");
 			statement.setString(1, hd.getSoHoaDon());
-			statement.setTimestamp(2, hd.getNgayTaoHD());
+			if(hd.getKh()!=null)
+				statement.setString(2, hd.getKh().getMaKH());
+			else
+				statement.setString(2, null);
+			if(hd.getTour()!=null)
+				statement.setString(3, hd.getTour().getMaTour());
+			else
+				statement.setString(3, null);
+			statement.setTimestamp(4, hd.getNgayTaoHD());
+			statement.setString(5, hd.getNv().getMaNV());
 			n = statement.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -94,9 +105,12 @@ public class HoaDon_Dao {
 		int n=0;
 		try {
 			Connection con = ConnectDB.getConnection();
-			stmt = con.prepareStatement("Update HoaDon Set NgayLapHD=? where SoHoaDon=?");
-			stmt.setString(1, hd.getSoHoaDon());
-			stmt.setTimestamp(2, hd.getNgayTaoHD());
+			stmt = con.prepareStatement("Update HoaDon Set MaKH=?, MaTour=?, NgayLapHD=?, MaNV=? where SoHoaDon=?");
+			stmt.setString(1, hd.getKh().getMaKH());
+			stmt.setString(2, hd.getTour().getMaTour());
+			stmt.setTimestamp(3, hd.getNgayTaoHD());
+			stmt.setString(4, hd.getNv().getMaNV());
+			stmt.setString(5, hd.getSoHoaDon());
 			n = stmt.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
