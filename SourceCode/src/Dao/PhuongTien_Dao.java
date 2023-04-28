@@ -118,5 +118,28 @@ public class PhuongTien_Dao {
 		}
 		return n>0;
 	}
-	
+	public PhuongTien timPhuongTien(String maPT) {
+		ConnectDB.getInstance();
+		PreparedStatement stmt = null;
+		int n=0;
+		try {
+			Connection con = ConnectDB.getConnection();
+			stmt = con.prepareStatement("select * from PhuongTien where MaPhuongTien=?");
+			stmt.setString(1, maPT);
+			ResultSet rs = stmt.executeQuery();
+			if(rs.next())
+				return new PhuongTien(rs.getString("MaPhuongTien"), rs.getString("PhuongTien"));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
 }

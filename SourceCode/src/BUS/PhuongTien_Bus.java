@@ -23,4 +23,7 @@ public class PhuongTien_Bus {
 	public boolean deletePhuongTien(String maPhuongTien) {
         return pt_Dao.deletePhuongTien(maPhuongTien);
     }
+	public PhuongTien timPhuongTien(String maPT) {
+		return pt_Dao.timPhuongTien(maPT);
+	}
 }

@@ -6,31 +6,42 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.LayoutManager;
-import java.sql.Date;
-import java.text.ParseException;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.concurrent.Flow;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.text.Document;
 
+import BUS.PhuongTien_Bus;
 import Entity.HoaDon;
 import Entity.KhachHang;
 import Entity.NhanVien;
+import Entity.PhuongTien;
 import Entity.TourDuLich;
 
 public class HoaDon_GUI extends JFrame{
+	private JButton btnIn;
 	private HoaDon hd;
 	private NhanVien nv;
 	private TourDuLich tour;
 	private KhachHang kh;
+	private PhuongTien_Bus ptBus;
+	private JMenu menuInHD;
 	public HoaDon_GUI(HoaDon hd, NhanVien nv, TourDuLich tour, KhachHang kh) {
 		setTitle("Hóa đơn");
 		setSize(625, 650);
@@ -40,13 +51,19 @@ public class HoaDon_GUI extends JFrame{
 		this.kh = kh;
 		this.tour = tour;
 		this.nv = nv;
+		ptBus = new PhuongTien_Bus();
 		createGUI();
 	}
 	public void createGUI() {
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		menuInHD = new JMenu("Xuất hóa đơn");
+		menuBar.add(menuInHD);
+		
 		JPanel panelNorth = new JPanel();
 		panelNorth.setLayout(new BoxLayout(panelNorth, BoxLayout.Y_AXIS));
-		//panelNorth.setBorder(BorderFactory.createEmptyBorder(10, 100, 10, 100));
 		add(panelNorth, BorderLayout.NORTH);
+		
 		Box b1 = Box.createHorizontalBox();
 		ImageIcon imgLogo = new ImageIcon("img/vietour_logo.png");
 		b1.add(new JLabel(imgLogo));
@@ -129,7 +146,7 @@ public class HoaDon_GUI extends JFrame{
 		JPanel pn1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel lblTenTour = new JLabel("Tên Tour: ");
 		lblTenTour.setFont(new Font("Arial", Font.BOLD, 14));
-		JLabel lblGetTenTour = new JLabel(/*tour.getTenTour()*/ "Tour du lịch xyz abc def");
+		JLabel lblGetTenTour = new JLabel(tour.getTenTour());
 		lblGetTenTour.setFont(new Font("Arial", Font.PLAIN, 14));
 		pn1.add(lblTenTour);
 		pn1.add(lblGetTenTour);
@@ -142,7 +159,7 @@ public class HoaDon_GUI extends JFrame{
 		lblDiemDi.setFont(new Font("Arial", Font.BOLD, 14));
 		panelChiTiet.add(lblDiemDi);
 		
-		JLabel lblGetDiemDi = new JLabel(/*tour.getDiemKH().getTenDiaDiem()*/ "Gia Lai");
+		JLabel lblGetDiemDi = new JLabel(tour.getDiemKH().getTenDiaDiem());
 		lblGetDiemDi.setFont(new Font("Arial", Font.PLAIN, 14));
 		panelChiTiet.add(lblGetDiemDi);
 		
@@ -150,15 +167,15 @@ public class HoaDon_GUI extends JFrame{
 		lblDiemDen.setFont(new Font("Arial", Font.BOLD, 14));
 		panelChiTiet.add(lblDiemDen);
 		
-		JLabel lblGetDiemDen = new JLabel(/*tour.getDiemKH().getTenDiaDiem()*/ "Đà Lạt");
+		JLabel lblGetDiemDen = new JLabel(tour.getDiemDen().getTenDiaDiem());
 		lblGetDiemDen.setFont(new Font("Arial", Font.PLAIN, 14));
 		panelChiTiet.add(lblGetDiemDen);
 		
 		JLabel lblPT = new JLabel("Phương tiện: ");
 		lblPT.setFont(new Font("Arial", Font.BOLD, 14));
 		panelChiTiet.add(lblPT);
-		
-		JLabel lblGetPhuongTien = new JLabel(/*tour.getDiemKH().getTenDiaDiem()*/ "Xe khách");
+		PhuongTien phuongTien = ptBus.timPhuongTien(tour.getPhuongTien().getMaPT());
+		JLabel lblGetPhuongTien = new JLabel(phuongTien.getTenPT());
 		lblGetPhuongTien.setFont(new Font("Arial", Font.PLAIN, 14));
 		panelChiTiet.add(lblGetPhuongTien);
 		
@@ -166,7 +183,7 @@ public class HoaDon_GUI extends JFrame{
 		lblKS.setFont(new Font("Arial", Font.BOLD, 14));
 		panelChiTiet.add(lblKS);
 		
-		JLabel lblGetKS = new JLabel(/*tour.getDiemKH().getTenDiaDiem()*/ "Khách sạn 5 sao");
+		JLabel lblGetKS = new JLabel(tour.getKhachSan());
 		lblGetKS.setFont(new Font("Arial", Font.PLAIN, 14));
 		panelChiTiet.add(lblGetKS);
 		
@@ -174,7 +191,8 @@ public class HoaDon_GUI extends JFrame{
 		lblNgayDi.setFont(new Font("Arial", Font.BOLD, 14));
 		panelChiTiet.add(lblNgayDi);
 		
-		JLabel lblGetNgayDi = new JLabel(/*tour.getDiemKH().getTenDiaDiem()*/ "28/04/2023");
+		SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
+		JLabel lblGetNgayDi = new JLabel(outputFormat.format(tour.getNgayDi()));
 		lblGetNgayDi.setFont(new Font("Arial", Font.PLAIN, 14));
 		panelChiTiet.add(lblGetNgayDi);
 		
@@ -182,7 +200,7 @@ public class HoaDon_GUI extends JFrame{
 		lblNgayKT.setFont(new Font("Arial", Font.BOLD, 14));
 		panelChiTiet.add(lblNgayKT);
 		
-		JLabel lblGetNgayKT = new JLabel(/*tour.getDiemKH().getTenDiaDiem()*/ "30/04/2023");
+		JLabel lblGetNgayKT = new JLabel(outputFormat.format(tour.getNgayKetThuc()));
 		lblGetNgayKT.setFont(new Font("Arial", Font.PLAIN, 14));
 		panelChiTiet.add(lblGetNgayKT);
 		
@@ -194,7 +212,7 @@ public class HoaDon_GUI extends JFrame{
 		lblSoLuong.setFont(new Font("Arial", Font.BOLD, 14));
 		panelChiTiet.add(lblSoLuong);
 		
-		JLabel lblGetSL = new JLabel(/*tour.getDiemKH().getTenDiaDiem()*/ "4");
+		JLabel lblGetSL = new JLabel(hd.getDsTV().size()+"");
 		lblGetSL.setFont(new Font("Arial", Font.PLAIN, 14));
 		panelChiTiet.add(lblGetSL);
 		
@@ -202,11 +220,12 @@ public class HoaDon_GUI extends JFrame{
 		panelChiTiet.add(new JLabel(""));
 		
 		JLabel lblThanhTien = new JLabel("Thành Tiền: ");
-		lblThanhTien.setFont(new Font("Arial", Font.BOLD, 17));
+		lblThanhTien.setFont(new Font("Arial", Font.BOLD, 16));
 		panelChiTiet.add(lblThanhTien);
 		
-		JLabel lblGetThanhTien = new JLabel(/*tour.getDiemKH().getTenDiaDiem()*/ "12500000 đ");
-		lblGetThanhTien.setFont(new Font("Arial", Font.PLAIN, 17));
+		JLabel lblGetThanhTien = new JLabel(hd.tinhThanhTien()+" đ");
+		lblGetThanhTien.setFont(new Font("Arial", Font.PLAIN, 14));
+		lblGetThanhTien.setForeground(new Color(220, 20, 60));
 		panelChiTiet.add(lblGetThanhTien);
 		
 		JPanel pnLine2 = new JPanel();
@@ -220,18 +239,22 @@ public class HoaDon_GUI extends JFrame{
 		lblKet.setFont(new Font("Arial", Font.BOLD, 24));
 		lblKet.setPreferredSize(new Dimension(225, 75));
 		panelSouth.add(lblKet);
+		
 	}
-	public static void main(String[] args) {
-		SimpleDateFormat timeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		String timeNow = timeFormat.format(new java.util.Date());
-		java.util.Date utilDate;
-		try {
-			utilDate = timeFormat.parse(timeNow);
-			java.sql.Timestamp sqlTimestamp  = new java.sql.Timestamp(utilDate.getTime());
-			new HoaDon_GUI(new HoaDon("HD001", sqlTimestamp), new NhanVien("NV002"), new TourDuLich(), new KhachHang("KH001",  "","Phạm Hữu Thuận", "", "")).setVisible(true);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void saveJFrameAsPdf(String pdfFilename) throws Exception {
+	    // Capture screenshot of JFrame
+	    Rectangle rect = getBounds();
+	    BufferedImage image = new Robot().createScreenCapture(rect);
+	    ImageIO.write(image, "png", new File("screenshot.png"));
+
+	    // Create PDF document containing screenshot
+	    com.itextpdf.text.Document document = new com.itextpdf.text.Document();
+	    com.itextpdf.text.pdf.PdfWriter.getInstance(document, new FileOutputStream(pdfFilename));
+	    document.open();
+	    com.itextpdf.text.Image pdfImage = com.itextpdf.text.Image.getInstance("screenshot.png");
+	    document.add(pdfImage);
+	    document.close();
+	    
+	    new File("screenshot.png").delete();
 	}
 }

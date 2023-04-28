@@ -355,6 +355,8 @@ public class NhanVien_GUI extends JFrame implements ActionListener, FocusListene
 			if(validData()) {
 				NhanVien nv = convertNhanVien();
 				if(nvBus.updateNhanVien(nv)) {
+					this.nv = nv;
+					btnNhanVien.setText(nv.getTenNV());
 					JOptionPane.showMessageDialog(this, "Update thành công!");
 				}else {
 					JOptionPane.showMessageDialog(this, "Thất bại! Đã xảy ra lỗi trong quá trình thực hiện.");

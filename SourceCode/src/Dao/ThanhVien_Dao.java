@@ -112,7 +112,7 @@ public class ThanhVien_Dao {
 										+ "GioiTinh = ? ,"
 										+ "NgaySinh = ? ,"
 										+ "LuaTuoi = ? ,"
-										+ "MaHD = ? ,"
+										+ "MaHD = ? "
 										+ "where MaTV = ? ");
 			stmt.setString(1, tv.getMaTV());
 			stmt.setString(2, tv.getTenTV());
