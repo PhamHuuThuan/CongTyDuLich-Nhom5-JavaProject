@@ -14,6 +14,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
@@ -199,15 +200,20 @@ public class NhanVien_GUI extends JFrame implements ActionListener, FocusListene
 		
 		b0.add(lblTitle);
 		b1.add(lblMaNV);
+		b1.add(Box.createHorizontalStrut(20));
 		b1.add(txtMaNV);
 		txtMaNV.setEditable(false);
 		b2.add(lblMatKhau);
+		b2.add(Box.createHorizontalStrut(20));
 		b2.add(password);
 		b3.add(lblTenNV);
+		b3.add(Box.createHorizontalStrut(20));
 		b3.add(txtTenNV);
 		b4.add(lblSdt);
+		b4.add(Box.createHorizontalStrut(20));
 		b4.add(txtSdt);
 		b5.add(lblNgaySinh);
+		b5.add(Box.createHorizontalStrut(20));
 		UtilDateModel model = new UtilDateModel();
 		Properties properties = new Properties();
 		properties.put("text.today", "Today");
@@ -216,13 +222,15 @@ public class NhanVien_GUI extends JFrame implements ActionListener, FocusListene
 		JDatePanelImpl datePanel = new JDatePanelImpl(model, properties);
 		ngaySinh = new JDatePickerImpl(datePanel, new DateComponentFormatter());
 		b5.add(ngaySinh);
-		b5.add(Box.createHorizontalStrut(10));
+		b5.add(Box.createHorizontalStrut(5));
 		b5.add(lblGioiTinh);
 		b5.add(radNam);
 		b5.add(radNu);
 		b6.add(lblCCCD);
+		b6.add(Box.createHorizontalStrut(20));
 		b6.add(txtCCCD);
 		b7.add(lblNgayVL);
+		b7.add(Box.createHorizontalStrut(20));
 		UtilDateModel model1 = new UtilDateModel();
 		Properties properties1 = new Properties();
 		properties1.put("text.today", "Today");
@@ -253,7 +261,7 @@ public class NhanVien_GUI extends JFrame implements ActionListener, FocusListene
 		
 		txtMaNV.setFont(new Font("Arial", Font.PLAIN, 14));
 		txtMaNV.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-		txtMaNV.setBackground(new Color(224, 255, 255));
+		txtMaNV.setBackground(new Color(220, 220, 220));
 		txtTenNV.setFont(new Font("Arial", Font.PLAIN, 14));
 		txtTenNV.setBackground(new Color(224, 255, 255));
 		txtTenNV.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
@@ -380,6 +388,19 @@ public class NhanVien_GUI extends JFrame implements ActionListener, FocusListene
 		boolean ptSdt = Pattern.matches("[0-9]{10,11}", sdt);
 		boolean ptCCCD = Pattern.matches("[0-9]{12}", cccd);
 		boolean ptMatKhau = Pattern.matches("[a-zA-Z0-9 @#$%^&+=_]{4,}", matKhau);
+
+		DateModel<?> model = ngaySinh.getModel();
+		int day = model.getDay();
+		int month = model.getMonth();
+		int year = model.getYear();
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year, month, day);
+		java.sql.Date birthDate = new java.sql.Date(calendar.getTimeInMillis());
+		if(!ptMatKhau) {
+			JOptionPane.showMessageDialog(this, "Lỗi! Pwd chỉ được nhập số, chữ và @#$%^&+=_. Độ dài từ 4 kí tự trở lên");
+			password.requestFocus();
+			return false;
+		}
 		if(!ptTenNV) {
 			JOptionPane.showMessageDialog(this, "Lỗi! Tên chỉ được nhập chữ và kí tự khoảng trắng hoặc '");
 			txtTenNV.requestFocus();
@@ -390,16 +411,17 @@ public class NhanVien_GUI extends JFrame implements ActionListener, FocusListene
 			txtSdt.requestFocus();
 			return false;
 		}
+		if(java.sql.Date.valueOf(LocalDate.now()).before(birthDate) || ChronoUnit.YEARS.between(birthDate.toLocalDate(), LocalDate.now())<18) {
+			JOptionPane.showMessageDialog(this, "Error: Ngày sinh không được sau ngày hiện tại và phải đủ 18 tuổi!");
+			ngaySinh.requestFocus();
+			return false;
+		}
 		if(!ptCCCD) {
 			JOptionPane.showMessageDialog(this, "Lỗi! CCCD chỉ được nhập số và độ dài 12 kí tự");
 			txtCCCD.requestFocus();
 			return false;
 		}
-		if(!ptMatKhau) {
-			JOptionPane.showMessageDialog(this, "Lỗi! Pwd chỉ được nhập số, chữ và @#$%^&+=_. Độ dài từ 4 kí tự trở lên");
-			password.requestFocus();
-			return false;
-		}
+		
 		return true;
 	}
 	public NhanVien convertNhanVien() {

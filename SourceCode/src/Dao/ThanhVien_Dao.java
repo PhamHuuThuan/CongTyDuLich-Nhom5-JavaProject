@@ -114,12 +114,12 @@ public class ThanhVien_Dao {
 										+ "LuaTuoi = ? ,"
 										+ "MaHD = ? "
 										+ "where MaTV = ? ");
-			stmt.setString(1, tv.getMaTV());
-			stmt.setString(2, tv.getTenTV());
-			stmt.setBoolean(3, tv.isGioiTinh());
-			stmt.setDate(4, tv.getNgaySinh());
-			stmt.setString(5, tv.getTenTV());
-			stmt.setBoolean(6, tv.isLuaTuoi());
+			stmt.setString(1, tv.getTenTV());
+			stmt.setBoolean(2, tv.isGioiTinh());
+			stmt.setDate(3, tv.getNgaySinh());
+			stmt.setBoolean(4, tv.isLuaTuoi());
+			stmt.setString(5, tv.getHd().getSoHoaDon());
+			stmt.setString(6, tv.getMaTV());
 			n = stmt.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

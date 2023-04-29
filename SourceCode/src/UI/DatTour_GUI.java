@@ -15,10 +15,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -27,6 +30,7 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -45,6 +49,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.table.DefaultTableModel;
 
 import org.jdatepicker.DateModel;
+import org.jdatepicker.JDateComponent;
 import org.jdatepicker.impl.DateComponentFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -416,10 +421,9 @@ public class DatTour_GUI extends JFrame implements ActionListener, MouseListener
 		btnThem.addActionListener(this);
 		btnSua.addActionListener(this);
 		btnXoa.addActionListener(this);
-		btnDaCoKH.addActionListener(this);
-		
+		btnDaCoKH.addActionListener(this);		
 		tblTV.addMouseListener(this);
-
+		
 		hdBus.themHoaDon(hd);
 	}
 	@Override
@@ -468,6 +472,7 @@ public class DatTour_GUI extends JFrame implements ActionListener, MouseListener
 					lblNguoiLon.setText((dsTV.size()-soTre)+" người");
 					DecimalFormat df = new DecimalFormat("#,###.##");
 					lblThanhTien.setText(df.format(hd.tinhThanhTien())+" đ");
+					clearTV();
 					JOptionPane.showMessageDialog(this, "Thêm thành công!");
 				}else {
 					JOptionPane.showMessageDialog(this, "Thêm thất bại! Đã có lỗi xảy ra!");
@@ -512,6 +517,22 @@ public class DatTour_GUI extends JFrame implements ActionListener, MouseListener
 		boolean ptDiaChi = Pattern.matches("[a-zA-Z0-9aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆ\r\n"
 				+ "fFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTu\r\n"
 				+ "UùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ '*()_+{}\\\\\\\\[\\\\\\\\]:;,]+", diaChi);
+		if(!ptTenKH) {
+			JOptionPane.showMessageDialog(this, "Error: Tên chỉ chứa chữ, số và kí tự khoảng trắng '");
+			return false;
+		}
+		if(!ptSDT) {
+			JOptionPane.showMessageDialog(this, "Error: SDT chỉ gồm các chữ số và độ dài 10-11 số!");
+			return false;
+		}
+		if(!ptMail) {
+			JOptionPane.showMessageDialog(this, "Error: Mail phải theo định dạng example@domain.com");
+			return false;
+		}
+		if(!ptDiaChi) {
+			JOptionPane.showMessageDialog(this, "Error: Địa chỉ gồm chứa chữ, số và kí tự đặc biệt");
+			return false;
+		}
 		return true;
 	}
 	public KhachHang convertKH() {
@@ -524,6 +545,28 @@ public class DatTour_GUI extends JFrame implements ActionListener, MouseListener
 	}
 	public boolean validDataTV() {
 		String hoTen = txtHoTenTV.getText().trim();
+		
+		boolean ptHoTen = Pattern.matches("[a-zA-Z0-9aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆ\r\n"
+				+ "fFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTu\r\n"
+				+ "UùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ _']+", hoTen);
+		DateModel<?> model = ngaySinh.getModel();
+		int day = model.getDay();
+		int month = model.getMonth();
+		int year = model.getYear();
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year, month, day);
+		java.sql.Date birthDate = new java.sql.Date(calendar.getTimeInMillis());
+		
+		if(!ptHoTen) {
+			JOptionPane.showMessageDialog(this, "Lỗi! Tên chỉ được nhập chữ và kí tự khoảng trắng hoặc '");
+			txtHoTenTV.requestFocus();
+			return false;
+		}
+		if(java.sql.Date.valueOf(LocalDate.now()).before(birthDate)) {
+			JOptionPane.showMessageDialog(this, "Error: Ngày sinh không được sau ngày hiện tại!");
+			ngaySinh.requestFocus();
+			return false;
+		}
 		return true;
 	}
 	public ThanhVien convertTV() {
@@ -571,6 +614,7 @@ public class DatTour_GUI extends JFrame implements ActionListener, MouseListener
 					hd.setDsTV(dsTV);
 					DecimalFormat df = new DecimalFormat("#,###.##");
 					lblThanhTien.setText(df.format(hd.tinhThanhTien())+" đ");
+					clearTV();
 					JOptionPane.showMessageDialog(this, "Xóa thành công!");
 				}else {
 					JOptionPane.showMessageDialog(this, "Xóa thất bại! Đã xảy ra lỗi!");
@@ -587,6 +631,14 @@ public class DatTour_GUI extends JFrame implements ActionListener, MouseListener
 				tre++;
 		}
 		return tre;
+	}
+	public void clearTV() {
+		int index = tblTV.getSelectedRow();
+		txtHoTenTV.setText(null);
+		cmbGioiTinh.setSelectedItem(0);
+		cmbLuaTuoi.setSelectedItem(0);
+		UtilDateModel modelDate = (UtilDateModel) ngaySinh.getModel();
+		modelDate.setSelected(false);
 	}
 	public boolean checkThanhToan() {
 		if(kh==null) {
