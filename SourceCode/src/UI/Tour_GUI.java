@@ -46,7 +46,9 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -245,10 +247,12 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		btnLoc.setFont(new Font("Arial", Font.BOLD, 14));
 		btnLoc.setForeground(Color.WHITE);
 		btnLoc.setBackground(new Color(30, 144, 255));
+		btnLoc.setBorder(new EmptyBorder(5, 10, 5, 10));
 		panelBtn.add(btnReset = new JButton("Reset"));
 		btnReset.setFont(new Font("Arial", Font.BOLD, 14));
 		btnReset.setForeground(Color.WHITE);
 		btnReset.setBackground(new Color(30, 144, 255));
+		btnReset.setBorder(new EmptyBorder(5, 10, 5, 10));
 		panelSearch.add(panelBtn);
 		
 		//form ds tour và chi tiết tour
@@ -259,12 +263,20 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		JPanel panelTop = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		panelThongTin.add(panelTop);
 		
+		panelTop.add(Box.createHorizontalStrut(20));
 		panelTop.add(txtTim=new JTextField(20));
 		txtTim.setFont(new Font("Arial", Font.PLAIN, 16));
 		txtTim.setToolTipText("Tìm theo mã tour hoặc tên tour");
+		txtTim.setBorder(new CompoundBorder(
+			    new MatteBorder(0, 0, 2, 0, new Color(0, 250, 154)),
+			    new EmptyBorder(5, 10, 5, 10)
+			));
+		panelTop.add(Box.createHorizontalStrut(10));
 		panelTop.add(btnTim = new JButton("Tìm"));
+		btnTim.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
 		btnTim.setForeground(Color.WHITE);
 		btnTim.setBackground(new Color(30, 144, 255));
+		panelTop.add(Box.createHorizontalStrut(10));
 		panelTop.add(lblTourTim = new JLabel());
 		
 		String cols[] = {"Mã Tour", "Tên Tour", "Số chỗ", "Ngày đi", "Ngày kết thúc", "Giá tour"};
@@ -471,6 +483,17 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		btnReset.addActionListener(this);
 		tblHead.addMouseListener(this);
 		
+		btnTrangChu.addMouseListener(this);
+		btnTour.addMouseListener(this);
+		btnDonHang.addMouseListener(this);
+		btnKH.addMouseListener(this);
+		btnQuanLi.addMouseListener(this);
+		btnNhanVien.addMouseListener(this);
+		btnLoc.addMouseListener(this);
+		btnTim.addMouseListener(this);
+		btnDatTour.addMouseListener(this);
+		btnReset.addMouseListener(this);
+		
 		dsTour = tourBus.getTourGanNhat();
 		dataArrayToTable(dsTour);
 		
@@ -522,19 +545,9 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 			lblTitleTour.setText("["+tblModel.getValueAt(r, 0)+"] "+ tblModel.getValueAt(r, 1));
 			lblGia.setText(tblModel.getValueAt(r, 5).toString()+"đ/khách");
 			
-			//format Ngay di
-			String timeKH = tblModel.getValueAt(r, 3).toString();
 			SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
-			java.util.Date dateKH = null;
-			try {
-				dateKH = inputFormat.parse(timeKH);
-			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			String output = outputFormat.format(dateKH);
-			lblKhoiHanh.setText(output);
+			lblKhoiHanh.setText(tblModel.getValueAt(r, 3).toString());
 			
 			//tinh so ngay
 			java.util.Date startDate = null, endDate = null;
@@ -710,12 +723,45 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 	}
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		if(e.getSource()!=tblTour &&  e.getSource()!=tblHead) {
+			JButton button = (JButton) e.getSource();
+			button.setBorder(new CompoundBorder(
+					    new MatteBorder(0, 0, 2, 0, new Color(220, 20, 60)),
+					    button.getBorder()
+					));
+		}	
 	}
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		if(e.getSource()!=tblTour && e.getSource()!=tblHead) {
+			JButton button = (JButton) e.getSource();
+			if(e.getSource()==btnTrangChu || e.getSource()==btnTour || e.getSource()==btnDonHang || e.getSource()==btnKH || e.getSource()==btnQuanLi)
+			    button.setBorder(new CompoundBorder(
+					    new MatteBorder(0, 0, 0, 0, new Color(255, 69, 0)),
+					    new EmptyBorder(10, 10, 10, 10)
+					));
+			else if(e.getSource()==btnNhanVien)
+			    button.setBorder(new CompoundBorder(
+					    new MatteBorder(0, 0, 0, 0, new Color(255, 69, 0)),
+					    BorderFactory.createEmptyBorder(5, 10, 5, 10)
+					));
+			else if(e.getSource()==btnTim){
+				button.setBorder(new CompoundBorder(
+					    new MatteBorder(0, 0, 0, 0, new Color(255, 69, 0)),
+					    BorderFactory.createEmptyBorder(5, 20, 5, 20)
+					));
+			}
+			else if(e.getSource()==btnDatTour){
+				button.setBorder(new CompoundBorder(
+					    new MatteBorder(0, 0, 0, 0, new Color(255, 69, 0)),
+					    BorderFactory.createEmptyBorder(10, 20, 10, 20)
+					));
+			}else if(e.getSource()==btnReset || e.getSource()==btnLoc){
+				button.setBorder(new CompoundBorder(
+					    new MatteBorder(0, 0, 0, 0, new Color(255, 69, 0)),
+					    BorderFactory.createEmptyBorder(5, 10, 5, 10)
+					));
+			}
+		}
 	}
 }	

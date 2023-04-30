@@ -10,6 +10,8 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -22,11 +24,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 
 import Entity.NhanVien;
 
-public class Home_GUI extends JFrame implements ActionListener{
+public class Home_GUI extends JFrame implements ActionListener, MouseListener{
 	private JButton btnTrangChu, btnTour, btnDonHang, btnKH, btnQuanLi, btnNhanVien;
 	private NhanVien nv;
 	public Home_GUI(NhanVien nv) {
@@ -120,6 +124,13 @@ public class Home_GUI extends JFrame implements ActionListener{
 		btnQuanLi.addActionListener(this);
 		btnNhanVien.addActionListener(this);
 		btnKH.addActionListener(this);
+		
+		btnTrangChu.addMouseListener(this);
+		btnTour.addMouseListener(this);
+		btnDonHang.addMouseListener(this);
+		btnKH.addMouseListener(this);
+		btnQuanLi.addMouseListener(this);
+		btnNhanVien.addMouseListener(this);
 	}
 	public static void main(String[] args) {
 		NhanVien nv = new NhanVien("NV001", "0123456789", "12345", "Phạm Hữu Thuận", java.sql.Date.valueOf(LocalDate.of(2003, 5, 14)), true, "064xxxxxxxxx",  java.sql.Date.valueOf(LocalDate.of(2023, 3, 15)));
@@ -146,5 +157,42 @@ public class Home_GUI extends JFrame implements ActionListener{
 			setVisible(false);
 			new KhachHang_GUI(nv).setVisible(true);
 		}
+	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		JButton button = (JButton) e.getSource();
+		button.setBorder(new CompoundBorder(
+				    new MatteBorder(0, 0, 2, 0, new Color(220, 20, 60)),
+				    button.getBorder()
+				));
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
+		JButton button = (JButton) e.getSource();
+		if(e.getSource()==btnTrangChu || e.getSource()==btnTour || e.getSource()==btnDonHang || e.getSource()==btnKH || e.getSource()==btnQuanLi)
+		    button.setBorder(new CompoundBorder(
+				    new MatteBorder(0, 0, 0, 0, new Color(255, 69, 0)),
+				    new EmptyBorder(10, 10, 10, 10)
+				));
+		else if(e.getSource()==btnNhanVien)
+		    button.setBorder(new CompoundBorder(
+				    new MatteBorder(0, 0, 0, 0, new Color(255, 69, 0)),
+				    BorderFactory.createEmptyBorder(5, 10, 5, 10)
+				));
 	}
 }

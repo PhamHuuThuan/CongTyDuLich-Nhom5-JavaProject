@@ -200,11 +200,11 @@ public class TourDuLich_Dao {
 		ConnectDB.getInstance();
 		try {
 			Connection con = ConnectDB.getConnection();
-			String sql = "select * from TourDuLich\r\n"
-					+ "		where (SoCho-(select count(hd.MaTour)as soluong\r\n"
+			String sql = "select * from TourDuLich t\r\n"
+					+ "		where (t.SoCho-ISNULL((select count(hd.MaTour)as soluong\r\n"
 					+ "		from HoaDon hd join ThanhVien tv ON hd.SoHoaDon = tv.MaHD\r\n"
-					+ "		where MaTour = MaTour\r\n"
-					+ "		group by hd.MaTour)) >= ? and NgayDi >= ? and DiemKH like ? and DiemKT like ? \r\n"
+					+ "		where hd.MaTour = t.MaTour\r\n"
+					+ "		group by hd.MaTour), 0)) >= ? and NgayDi >= ? and DiemKH like ? and DiemKT like ? \r\n"
 					+ "		and PhuongTien like ? \r\n"
 					+ "		and DATEDIFF(day, NgayDi, NgayKetThuc) = ?";
 			stmt = con.prepareStatement(sql);

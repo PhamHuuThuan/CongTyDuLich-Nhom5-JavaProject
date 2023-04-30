@@ -52,7 +52,9 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -411,12 +413,19 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		JPanel panelTop = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		panelThongTin.add(panelTop);
 		
+		panelTop.add(Box.createHorizontalStrut(20));
 		panelTop.add(txtTim=new JTextField(20));
 		txtTim.setFont(new Font("Arial", Font.PLAIN, 16));
-		panelTop.add(btnTim = new JButton("Tìm"));
 		txtTim.setToolTipText("Tìm theo mã tour hoặc tên tour");
+		txtTim.setBorder(new CompoundBorder(
+			    new MatteBorder(0, 0, 2, 0, new Color(0, 250, 154)),
+			    new EmptyBorder(5, 10, 5, 10)
+			));
+		panelTop.add(Box.createHorizontalStrut(10));
+		panelTop.add(btnTim = new JButton("Tìm"));
 		btnTim.setForeground(Color.WHITE);
 		btnTim.setBackground(new Color(30, 144, 255));
+		panelTop.add(Box.createHorizontalStrut(10));
 		panelTop.add(lblTourTim = new JLabel());
 		
 		String cols[] = {"Mã Tour", "Tên Tour", "Số chỗ", "Ngày đi", "Ngày kết thúc", "Giá tour"};
