@@ -55,7 +55,7 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 	private ArrayList<DiaDiem> dsDiaDiem;
 	private PhuongTien_Bus pt_bus = new PhuongTien_Bus();
 	private ArrayList<PhuongTien> dsPhuongTien;
-	private CodeGenerator maDiemKHGenerator,maDiemDLGenerator,maPTGenerator = new CodeGenerator();
+	private CodeGenerator maDiemKHGenerator,maDiemDLGenerator,maPTGenerator;
 	private NhanVien nv;
 	
 	public DiaDiem_GUI(NhanVien nv) {
@@ -331,6 +331,9 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		showDataOnTableDiemKH();
 		showDataOnTableDiemKT();
 		showDataOnTablePTien();
+		maDiemKHGenerator = new CodeGenerator();
+		maDiemDLGenerator = new CodeGenerator();
+		maPTGenerator = new CodeGenerator();
 		
 		btnTrangChu.addActionListener(this);
 		btnTour.addActionListener(this);
@@ -506,16 +509,21 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		txtTenPT.setText(null);
 	}
 	
-	public boolean validData() {
+	public boolean validDataDiemKH() {
 		String maDiemKH = txtMaDiemKH.getText().trim();
 		String tenDiemKH = txtTenDiemKH.getText().trim();
-		String maDiemDL = txtMaDiemDL.getText().trim();
-		String tenDiemDL = txtTenDiemDL.getText().trim();
-		String maPT = txtMaPT.getText().trim();
-		String tenPT = txtTenPT.getText().trim();
 		
+		if(tenDiemKH.isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Tên điểm KH không được để trống !!!");
+		    return false;
+		}
+		if (!tenDiemKH.matches("^[\\p{L} ]+$")) {
+		    JOptionPane.showMessageDialog(this, "Tên điểm KH không hợp lệ. Vui lòng nhập lại.");
+		    return false;
+		}
 		return true;
 	}
+	
 	public DiaDiem convertTableToDDKH() {
 		String maDiemKH = txtMaDiemKH.getText().trim();
 		String tenDiemKH = txtTenDiemKH.getText().trim();
@@ -530,7 +538,7 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 	}
 	
 	public void themDiaDiemKH() {
-		if(validData()) {
+		if(validDataDiemKH()) {
 			DiaDiem diaDiem = convertTableToDDKH();
 			if(dd_bus.themDiaDiem(diaDiem)) {
 				 JOptionPane.showMessageDialog(this, "Thêm địa điểm thành công");
@@ -540,6 +548,21 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 				JOptionPane.showMessageDialog(this, "Thêm thất bại! Trùng mã!");
 			}
 		}
+	}
+	
+	public boolean validDataDiemDL() {
+		String maDiemDL = txtMaDiemDL.getText().trim();
+		String tenDiemDL = txtTenDiemDL.getText().trim();
+		
+		if(tenDiemDL.isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Tên điểm DL không được để trống !!!");
+		    return false;
+		}
+		if (!tenDiemDL.matches("^[\\p{L} ]+$")) {
+		    JOptionPane.showMessageDialog(this, "Tên điểm DL không hợp lệ. Vui lòng nhập lại.");
+		    return false;
+		}
+		return true;
 	}
 	
 	public DiaDiem convertTableToDDDL() {
@@ -556,7 +579,7 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 	}
 	
 	public void themDiaDiemDL() {
-		if(validData()) {
+		if(validDataDiemDL()) {
 			DiaDiem diaDiem = convertTableToDDDL();
 			if(dd_bus.themDiaDiem(diaDiem)) {
 				 JOptionPane.showMessageDialog(this, "Thêm địa điểm thành công");
@@ -568,6 +591,20 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		}
 	}
 	
+	public boolean validDataPT() {
+		String maPT = txtMaPT.getText().trim();
+		String tenPT = txtTenPT.getText().trim();
+		
+		if(tenPT.isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Tên PT không được để trống !!!");
+		    return false;
+		}
+		if (!tenPT.matches("^[\\p{L} ]+$")) {
+		    JOptionPane.showMessageDialog(this, "Tên PT không hợp lệ. Vui lòng nhập lại.");
+		    return false;
+		}
+		return true;
+	}
 	public PhuongTien convertTableToPT() {
 		String maPT = txtMaPT.getText().trim();
 		String tenPT = txtTenPT.getText().trim();
@@ -582,7 +619,7 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 	}
 	
 	public void themPTien() {
-		if(validData()) {
+		if(validDataPT()) {
 			PhuongTien phuongTien = convertTableToPT();
 			if(pt_bus.themPhuongTien(phuongTien)) {
 				 JOptionPane.showMessageDialog(this, "Thêm phương tiện thành công");
