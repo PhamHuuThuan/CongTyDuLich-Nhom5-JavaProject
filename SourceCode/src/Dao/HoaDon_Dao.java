@@ -15,6 +15,7 @@ import java.util.List;
 import ConnectDB.ConnectDB;
 import Entity.DiaDiem;
 import Entity.HoaDon;
+import Entity.KhachHang;
 import Entity.NhanVien;
 import Entity.PhuongTien;
 import Entity.TourDuLich;
@@ -44,20 +45,28 @@ public class HoaDon_Dao {
 		}
 		return dsHD;
 	}
-	public HoaDon getHoaDonTheoSoHD(String soHoaDon) throws ParseException {
+	public ArrayList<HoaDon> getHoaDonTheoSoDT(String SDT){
+		ArrayList<HoaDon> dsHD = new ArrayList<HoaDon>();
 		PreparedStatement statement = null;
 		try {
 			ConnectDB.getInstance();
 			Connection con = ConnectDB.getConnection();
-			String sql = "Select * from HoaDon where SoHoaDon like ?";
+			String sql = "Select * from HoaDon hd "
+					+ "join KhachHang kh on hd.MaKH = kh.MaKH "
+					+ "join TourDuLich t on hd.MaTour = t.MaTour "
+					+ "join NhanVien nv on hd.MaNV = nv.MaNV "
+					+ "where kh.SDT = ?";
 			statement = con.prepareStatement(sql);
-			statement.setString(1, "%"+soHoaDon+"%");
+			statement.setString(1, SDT);
 			ResultSet rs = statement.executeQuery();
 			while(rs.next()) {
 				String soHD = rs.getString("SoHoaDon");
 				java.sql.Timestamp ngayLap = rs.getTimestamp("NgayLapHD");
-				HoaDon hd = new HoaDon(soHD,ngayLap, new TourDuLich(rs.getString("MaTour")),new NhanVien(rs.getString("MaNV")));
-				return hd;
+				TourDuLich tour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getDouble("Gia"));
+				NhanVien nv = new NhanVien(rs.getString("MaNV"),rs.getString("TenNV"));
+				KhachHang kh = new KhachHang(rs.getString("MaKH"),rs.getString("SDT"),rs.getString("TenKH"),rs.getString("Email"),rs.getString("DiaChi"));
+				HoaDon hd = new HoaDon(soHD,ngayLap, tour , nv, kh);
+				dsHD.add(hd);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -69,7 +78,112 @@ public class HoaDon_Dao {
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return dsHD;
+	}
+	public ArrayList<HoaDon> getHoaDonTheoNhanVien(NhanVien nv){
+		ArrayList<HoaDon> dsHD = new ArrayList<HoaDon>();
+		PreparedStatement statement = null;
+		try {
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+			String sql = "Select * from HoaDon hd \r\n"
+					+ "join KhachHang kh on hd.MaKH = kh.MaKH \r\n"
+					+ "join TourDuLich t on hd.MaTour = t.MaTour \r\n"
+					+ "join NhanVien nv on hd.MaNV = nv.MaNV \r\n"
+					+ "where nv.MaNV = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, nv.getMaNV());
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				String soHD = rs.getString("SoHoaDon");
+				java.sql.Timestamp ngayLap = rs.getTimestamp("NgayLapHD");
+				TourDuLich tour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getDouble("Gia"));
+				KhachHang kh = new KhachHang(rs.getString("MaKH"),rs.getString("SDT"),rs.getString("TenKH"),rs.getString("Email"),rs.getString("DiaChi"));
+				HoaDon hd = new HoaDon(soHD,ngayLap, tour , nv, kh);
+				dsHD.add(hd);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				statement.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return dsHD;
+	}
+	public ArrayList<HoaDon> getHoaDonTheoNgayLap(java.sql.Date ngayLapHD){
+		ArrayList<HoaDon> dsHD = new ArrayList<HoaDon>();
+		PreparedStatement statement = null;
+		try {
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+			String sql = "Select * from HoaDon hd \r\n"
+					+ "join KhachHang kh on hd.MaKH = kh.MaKH \r\n"
+					+ "join TourDuLich t on hd.MaTour = t.MaTour \r\n"
+					+ "join NhanVien nv on hd.MaNV = nv.MaNV \r\n"
+					+ "where CAST(hd.NgayLapHD AS date)  = ?";
+			statement = con.prepareStatement(sql);
+			statement.setDate(1, ngayLapHD);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				String soHD = rs.getString("SoHoaDon");
+				java.sql.Timestamp ngayLap = rs.getTimestamp("NgayLapHD");
+				TourDuLich tour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getDouble("Gia"));
+				NhanVien nv = new NhanVien(rs.getString("MaNV"),rs.getString("TenNV"));
+				KhachHang kh = new KhachHang(rs.getString("MaKH"),rs.getString("SDT"),rs.getString("TenKH"),rs.getString("Email"),rs.getString("DiaChi"));
+				HoaDon hd = new HoaDon(soHD,ngayLap, tour , nv, kh);
+				dsHD.add(hd);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				statement.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return dsHD;
+	}
+	public ArrayList<HoaDon> getHoaDonTheoNhanVienVaNgayLap(NhanVien nv, java.sql.Date ngayLapHD){
+		ArrayList<HoaDon> dsHD = new ArrayList<HoaDon>();
+		PreparedStatement statement = null;
+		try {
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+			String sql = "Select * from HoaDon hd \r\n"
+					+ "join KhachHang kh on hd.MaKH = kh.MaKH \r\n"
+					+ "join TourDuLich t on hd.MaTour = t.MaTour \r\n"
+					+ "join NhanVien nv on hd.MaNV = nv.MaNV \r\n"
+					+ "where hd.MaNV = ? and\r\n"
+					+ "CAST(hd.NgayLapHD AS date)  = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, nv.getMaNV());
+			statement.setDate(2, ngayLapHD);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				String soHD = rs.getString("SoHoaDon");
+				java.sql.Timestamp ngayLap = rs.getTimestamp("NgayLapHD");
+				TourDuLich tour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getDouble("Gia"));
+				KhachHang kh = new KhachHang(rs.getString("MaKH"),rs.getString("SDT"),rs.getString("TenKH"),rs.getString("Email"),rs.getString("DiaChi"));
+				HoaDon hd = new HoaDon(soHD,ngayLap, tour , nv, kh);
+				dsHD.add(hd);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				statement.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return dsHD;
 	}
 	public boolean themHoaDon(HoaDon hd) {
 		ConnectDB.getInstance();

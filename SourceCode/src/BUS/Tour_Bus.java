@@ -32,6 +32,9 @@ public class Tour_Bus {
 	public ArrayList<TourDuLich> timTour(String maTim){
 		return tour_Dao.timTour(maTim);
 	}
+	public TourDuLich timTourTheoMa(String maTim) {
+		return tour_Dao.timTourTheoMa(maTim);
+	}
 	public ArrayList<TourDuLich> locTour(String diemDi, String diemDen, int soNgay, java.sql.Date date, int soNguoi,
 			String phuongTien) {
 		// TODO Auto-generated method stub

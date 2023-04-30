@@ -74,6 +74,37 @@ public class ThanhVien_Dao {
 		}
 		return null;
 	}
+	public ArrayList<ThanhVien> getThanhVienTheoMaHD(String maHD){
+		ArrayList<ThanhVien> dsTV = new ArrayList<>(); 
+		PreparedStatement statement = null;
+		try {
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+			String sql = "Select * from ThanhVien where MaHD = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, maHD);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				String maTV = rs.getString("MaTV");
+				String tenTV = rs.getString("TenTV");
+				boolean gioiTinh = rs.getBoolean("GioiTinh");
+				Date ngaySinh = rs.getDate("NgaySinh");
+				HoaDon hd = new HoaDon(rs.getString("MaHD"));
+				ThanhVien tv = new ThanhVien(maTV, tenTV, gioiTinh, ngaySinh, gioiTinh, hd);
+				dsTV.add(tv);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				statement.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return dsTV;
+	}
 	public boolean addThanhVien(ThanhVien tv) {
 		ConnectDB.getInstance();
 		PreparedStatement statement = null;

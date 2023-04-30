@@ -32,6 +32,18 @@ public class NhanVien {
 		super();
 		this.maNV = maNV;
 	}
+	public NhanVien(String maNV, String soDT, String tenNV) {
+		super();
+		this.maNV = maNV;
+		this.soDT = soDT;
+		this.tenNV = tenNV;
+	}
+	public NhanVien(String maNV, String tenNV) {
+		super();
+		this.maNV = maNV;
+		this.tenNV = tenNV;
+	}
+	
 	public String getMaNV() {
 		return maNV;
 	}
@@ -95,5 +107,8 @@ public class NhanVien {
 		NhanVien other = (NhanVien) obj;
 		return Objects.equals(maNV, other.maNV);
 	}
-	
+	@Override
+	public String toString() {
+		return tenNV;
+	}
 }

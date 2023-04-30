@@ -1,7 +1,10 @@
 package BUS;
 
+import java.util.ArrayList;
+
 import Dao.HoaDon_Dao;
 import Entity.HoaDon;
+import Entity.NhanVien;
 import Entity.TourDuLich;
 
 public class HoaDon_Bus {
@@ -23,5 +26,17 @@ public class HoaDon_Bus {
 	}
 	public TourDuLich tourMax() {
 		return hd_Dao.tourMax();
+	}
+	public ArrayList<HoaDon> getHoaDonTheoSoDT(String SDT){
+		return hd_Dao.getHoaDonTheoSoDT(SDT);
+	}
+	public ArrayList<HoaDon> getHoaDonTheoNhanVien(NhanVien nv){
+		return hd_Dao.getHoaDonTheoNhanVien(nv);
+	}
+	public ArrayList<HoaDon> getHoaDonTheoNgayLap(java.sql.Date ngayLapHD){
+		return hd_Dao.getHoaDonTheoNgayLap(ngayLapHD);
+	}
+	public ArrayList<HoaDon> getHoaDonTheoNhanVienVaNgayLap(NhanVien nv, java.sql.Date ngayLapHD){
+		return hd_Dao.getHoaDonTheoNhanVienVaNgayLap(nv, ngayLapHD);
 	}
 }

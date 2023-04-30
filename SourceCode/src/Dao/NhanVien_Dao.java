@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import ConnectDB.ConnectDB;
 import Entity.NhanVien;
@@ -69,5 +70,46 @@ public class NhanVien_Dao {
 		}
 		return nv;
 	}
-
+	public ArrayList<NhanVien> getALLNhanVien() {
+		ArrayList<NhanVien> dsNV = new ArrayList<>();
+		NhanVien nv = null;
+		ConnectDB.getInstance();
+		PreparedStatement st = null;
+		try {
+			Connection con = ConnectDB.getConnection();
+			st = con.prepareStatement("Select * from NhanVien");
+			ResultSet rs = st.executeQuery();
+			while(rs.next()) {
+				String MaNV = rs.getString("MaNV");
+				String tenNV = rs.getString("TenNV");
+				nv =  new NhanVien(MaNV, tenNV);
+				dsNV.add(nv);
+			}
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return dsNV;
+	}
+	public NhanVien timNhanVienMa(String maNV) {
+		NhanVien nv = null;
+		ConnectDB.getInstance();
+		PreparedStatement st = null;
+		try {
+			Connection con = ConnectDB.getConnection();
+			st = con.prepareStatement("Select * from NhanVien where MaNV=?");
+			st.setString(1, maNV);
+			ResultSet rs = st.executeQuery();
+			if(rs.next()) {
+				String MaNV = rs.getString("MaNV");
+				String SDT = rs.getString("SDT");
+				String tenNV = rs.getString("TenNV");
+				nv =  new NhanVien(MaNV, SDT, tenNV);
+			}
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return nv;
+	}
 }

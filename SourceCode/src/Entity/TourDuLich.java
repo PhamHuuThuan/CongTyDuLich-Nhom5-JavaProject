@@ -40,7 +40,13 @@ public class TourDuLich {
 		this.gia = gia;
 		this.dsAnh = dsAnh;
 	}
-
+	
+	public TourDuLich(String maTour, String tenTour, double gia) {
+		super();
+		this.maTour = maTour;
+		this.tenTour = tenTour;
+		this.gia = gia;
+	}
 	@Override
 	public int hashCode() {
 		return Objects.hash(maTour);

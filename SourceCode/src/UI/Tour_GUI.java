@@ -243,17 +243,21 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		}
 		
 		JPanel panelBtn = new JPanel(new FlowLayout());
-		panelBtn.add(btnLoc = new JButton("Lọc kết quả"));
+		panelBtn.add(btnLoc = new JButton("Lọc"));
 		btnLoc.setFont(new Font("Arial", Font.BOLD, 14));
 		btnLoc.setForeground(Color.WHITE);
 		btnLoc.setBackground(new Color(30, 144, 255));
 		btnLoc.setBorder(new EmptyBorder(5, 10, 5, 10));
+		panelBtn.add(Box.createHorizontalStrut(10));
 		panelBtn.add(btnReset = new JButton("Reset"));
 		btnReset.setFont(new Font("Arial", Font.BOLD, 14));
 		btnReset.setForeground(Color.WHITE);
 		btnReset.setBackground(new Color(30, 144, 255));
 		btnReset.setBorder(new EmptyBorder(5, 10, 5, 10));
+		
 		panelSearch.add(panelBtn);
+		btnReset.setPreferredSize(new Dimension(75, 27));
+		btnLoc.setPreferredSize(btnReset.getPreferredSize());
 		
 		//form ds tour và chi tiết tour
 		JPanel panelThongTin = new JPanel();
@@ -371,6 +375,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		txtAMoTa.setFont(new Font("Arial", Font.ITALIC, 14));
 		txtAMoTa.setWrapStyleWord(true);
 		txtAMoTa.setLineWrap(true);
+		txtAMoTa.setEditable(false);
 		
 		JPanel panelTT = new JPanel(new GridLayout(4, 2));
 		panelBotLeft.add(panelTT);

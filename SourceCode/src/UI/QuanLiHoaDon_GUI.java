@@ -13,9 +13,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -25,6 +31,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -35,12 +42,19 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
+import org.jdatepicker.DateModel;
 import org.jdatepicker.impl.DateComponentFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import BUS.HoaDon_Bus;
+import BUS.NhanVien_Bus;
+import BUS.ThanhVien_Bus;
+import Entity.HoaDon;
 import Entity.NhanVien;
 
 public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseListener{
@@ -51,6 +65,9 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 	private DefaultTableModel tblModel;
 	private JTable tblHD;
 	private NhanVien nv;
+	private HoaDon_Bus hdBus;
+	private ThanhVien_Bus tvBus;
+	private NhanVien_Bus nvBus;
 	public QuanLiHoaDon_GUI(NhanVien nv) {
 		setTitle("Vietour - Phan mem quan li tour du lich");
 		setSize(1200, 820);
@@ -58,6 +75,9 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("img/travel.png"));
 		this.nv = nv;
+		hdBus = new HoaDon_Bus();
+		tvBus = new ThanhVien_Bus();
+		nvBus = new NhanVien_Bus();
 		createGUI();
 	}
 	public void createGUI() {
@@ -138,7 +158,7 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 		panelCenter.add(b);
 		
 		//tim kiem
-		panelSearch.add(new JLabel("SĐT: "));
+		panelSearch.add(new JLabel("SĐT KH: "));
 		panelSearch.add(txtSDT = new JTextField(15));
 		panelSearch.add(Box.createHorizontalStrut(20));
 		panelSearch.add(btnTim = new JButton("Tìm"));
@@ -156,6 +176,9 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 		panelLoc.add(cboNV = new JComboBox<NhanVien>());
 		panelLoc.add(Box.createHorizontalStrut(25));
 		cboNV.addItem(null);
+		for(NhanVien nv : nvBus.getALLNhanVien()) {
+			cboNV.addItem(nv);
+		}
 		
 		panelLoc.add(new JLabel("Ngày lập:"));
 		UtilDateModel model = new UtilDateModel();
@@ -174,6 +197,16 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 		String cols[] = {"Số HĐ", "Nhân Viên Tạo", "Tên Khách Hàng", "Ngày Lập HD", "Tên Tour", "Giá Tour", "Thành Tiền"};
 		tblModel = new DefaultTableModel(cols, 0);
 		tblHD = new JTable(tblModel);
+		tblHD.setFont(new Font("Arial", Font.PLAIN, 14));
+		tblHD.setRowHeight(25);
+		tblHD.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tblHD.getColumnModel().getColumn(0).setPreferredWidth(75);
+		tblHD.getColumnModel().getColumn(1).setPreferredWidth(200);
+		tblHD.getColumnModel().getColumn(2).setPreferredWidth(200);
+		tblHD.getColumnModel().getColumn(3).setPreferredWidth(150);
+		tblHD.getColumnModel().getColumn(4).setPreferredWidth(300);
+		tblHD.getColumnModel().getColumn(5).setPreferredWidth(120);
+		tblHD.getColumnModel().getColumn(6).setPreferredWidth(120);
 		JScrollPane jScrollPane = new JScrollPane(tblHD, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panelCenter.add(jScrollPane);
 		
@@ -204,6 +237,7 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 		btnNhanVien.addActionListener(this);
 		btnKH.addActionListener(this);
 		btnTim.addActionListener(this);
+		btnLoc.addActionListener(this);
 		
 		btnTrangChu.addMouseListener(this);
 		btnTour.addMouseListener(this);
@@ -226,7 +260,8 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 			setVisible(false);
 			new Home_GUI(nv).setVisible(true);
 		}else if(o==btnDonHang) {
-			
+			setVisible(false);
+			new QuanLiHoaDon_GUI(nv).setVisible(true);
 		}else if(o==btnQuanLi){
 			setVisible(false);
 			new QuanLiTour_GUI(nv).setVisible(true);
@@ -239,6 +274,10 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 		}else if(o==btnKH){
 			setVisible(false);
 			new KhachHang_GUI(nv).setVisible(true);
+		}else if(o==btnTim) {
+			timTheoSDT();
+		}else if(o==btnLoc) {
+			locTour();
 		}
 	}
 	@Override
@@ -288,6 +327,48 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 				    new MatteBorder(0, 0, 0, 0, new Color(255, 69, 0)),
 				    new EmptyBorder(10, 30, 10, 30)
 				));
+		}
+	}
+	public void addRow(HoaDon hd) {
+		DecimalFormat df = new DecimalFormat("#,###");
+		SimpleDateFormat fmD = new SimpleDateFormat("dd/MM/yyyy");
+		tblModel.addRow(new Object[] {hd.getSoHoaDon(), hd.getNv().getTenNV(), hd.getKh().getTenKH(), fmD.format(hd.getNgayTaoHD()) , hd.getTour().getTenTour(), df.format(hd.getTour().getGia()) , df.format(hd.tinhThanhTien())});
+	}
+	public void timTheoSDT(){
+		String sdt = txtSDT.getText().trim();
+		boolean ptSDT = Pattern.matches("[0-9]{10,11}", sdt);
+		if(!ptSDT) {
+			JOptionPane.showMessageDialog(this, "Error: SDT chỉ gồm các chữ số và độ dài 10-11 số!");
+			return;
+		}
+		dataToTable(hdBus.getHoaDonTheoSoDT(sdt));
+	}
+	public void dataToTable(ArrayList<HoaDon> dsHD) {
+		tblModel.setRowCount(0);
+		for(HoaDon hd: dsHD) {
+			hd.setDsTV(tvBus.getThanhVienTheoMaHD(hd.getSoHoaDon()));
+			addRow(hd);
+		}
+	}
+	public void locTour() {
+		NhanVien nv = (NhanVien) cboNV.getSelectedItem();
+		DateModel<?> model = ngayLap.getModel();
+		int day = model.getDay();
+		int month = model.getMonth();
+		int year = model.getYear();
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year, month, day);
+		java.sql.Date date = new java.sql.Date(calendar.getTimeInMillis());
+		
+		if(nv==null && ngayLap.getModel().getValue()==null) {
+			JOptionPane.showMessageDialog(this, "Bạn chưa chọn ngày và nhân viên");
+		}else if(nv==null) {
+			dataToTable(hdBus.getHoaDonTheoNgayLap(date));
+		}else if(ngayLap.getModel().getValue()==null) {
+			dataToTable(hdBus.getHoaDonTheoNhanVien(nv));
+		}else {
+			dataToTable(hdBus.getHoaDonTheoNhanVienVaNgayLap(nv, date));
 		}
 	}
 }

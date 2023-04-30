@@ -1,6 +1,7 @@
 package BUS;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 
 import Dao.ThanhVien_Dao;
 import Entity.ThanhVien;
@@ -18,5 +19,8 @@ public class ThanhVien_Bus {
 	}
 	public boolean deleteThanhVien(String maThanhVien) {
 		return tvDao.deleteThanhVien(maThanhVien);
+	}
+	public ArrayList<ThanhVien> getThanhVienTheoMaHD(String maHD){
+		return tvDao.getThanhVienTheoMaHD(maHD);
 	}
 }

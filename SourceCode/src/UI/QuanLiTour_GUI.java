@@ -329,6 +329,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		panelAdd.add(pnGia);
 		panelAdd.add(Box.createVerticalStrut(5));
 		panelAdd.add(txtGia=new JTextField());
+		txtGia.setFont(new Font("Arial", Font.PLAIN, 18));
 		panelAdd.add(Box.createVerticalStrut(5));
 		
 		Box b1 = Box.createHorizontalBox();
@@ -402,6 +403,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		btnReset.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
 		panelAdd.add(pnButtonBot);
 		
+		btnReset.setPreferredSize(new Dimension(75, 30));
 		btnThem.setPreferredSize(btnReset.getPreferredSize());
 		btnSua.setPreferredSize(btnReset.getPreferredSize());
 		btnXoa.setPreferredSize(btnReset.getPreferredSize());
@@ -425,7 +427,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		panelTop.add(btnTim = new JButton("Tìm"));
 		btnTim.setForeground(Color.WHITE);
 		btnTim.setBackground(new Color(30, 144, 255));
-		panelTop.add(Box.createHorizontalStrut(10));
+		panelTop.add(Box.createHorizontalStrut(5));
 		panelTop.add(lblTourTim = new JLabel());
 		
 		String cols[] = {"Mã Tour", "Tên Tour", "Số chỗ", "Ngày đi", "Ngày kết thúc", "Giá tour"};
@@ -510,6 +512,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		txtAMoTa.setFont(new Font("Arial", Font.ITALIC, 14));
 		txtAMoTa.setWrapStyleWord(true);
 		txtAMoTa.setLineWrap(true);
+		txtAMoTa.setEditable(false);
 		
 		JPanel panelTT = new JPanel(new GridLayout(4, 2));
 		panelBotLeft.add(panelTT);
@@ -622,6 +625,17 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		btnReset.addActionListener(this);
 		btnTim.addActionListener(this);
 		btnThongKe.addActionListener(this);
+		
+		btnTrangChu.addMouseListener(this);
+		btnTour.addMouseListener(this);
+		btnThem.addMouseListener(this);
+		btnXoa.addMouseListener(this);
+		btnSua.addMouseListener(this);
+		btnNhanVien.addMouseListener(this);
+		btnDiaDiem.addMouseListener(this);
+		btnTim.addMouseListener(this);
+		btnThongKe.addMouseListener(this);
+		btnReset.addMouseListener(this);
 		
 		tblHead.addMouseListener(this);
 		tblTour.addMouseListener(this);
@@ -788,13 +802,47 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 	}
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		if(e.getSource()!=tblTour &&  e.getSource()!=tblHead) {
+			JButton button = (JButton) e.getSource();
+			button.setBorder(new CompoundBorder(
+					    new MatteBorder(0, 0, 2, 0, new Color(220, 20, 60)),
+					    button.getBorder()
+					));
+		}	
 	}
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		if(e.getSource()!=tblTour && e.getSource()!=tblHead) {
+			JButton button = (JButton) e.getSource();
+			if(e.getSource()==btnTrangChu || e.getSource()==btnTour || e.getSource()==btnDiaDiem || e.getSource()==btnThongKe)
+			    button.setBorder(new CompoundBorder(
+					    new MatteBorder(0, 0, 0, 0, new Color(255, 69, 0)),
+					    new EmptyBorder(10, 10, 10, 10)
+					));
+			else if(e.getSource()==btnNhanVien)
+			    button.setBorder(new CompoundBorder(
+					    new MatteBorder(0, 0, 0, 0, new Color(255, 69, 0)),
+					    BorderFactory.createEmptyBorder(5, 10, 5, 10)
+					));
+			else if(e.getSource()==btnTim){
+				button.setBorder(new CompoundBorder(
+					    new MatteBorder(0, 0, 0, 0, new Color(255, 69, 0)),
+					    BorderFactory.createEmptyBorder(5, 20, 5, 20)
+					));
+			}
+//			else if(e.getSource()==btnDatTour){
+//				button.setBorder(new CompoundBorder(
+//					    new MatteBorder(0, 0, 0, 0, new Color(255, 69, 0)),
+//					    BorderFactory.createEmptyBorder(10, 20, 10, 20)
+//					));
+//			}
+			else if(e.getSource()==btnReset || e.getSource()==btnThem || e.getSource()==btnSua || e.getSource()==btnXoa){
+				button.setBorder(new CompoundBorder(
+					    new MatteBorder(0, 0, 0, 0, new Color(255, 69, 0)),
+					    BorderFactory.createEmptyBorder(5, 10, 5, 10)
+					));
+			}
+		}
 	}
 	public void paintColumnSelected(int col) {
 		DefaultTableCellRenderer colorWhiteRenderer = new DefaultTableCellRenderer();

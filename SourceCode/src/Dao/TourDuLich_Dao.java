@@ -194,6 +194,29 @@ public class TourDuLich_Dao {
 		}
 		return dsTour;
 	}
+	public TourDuLich timTourTheoMa(String maTim){
+		PreparedStatement stmt = null;
+		ConnectDB.getInstance();
+		try {
+			Connection con = ConnectDB.getConnection();
+			stmt = con.prepareStatement("select * from TourDuLich where MaTour = ?");
+			stmt.setString(1, maTim);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()) {
+				DiaDiem diemKH = new DiaDiem_Dao().getDiaDiemTheoMa(rs.getString("DiemKH"));
+				DiaDiem diemKT = new DiaDiem_Dao().getDiaDiemTheoMa(rs.getString("DiemKT"));
+				String[] array = rs.getString("Anh").split(";");
+				List<String> list = Arrays.asList(array);
+				ArrayList<String> dsAnh = new ArrayList<>(list);
+				TourDuLich tour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getString("MoTa"), rs.getInt("SoCho"), new PhuongTien(rs.getString("PhuongTien")), rs.getDate("NgayDi"), rs.getDate("NgayKetThuc"), diemKH, diemKT, rs.getString("KhachSan"), rs.getDouble("Gia"), dsAnh);
+				return tour;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 	public ArrayList<TourDuLich> locTour(String diemDi, String diemDen, int soNgay, java.sql.Date ngayDi, int soNguoi, String phuongTien){
 		ArrayList<TourDuLich> dsTour = new ArrayList<TourDuLich>();
 		PreparedStatement stmt = null;
