@@ -9,10 +9,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import ConnectDB.ConnectDB;
+import Entity.DiaDiem;
 import Entity.HoaDon;
 import Entity.NhanVien;
+import Entity.PhuongTien;
 import Entity.TourDuLich;
 
 public class HoaDon_Dao {
@@ -190,4 +194,41 @@ public class HoaDon_Dao {
 		}
 		return maHDMax;
 	}
+	public TourDuLich tourMax() {
+	    ConnectDB.getInstance();
+	    PreparedStatement stmt = null;
+	    TourDuLich maxTour = null;
+	    int maxSoLuongDat = -1;
+
+	    try {
+	        Connection con = ConnectDB.getConnection();
+	        stmt = con.prepareStatement("select * from TourDuLich");
+	        ResultSet rs = stmt.executeQuery();
+
+	        while (rs.next()) {
+	            String maTour = rs.getString("MaTour");
+	            int soLuongDat = soLuongDat(maTour);
+
+	            if (soLuongDat > maxSoLuongDat) {
+	                maxSoLuongDat = soLuongDat;
+	                DiaDiem diemKH = new DiaDiem_Dao().getDiaDiemTheoMa(rs.getString("DiemKH"));
+					DiaDiem diemKT = new DiaDiem_Dao().getDiaDiemTheoMa(rs.getString("DiemKT"));
+					String[] array = rs.getString("Anh").split(";");
+					List<String> list = Arrays.asList(array);
+					ArrayList<String> dsAnh = new ArrayList<>(list);
+					maxTour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getString("MoTa"), rs.getInt("SoCho"), new PhuongTien(rs.getString("PhuongTien")), rs.getDate("NgayDi"), rs.getDate("NgayKetThuc"), diemKH, diemKT, rs.getString("KhachSan"), rs.getDouble("Gia"), dsAnh);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            stmt.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return maxTour;
+	}
+
 }

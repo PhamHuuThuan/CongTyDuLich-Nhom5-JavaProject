@@ -11,5 +11,7 @@
 	<classpathentry kind="lib" path="Lib/javax.mail.jar"/>
 	<classpathentry kind="lib" path="Lib/activation-1.1.1.jar"/>
 	<classpathentry kind="lib" path="Lib/itextpdf-5.5.9.jar"/>
+	<classpathentry kind="lib" path="Lib/jfreechart-1.0.19.jar"/>
+	<classpathentry kind="lib" path="Lib/jcommon-1.0.23.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

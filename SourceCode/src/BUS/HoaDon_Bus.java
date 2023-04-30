@@ -2,6 +2,7 @@ package BUS;
 
 import Dao.HoaDon_Dao;
 import Entity.HoaDon;
+import Entity.TourDuLich;
 
 public class HoaDon_Bus {
 	HoaDon_Dao hd_Dao = new HoaDon_Dao();
@@ -19,5 +20,8 @@ public class HoaDon_Bus {
 	}
 	public boolean deleteHoaDon(String soHoaDon) {
 		return hd_Dao.deleteHoaDon(soHoaDon);
+	}
+	public TourDuLich tourMax() {
+		return hd_Dao.tourMax();
 	}
 }
