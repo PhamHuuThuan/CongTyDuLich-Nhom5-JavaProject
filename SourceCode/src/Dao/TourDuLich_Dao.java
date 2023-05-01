@@ -224,29 +224,30 @@ public class TourDuLich_Dao {
 		ConnectDB.getInstance();
 		try {
 			Connection con = ConnectDB.getConnection();
-			String sql = "select * from TourDuLich t\r\n"
+			String sql = "select * from TourDuLich t \r\n"
 					+ "		where (t.SoCho-ISNULL((select count(hd.MaTour)as soluong\r\n"
 					+ "		from HoaDon hd join ThanhVien tv ON hd.SoHoaDon = tv.MaHD\r\n"
 					+ "		where hd.MaTour = t.MaTour\r\n"
-					+ "		group by hd.MaTour), 0)) >= ? and NgayDi >= ? and DiemKH like ? and DiemKT like ? \r\n"
-					+ "		and PhuongTien like ? \r\n"
+					+ "		group by hd.MaTour), 0)) >= ? and NgayDi >= ? and DiemKH = ? and DiemKT = ? \r\n"
+					+ "		and PhuongTien = ? \r\n"
 					+ "		and DATEDIFF(day, NgayDi, NgayKetThuc) = ?";
 			stmt = con.prepareStatement(sql);
 			
 			stmt.setInt(1, soNguoi);
 			stmt.setDate(2, ngayDi);
-			stmt.setString(3, "%"+diemDi+"%");
-			stmt.setString(4, "%"+diemDen+"%");
-			stmt.setString(5, "%"+phuongTien+"%");
+			stmt.setString(3, diemDi);
+			stmt.setString(4, diemDen);
+			stmt.setString(5, phuongTien);
 			stmt.setInt(6, soNgay);
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) {
 				DiaDiem diemKH = new DiaDiem_Dao().getDiaDiemTheoMa(rs.getString("DiemKH"));
 				DiaDiem diemKT = new DiaDiem_Dao().getDiaDiemTheoMa(rs.getString("DiemKT"));
+				PhuongTien pt = new PhuongTien_Dao().timPhuongTien(rs.getString("PhuongTien"));
 				String[] array = rs.getString("Anh").split(";");
 				List<String> list = Arrays.asList(array);
 				ArrayList<String> dsAnh = new ArrayList<>(list);
-				TourDuLich tour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getString("MoTa"), rs.getInt("SoCho"), new PhuongTien(rs.getString("PhuongTien")), rs.getDate("NgayDi"), rs.getDate("NgayKetThuc"), diemKH, diemKT, rs.getString("KhachSan"), rs.getDouble("Gia"), dsAnh);
+				TourDuLich tour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getString("MoTa"), rs.getInt("SoCho"), pt, rs.getDate("NgayDi"), rs.getDate("NgayKetThuc"), diemKH, diemKT, rs.getString("KhachSan"), rs.getDouble("Gia"), dsAnh);
 				dsTour.add(tour);
 			}
 		} catch (SQLException e) {

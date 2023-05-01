@@ -297,7 +297,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		
 		tblTour.setRowHeight(20);
 		tblTour.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		tblTour.getColumnModel().getColumn(0).setPreferredWidth(100);
+		tblTour.getColumnModel().getColumn(0).setPreferredWidth(75);
 		tblTour.getColumnModel().getColumn(1).setPreferredWidth(350);
 		tblTour.getColumnModel().getColumn(2).setPreferredWidth(100);
 		tblTour.getColumnModel().getColumn(3).setPreferredWidth(125);
@@ -695,7 +695,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		java.sql.Date date = new java.sql.Date(calendar.getTimeInMillis());
 		
 		ArrayList<TourDuLich>	dsLoc = tourBus.locTour(diemDi.getMaDiaDiem(), diemDen.getMaDiaDiem(), soNgay, date, soNguoi, phuongTien.getMaPT());
-		if(dsLoc.size()==0) {
+		if(dsLoc.size()>0) {
 			dsTour = dsLoc;
 			dataArrayToTable(dsTour);
 			lblTourTim.setText( "Đã tìm được "+dsLoc.size()+" Tour phù hợp.");
