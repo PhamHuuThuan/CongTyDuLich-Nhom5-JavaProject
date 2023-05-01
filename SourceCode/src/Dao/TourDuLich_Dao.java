@@ -205,10 +205,11 @@ public class TourDuLich_Dao {
 			while(rs.next()) {
 				DiaDiem diemKH = new DiaDiem_Dao().getDiaDiemTheoMa(rs.getString("DiemKH"));
 				DiaDiem diemKT = new DiaDiem_Dao().getDiaDiemTheoMa(rs.getString("DiemKT"));
+				PhuongTien pt = new PhuongTien_Dao().timPhuongTien(rs.getString("PhuongTien"));
 				String[] array = rs.getString("Anh").split(";");
 				List<String> list = Arrays.asList(array);
 				ArrayList<String> dsAnh = new ArrayList<>(list);
-				TourDuLich tour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getString("MoTa"), rs.getInt("SoCho"), new PhuongTien(rs.getString("PhuongTien")), rs.getDate("NgayDi"), rs.getDate("NgayKetThuc"), diemKH, diemKT, rs.getString("KhachSan"), rs.getDouble("Gia"), dsAnh);
+				TourDuLich tour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getString("MoTa"), rs.getInt("SoCho"), pt, rs.getDate("NgayDi"), rs.getDate("NgayKetThuc"), diemKH, diemKT, rs.getString("KhachSan"), rs.getDouble("Gia"), dsAnh);
 				return tour;
 			}
 		} catch (SQLException e) {

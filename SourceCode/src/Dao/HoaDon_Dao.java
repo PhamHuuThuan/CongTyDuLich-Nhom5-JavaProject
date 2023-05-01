@@ -62,7 +62,7 @@ public class HoaDon_Dao {
 			while(rs.next()) {
 				String soHD = rs.getString("SoHoaDon");
 				java.sql.Timestamp ngayLap = rs.getTimestamp("NgayLapHD");
-				TourDuLich tour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getDouble("Gia"));
+				TourDuLich tour = new TourDuLich_Dao().timTourTheoMa(rs.getString("MaTour"));
 				NhanVien nv = new NhanVien(rs.getString("MaNV"),rs.getString("TenNV"));
 				KhachHang kh = new KhachHang(rs.getString("MaKH"),rs.getString("SDT"),rs.getString("TenKH"),rs.getString("Email"),rs.getString("DiaChi"));
 				HoaDon hd = new HoaDon(soHD,ngayLap, tour , nv, kh);
@@ -97,7 +97,7 @@ public class HoaDon_Dao {
 			while(rs.next()) {
 				String soHD = rs.getString("SoHoaDon");
 				java.sql.Timestamp ngayLap = rs.getTimestamp("NgayLapHD");
-				TourDuLich tour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getDouble("Gia"));
+				TourDuLich tour = new TourDuLich_Dao().timTourTheoMa(rs.getString("MaTour"));
 				KhachHang kh = new KhachHang(rs.getString("MaKH"),rs.getString("SDT"),rs.getString("TenKH"),rs.getString("Email"),rs.getString("DiaChi"));
 				HoaDon hd = new HoaDon(soHD,ngayLap, tour , nv, kh);
 				dsHD.add(hd);
@@ -131,7 +131,7 @@ public class HoaDon_Dao {
 			while(rs.next()) {
 				String soHD = rs.getString("SoHoaDon");
 				java.sql.Timestamp ngayLap = rs.getTimestamp("NgayLapHD");
-				TourDuLich tour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getDouble("Gia"));
+				TourDuLich tour = new TourDuLich_Dao().timTourTheoMa(rs.getString("MaTour"));
 				NhanVien nv = new NhanVien(rs.getString("MaNV"),rs.getString("TenNV"));
 				KhachHang kh = new KhachHang(rs.getString("MaKH"),rs.getString("SDT"),rs.getString("TenKH"),rs.getString("Email"),rs.getString("DiaChi"));
 				HoaDon hd = new HoaDon(soHD,ngayLap, tour , nv, kh);
@@ -168,7 +168,7 @@ public class HoaDon_Dao {
 			while(rs.next()) {
 				String soHD = rs.getString("SoHoaDon");
 				java.sql.Timestamp ngayLap = rs.getTimestamp("NgayLapHD");
-				TourDuLich tour = new TourDuLich(rs.getString("MaTour"), rs.getString("TenTour"), rs.getDouble("Gia"));
+				TourDuLich tour = new TourDuLich_Dao().timTourTheoMa(rs.getString("MaTour"));
 				KhachHang kh = new KhachHang(rs.getString("MaKH"),rs.getString("SDT"),rs.getString("TenKH"),rs.getString("Email"),rs.getString("DiaChi"));
 				HoaDon hd = new HoaDon(soHD,ngayLap, tour , nv, kh);
 				dsHD.add(hd);

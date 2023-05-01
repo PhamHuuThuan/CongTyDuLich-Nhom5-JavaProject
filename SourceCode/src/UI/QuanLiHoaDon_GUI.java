@@ -68,6 +68,7 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 	private HoaDon_Bus hdBus;
 	private ThanhVien_Bus tvBus;
 	private NhanVien_Bus nvBus;
+	private ArrayList<HoaDon> ds;
 	public QuanLiHoaDon_GUI(NhanVien nv) {
 		setTitle("Vietour - Phan mem quan li tour du lich");
 		setSize(1200, 820);
@@ -78,6 +79,7 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 		hdBus = new HoaDon_Bus();
 		tvBus = new ThanhVien_Bus();
 		nvBus = new NhanVien_Bus();
+		ds=  new ArrayList<>();
 		createGUI();
 	}
 	public void createGUI() {
@@ -238,6 +240,7 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 		btnKH.addActionListener(this);
 		btnTim.addActionListener(this);
 		btnLoc.addActionListener(this);
+		btnChiTietHD.addActionListener(this);
 		
 		btnTrangChu.addMouseListener(this);
 		btnTour.addMouseListener(this);
@@ -278,6 +281,8 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 			timTheoSDT();
 		}else if(o==btnLoc) {
 			locTour();
+		}else if(o==btnChiTietHD) {
+			xemChiTietHD();
 		}
 	}
 	@Override
@@ -345,7 +350,8 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 	}
 	public void dataToTable(ArrayList<HoaDon> dsHD) {
 		tblModel.setRowCount(0);
-		for(HoaDon hd: dsHD) {
+		ds = dsHD;
+		for(HoaDon hd: ds) {
 			hd.setDsTV(tvBus.getThanhVienTheoMaHD(hd.getSoHoaDon()));
 			addRow(hd);
 		}
@@ -370,5 +376,13 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 		}else {
 			dataToTable(hdBus.getHoaDonTheoNhanVienVaNgayLap(nv, date));
 		}
+	}
+	public void xemChiTietHD() {
+		int index = tblHD.getSelectedRow();
+		if(index==-1) {
+			JOptionPane.showMessageDialog(this, "Bạn cần chọn hóa đơn muốn xem!");
+			return;
+		}
+		new HoaDon_GUI(ds.get(index), nv, ds.get(index).getTour(), ds.get(index).getKh()).setVisible(true);;
 	}
 }
