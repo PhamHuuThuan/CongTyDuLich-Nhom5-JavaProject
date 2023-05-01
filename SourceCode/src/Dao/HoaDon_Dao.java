@@ -344,5 +344,27 @@ public class HoaDon_Dao {
 	    }
 	    return maxTour;
 	}
+	public double tinhTongThanhTienByMonth(int month, int year) {
+	    double tongThanhTien = 0.0;
+	    try {
+	        ConnectDB.getInstance();
+	        Connection con = ConnectDB.getConnection();
+	        String query = "SELECT MaTour FROM HoaDon WHERE MONTH(NgayLapHD) = ? AND YEAR(NgayLapHD) = ?";
+	        PreparedStatement statement = con.prepareStatement(query);
+	        statement.setInt(1, month);
+	        statement.setInt(2, year);
+	        ResultSet rs = statement.executeQuery();
+	        while (rs.next()) {
+	            String maTour = rs.getString("MaTour");
+	            int soLuongDat = soLuongDat(maTour);
+	            TourDuLich tour = new TourDuLich_Dao().timTourTheoMa(maTour);
+	            double thanhTien = tour.getGia() * soLuongDat;
+	            tongThanhTien += thanhTien;
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return tongThanhTien;
+	}
 
 }

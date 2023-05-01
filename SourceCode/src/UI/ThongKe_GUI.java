@@ -46,7 +46,7 @@ public class ThongKe_GUI extends JFrame implements MouseListener,ActionListener{
 	
 	public ThongKe_GUI(NhanVien nv) {
 		setTitle("Vietour - Phần mềm quản lí tour du lịch");
-		setSize(1200, 800);
+		setSize(1200, 850);
 		setLocationRelativeTo(null);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("img/travel.png"));
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -88,7 +88,7 @@ public class ThongKe_GUI extends JFrame implements MouseListener,ActionListener{
 		btnDiaDiem.setFont(new Font("Arial", Font.BOLD, 14));
 		btnDiaDiem.setBackground(Color.WHITE);
 		btnDiaDiem.setBorder(new EmptyBorder(10, 10, 10, 10));
-		btnDiaDiem.setBackground(new Color(255, 165, 0));
+		btnDiaDiem.setBackground(new Color(60, 179, 113));
 		btnDiaDiem.setForeground(new Color(255, 255, 255));
 		btnDiaDiem.setPreferredSize(btnTrangChu.getPreferredSize());
 		
@@ -98,7 +98,7 @@ public class ThongKe_GUI extends JFrame implements MouseListener,ActionListener{
 		btnThongKe.setFont(new Font("Arial", Font.BOLD, 14));
 		btnThongKe.setBackground(Color.WHITE);
 		btnThongKe.setBorder(new EmptyBorder(10, 10, 10, 10));
-		btnThongKe.setBackground(new Color(60, 179, 113));
+		btnThongKe.setBackground(new Color(255, 165, 0));
 		btnThongKe.setForeground(new Color(255, 255, 255));
 		btnThongKe.setPreferredSize(btnThongKe.getPreferredSize());
 		
@@ -122,20 +122,9 @@ public class ThongKe_GUI extends JFrame implements MouseListener,ActionListener{
 		chartPanel.setPreferredSize(new Dimension(800, 500));
 		add(chartPanel, BorderLayout.CENTER);
 
+		
 		// Create dataset
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-		dataset.setValue(5000000, "Doanh thu", "T1");
-		dataset.setValue(5500000, "Doanh thu", "T2");
-		dataset.setValue(6000000, "Doanh thu", "T3");
-		dataset.setValue(10000000, "Doanh thu", "T4");
-		dataset.setValue(10500000, "Doanh thu", "T5");
-		dataset.setValue(5500000, "Doanh thu", "T6");
-		dataset.setValue(6000000, "Doanh thu", "T7");
-		dataset.setValue(8500000, "Doanh thu", "T8");
-		dataset.setValue(8000000, "Doanh thu", "T9");
-		dataset.setValue(8500000, "Doanh thu", "T10");
-		dataset.setValue(12000000, "Doanh thu", "T11");
-		dataset.setValue(13500000, "Doanh thu", "T12");
 
 		// create chart
 		JFreeChart chart = ChartFactory.createBarChart(
@@ -150,23 +139,37 @@ public class ThongKe_GUI extends JFrame implements MouseListener,ActionListener{
 		);
 		ChartPanel chartp = new ChartPanel(chart);
 		chartPanel.add(chartp);
-		
 		comboBox.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		        String selectedYear = (String) comboBox.getSelectedItem();
 		        switch (selectedYear) {
 		            case "2020":
 		                // Hiển thị bảng dữ liệu của năm 2020
+		            	for (int i = 1; i <= 12; i++) {
+		            	    String month = "T" + i;
+		            	    dataset.setValue(hd_bus.thanhTienByMonth(i, 2020), "Doanh thu", month);
+		            	}
 		                break;
 		            case "2021":
-		                // Hiển thị bảng dữ liệu của năm 2021
+		            	// Hiển thị bảng dữ liệu của năm 2021
+		            	for (int i = 1; i <= 12; i++) {
+		            	    String month = "T" + i;
+		            	    dataset.setValue(hd_bus.thanhTienByMonth(i, 2021), "Doanh thu", month);
+		            	}
 		                break;
 		            case "2022":
 		                // Hiển thị bảng dữ liệu của năm 2022
+		            	for (int i = 1; i <= 12; i++) {
+		            	    String month = "T" + i;
+		            	    dataset.setValue(hd_bus.thanhTienByMonth(i, 2022), "Doanh thu", month);
+		            	}
 		                break;
 		            case "2023":
-//		        		ChartPanel chartp = new ChartPanel(chart);
-//		        		chartPanel.add(chartp);
+		            	// Hiển thị bảng dữ liệu của năm 2023
+		            	for (int i = 1; i <= 12; i++) {
+		            	    String month = "T" + i;
+		            	    dataset.setValue(hd_bus.thanhTienByMonth(i, 2023), "Doanh thu", month);
+		            	}
 		                break;
 		            default:
 		                break;
@@ -288,7 +291,8 @@ public class ThongKe_GUI extends JFrame implements MouseListener,ActionListener{
 			setVisible(false);
 			new DiaDiem_GUI(nv).setVisible(true);
 		}else if(o==btnNhanVien){
-			
+			setVisible(false);
+			new NhanVien_GUI(nv).setVisible(true);
 		}else if(o==btnTour) {
 			setVisible(false);
 			new QuanLiTour_GUI(nv).setVisible(true);

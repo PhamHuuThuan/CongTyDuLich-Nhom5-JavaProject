@@ -39,4 +39,7 @@ public class HoaDon_Bus {
 	public ArrayList<HoaDon> getHoaDonTheoNhanVienVaNgayLap(NhanVien nv, java.sql.Date ngayLapHD){
 		return hd_Dao.getHoaDonTheoNhanVienVaNgayLap(nv, ngayLapHD);
 	}
+	public double thanhTienByMonth(int month, int year) {
+		return hd_Dao.tinhTongThanhTienByMonth(month, year);
+	}
 }
