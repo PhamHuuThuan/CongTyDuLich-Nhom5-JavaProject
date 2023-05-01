@@ -359,7 +359,7 @@ public class HoaDon_Dao {
 	            int soLuongDat = soLuongDat(maTour);
 	            TourDuLich tour = new TourDuLich_Dao().timTourTheoMa(maTour);
 	            double thanhTien = tour.getGia() * soLuongDat;
-	            tongThanhTien += thanhTien;
+	            tongThanhTien += thanhTien; 
 	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();

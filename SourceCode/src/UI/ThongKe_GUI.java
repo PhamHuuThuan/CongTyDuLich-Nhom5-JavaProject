@@ -13,6 +13,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.DecimalFormat;
+import java.util.Calendar;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -31,7 +33,12 @@ import javax.swing.border.EmptyBorder;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 import BUS.HoaDon_Bus;
@@ -42,7 +49,8 @@ public class ThongKe_GUI extends JFrame implements MouseListener,ActionListener{
 	private JButton btnTrangChu, btnTour, btnDiaDiem, btnThongKe, btnNhanVien;
 	private NhanVien nv;
 	private HoaDon_Bus hd_bus;
-	
+	private JComboBox<Integer> comboBox;
+	private DefaultCategoryDataset dataset;
 	
 	public ThongKe_GUI(NhanVien nv) {
 		setTitle("Vietour - Phần mềm quản lí tour du lịch");
@@ -112,9 +120,12 @@ public class ThongKe_GUI extends JFrame implements MouseListener,ActionListener{
 
 		
 		JPanel chartPanel = new JPanel();
-		String[] years = {"2020", "2021", "2022", "2023"};
-        JComboBox<String> comboBox = new JComboBox<>(years);
+        comboBox = new JComboBox<>();
         comboBox.setPreferredSize(new Dimension(100, 30));
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        for (int year = 2022; year <= currentYear; year++) {
+        	comboBox.addItem(year);
+        }
         chartPanel.add(comboBox);
         
 		chartPanel.setBorder(BorderFactory.createTitledBorder("Thống kê doanh thu các tháng trong năm"));
@@ -124,7 +135,7 @@ public class ThongKe_GUI extends JFrame implements MouseListener,ActionListener{
 
 		
 		// Create dataset
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+		dataset = new DefaultCategoryDataset();
 
 		// create chart
 		JFreeChart chart = ChartFactory.createBarChart(
@@ -137,46 +148,13 @@ public class ThongKe_GUI extends JFrame implements MouseListener,ActionListener{
 		    true,         
 		    false           
 		);
+		CategoryPlot plot = (CategoryPlot) chart.getPlot();
+		ValueAxis rangeAxis = plot.getRangeAxis();
+		DecimalFormat decimalFormat = new DecimalFormat("0,000");
+		((NumberAxis) rangeAxis).setNumberFormatOverride(decimalFormat);
 		ChartPanel chartp = new ChartPanel(chart);
 		chartPanel.add(chartp);
-		comboBox.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        String selectedYear = (String) comboBox.getSelectedItem();
-		        switch (selectedYear) {
-		            case "2020":
-		                // Hiển thị bảng dữ liệu của năm 2020
-		            	for (int i = 1; i <= 12; i++) {
-		            	    String month = "T" + i;
-		            	    dataset.setValue(hd_bus.thanhTienByMonth(i, 2020), "Doanh thu", month);
-		            	}
-		                break;
-		            case "2021":
-		            	// Hiển thị bảng dữ liệu của năm 2021
-		            	for (int i = 1; i <= 12; i++) {
-		            	    String month = "T" + i;
-		            	    dataset.setValue(hd_bus.thanhTienByMonth(i, 2021), "Doanh thu", month);
-		            	}
-		                break;
-		            case "2022":
-		                // Hiển thị bảng dữ liệu của năm 2022
-		            	for (int i = 1; i <= 12; i++) {
-		            	    String month = "T" + i;
-		            	    dataset.setValue(hd_bus.thanhTienByMonth(i, 2022), "Doanh thu", month);
-		            	}
-		                break;
-		            case "2023":
-		            	// Hiển thị bảng dữ liệu của năm 2023
-		            	for (int i = 1; i <= 12; i++) {
-		            	    String month = "T" + i;
-		            	    dataset.setValue(hd_bus.thanhTienByMonth(i, 2023), "Doanh thu", month);
-		            	}
-		                break;
-		            default:
-		                break;
-		        }
-		    }
-		});
-		
+	
         JPanel panelEast = new JPanel();
         panelEast.setPreferredSize(new Dimension(450, 400));
 		panelEast.setLayout(new BoxLayout(panelEast, BoxLayout.X_AXIS));
@@ -279,6 +257,7 @@ public class ThongKe_GUI extends JFrame implements MouseListener,ActionListener{
 		btnTour.addActionListener(this);
 		btnDiaDiem.addActionListener(this);
 		btnNhanVien.addActionListener(this);
+		comboBox.addActionListener(this);
 	}
 	
 	@Override
@@ -296,6 +275,9 @@ public class ThongKe_GUI extends JFrame implements MouseListener,ActionListener{
 		}else if(o==btnTour) {
 			setVisible(false);
 			new QuanLiTour_GUI(nv).setVisible(true);
+		}else if(o==comboBox) {
+			int nam = (int) comboBox.getSelectedItem();
+			tinhDoanhThu(nam);
 		}
 	}
 
@@ -328,5 +310,11 @@ public class ThongKe_GUI extends JFrame implements MouseListener,ActionListener{
 		// TODO Auto-generated method stub
 		
 	}
-	
+	public void tinhDoanhThu(int nam) {
+		for (int i = 1; i <= 12; i++) {
+    	    String month = "T" + i;
+    	    dataset.setValue(hd_bus.thanhTienByMonth(i, nam), "Doanh thu", month);
+    	    System.out.println(hd_bus.thanhTienByMonth(i, nam));
+    	}
+	}
 }
