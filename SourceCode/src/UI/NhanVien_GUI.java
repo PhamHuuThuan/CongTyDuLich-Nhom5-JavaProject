@@ -240,9 +240,9 @@ public class NhanVien_GUI extends JFrame implements ActionListener, FocusListene
 		ngayVL = new JDatePickerImpl(datePanelVL, new DateComponentFormatter());
 		b7.add(ngayVL);
 		b7.add(Box.createHorizontalStrut(165));
-		b8.add(btnSua = new JButton("Cập nhật thông tin"));
+		b8.add(btnSua = new JButton("Cập nhật thông tin", new ImageIcon("Img/edit-nv.png")));
 		b8.add(Box.createHorizontalStrut(50));
-		b8.add(btnLogout = new JButton("Đăng xuất"));
+		b8.add(btnLogout = new JButton("Đăng xuất", new ImageIcon("Img/logout.png")));
 		lblMaNV.setFont(new Font("Arial", Font.PLAIN, 14));
 		lblTenNV.setFont(new Font("Arial", Font.PLAIN, 14));
 		lblMatKhau.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -278,12 +278,12 @@ public class NhanVien_GUI extends JFrame implements ActionListener, FocusListene
 		radNu.setBackground(Color.WHITE);
 		
 		btnSua.setFont(new Font("Arial", Font.BOLD, 14));
-		btnSua.setBorder(new EmptyBorder(10, 20, 10, 20));
+		btnSua.setBorder(new EmptyBorder(5, 20, 5, 20));
 		btnSua.setBackground(new Color(255, 165, 0));
 		btnSua.setForeground(new Color(255, 255, 255));
 		
 		btnLogout.setFont(new Font("Arial", Font.BOLD, 14));
-		btnLogout.setBorder(new EmptyBorder(10, 20, 10, 20));
+		btnLogout.setBorder(new EmptyBorder(5, 20, 5, 20));
 		btnLogout.setBackground(new Color(255, 127, 80));
 		btnLogout.setForeground(new Color(255, 255, 255));
 		

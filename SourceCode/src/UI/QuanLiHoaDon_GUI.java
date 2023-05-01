@@ -164,7 +164,7 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 		panelSearch.add(new JLabel("SĐT KH: "));
 		panelSearch.add(txtSDT = new JTextField(15));
 		panelSearch.add(Box.createHorizontalStrut(20));
-		panelSearch.add(btnTim = new JButton("Tìm"));
+		panelSearch.add(btnTim = new JButton("Tìm", new ImageIcon("Img/search-icon.png")));
 		txtSDT.setBorder(new CompoundBorder(
 			    new MatteBorder(0, 0, 1, 0, new Color(0, 250, 154)),
 			    new EmptyBorder(5, 10, 5, 10)
@@ -193,7 +193,7 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 		ngayLap = new JDatePickerImpl(datePanel, new DateComponentFormatter());
 		panelLoc.add(ngayLap);
 		panelLoc.add(Box.createHorizontalStrut(25));
-		panelLoc.add(btnLoc = new JButton("Lọc"));
+		panelLoc.add(btnLoc = new JButton("Lọc", new ImageIcon("img/loc.png")));
 		
 		cboNV.setPreferredSize(ngayLap.getPreferredSize());
 		
@@ -222,7 +222,7 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 		
 		JPanel panelSouth = new JPanel();
 		add(panelSouth,BorderLayout.SOUTH);
-		panelSouth.add(btnChiTietHD = new JButton("Xem chi tiết hóa đơn"));
+		panelSouth.add(btnChiTietHD = new JButton("Xem chi tiết hóa đơn", new ImageIcon("Img/bills.png")));
 		panelSouth.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 		
 		btnTim.setFont(new Font("Arial", Font.BOLD, 14));

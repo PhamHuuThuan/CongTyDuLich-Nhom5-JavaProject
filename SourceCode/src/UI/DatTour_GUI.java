@@ -236,11 +236,11 @@ public class DatTour_GUI extends JFrame implements ActionListener, MouseListener
 		
 		JPanel pnTaoKH = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		panelCenter.add(pnTaoKH);
-		pnTaoKH.add(btnTao=new JButton("Tạo khách hàng"));
+		pnTaoKH.add(btnTao=new JButton("Tạo khách hàng", new ImageIcon("img/plus1.png")));
 		btnTao.setForeground(Color.WHITE);
 		btnTao.setBackground(new Color(30, 144, 255));
 		pnTaoKH.add(Box.createHorizontalStrut(20));
-		pnTaoKH.add(btnDaCoKH=new JButton("Đã Có Thông Tin"));
+		pnTaoKH.add(btnDaCoKH=new JButton("Đã Có Thông Tin", new ImageIcon("img/user-list.png")));
 		btnDaCoKH.setForeground(Color.WHITE);
 		btnDaCoKH.setBackground(new Color(30, 144, 255));
 		
@@ -290,17 +290,17 @@ public class DatTour_GUI extends JFrame implements ActionListener, MouseListener
 		//tao button them sua xoa khach hang
 		JPanel panelButton = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		panelCenter.add(panelButton);
-		panelButton.add(btnThem = new JButton("Thêm"));
+		panelButton.add(btnThem = new JButton("Thêm", new ImageIcon("img/plus1.png")));
 		panelButton.add(Box.createHorizontalStrut(10));
 		btnThem.setForeground(Color.WHITE);
 		btnThem.setBackground(new Color(30, 144, 255));
 		btnThem.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
-		panelButton.add(btnSua = new JButton("Sửa"));
+		panelButton.add(btnSua = new JButton("Sửa", new ImageIcon("img/edit-user.png")));
 		panelButton.add(Box.createHorizontalStrut(10));
 		btnSua.setForeground(Color.WHITE);
 		btnSua.setBackground(new Color(30, 144, 255));
 		btnSua.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
-		panelButton.add(btnXoa = new JButton("Xóa"));
+		panelButton.add(btnXoa = new JButton("Xóa", new ImageIcon("Img/delete.png")));
 		btnXoa.setForeground(Color.WHITE);
 		btnXoa.setBackground(new Color(30, 144, 255));
 		btnXoa.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
@@ -401,14 +401,14 @@ public class DatTour_GUI extends JFrame implements ActionListener, MouseListener
 		JPanel panelBtnThanhToan = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		panelBtnThanhToan.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 20));
 		panelThanhToan.add(panelBtnThanhToan, BorderLayout.SOUTH);
-		panelBtnThanhToan.add(btnThanhToan = new JButton("Thanh Toán"));
+		panelBtnThanhToan.add(btnThanhToan = new JButton("Thanh Toán", new ImageIcon("img/money.png")));
 		btnThanhToan.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 		btnThanhToan.setFont(new Font("Arial", Font.BOLD, 18));
 		btnThanhToan.setBounds(0, 0, 100, 50);
 		btnThanhToan.setForeground(Color.WHITE);
 		btnThanhToan.setBackground(new Color(32,178,170));
-		panelBtnThanhToan.add(Box.createHorizontalStrut(50));
-		panelBtnThanhToan.add(btnClose = new JButton("Thoát"));
+		panelBtnThanhToan.add(Box.createHorizontalStrut(30));
+		panelBtnThanhToan.add(btnClose = new JButton("Thoát", new ImageIcon("img/back.png")));
 		btnClose.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 		btnClose.setFont(new Font("Arial", Font.BOLD, 18));
 		btnClose.setBounds(0, 0, 100, 50);

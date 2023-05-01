@@ -243,20 +243,20 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		}
 		
 		JPanel panelBtn = new JPanel(new FlowLayout());
-		panelBtn.add(btnLoc = new JButton("Lọc"));
+		panelBtn.add(btnLoc = new JButton("Lọc", new ImageIcon("img/loc.png")));
 		btnLoc.setFont(new Font("Arial", Font.BOLD, 14));
 		btnLoc.setForeground(Color.WHITE);
 		btnLoc.setBackground(new Color(30, 144, 255));
 		btnLoc.setBorder(new EmptyBorder(5, 10, 5, 10));
 		panelBtn.add(Box.createHorizontalStrut(10));
-		panelBtn.add(btnReset = new JButton("Reset"));
+		panelBtn.add(btnReset = new JButton("Reset", new ImageIcon("Img/reset-icon.png")));
 		btnReset.setFont(new Font("Arial", Font.BOLD, 14));
 		btnReset.setForeground(Color.WHITE);
 		btnReset.setBackground(new Color(30, 144, 255));
 		btnReset.setBorder(new EmptyBorder(5, 10, 5, 10));
 		
 		panelSearch.add(panelBtn);
-		btnReset.setPreferredSize(new Dimension(75, 27));
+		btnReset.setPreferredSize(new Dimension(100, 27));
 		btnLoc.setPreferredSize(btnReset.getPreferredSize());
 		
 		//form ds tour và chi tiết tour
@@ -276,7 +276,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 			    new EmptyBorder(5, 10, 5, 10)
 			));
 		panelTop.add(Box.createHorizontalStrut(10));
-		panelTop.add(btnTim = new JButton("Tìm"));
+		panelTop.add(btnTim = new JButton("Tìm", new ImageIcon("Img/search-icon.png")));
 		btnTim.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
 		btnTim.setForeground(Color.WHITE);
 		btnTim.setBackground(new Color(30, 144, 255));
@@ -327,7 +327,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		panelTitleTour.add(lblGia = new JLabel("x.xxx.000"+"/khach"));
 		lblGia.setFont(new Font("Arial", Font.PLAIN, 16));
 		lblGia.setForeground(new Color(30,144,255));
-		panelTitleTour.add(btnDatTour = new JButton("Đặt Tour"));
+		panelTitleTour.add(btnDatTour = new JButton("Đặt Tour", new ImageIcon("img/booking.png")));
 		btnDatTour.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 		btnDatTour.setFont(new Font("Arial", Font.BOLD, 18));
 		btnDatTour.setBounds(0, 0, 100, 50);

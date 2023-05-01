@@ -374,7 +374,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		btnAnh4.setBorder(BorderFactory.createEmptyBorder(5, 7, 5, 7));
 		b2.add(Box.createHorizontalStrut(5));
 		panelAdd.add(b2);
-		panelAdd.add(Box.createVerticalStrut(20));
+		panelAdd.add(Box.createVerticalStrut(10));
 		
 		btnAnh1.setPreferredSize(new Dimension(50, 50));
 		btnAnh2.setPreferredSize(new Dimension(50, 50));
@@ -382,25 +382,27 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		btnAnh4.setPreferredSize(new Dimension(50, 50));
 		
 		JPanel pnButtonTop = new JPanel(new FlowLayout());
-		pnButtonTop.add(btnThem=new JButton("Thêm"));
+		pnButtonTop.add(btnThem=new JButton("Thêm", new ImageIcon("img/plus1.png")));
+		pnButtonTop.add(Box.createHorizontalStrut(5));
 		btnThem.setForeground(Color.WHITE);
 		btnThem.setBackground(new Color(30, 144, 255));
-		btnThem.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
-		pnButtonTop.add(btnSua=new JButton("Sửa"));
+		btnThem.setBorder(BorderFactory.createEmptyBorder(7, 10, 7, 10));
+		pnButtonTop.add(btnSua=new JButton("Sửa", new ImageIcon("Img/edit-tour.png")));
 		btnSua.setForeground(Color.WHITE);
 		btnSua.setBackground(new Color(30, 144, 255));
-		btnSua.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
+		btnSua.setBorder(BorderFactory.createEmptyBorder(7, 10, 7, 10));
 		panelAdd.add(pnButtonTop);
 		
 		JPanel pnButtonBot = new JPanel(new FlowLayout());
-		pnButtonBot.add(btnXoa=new JButton("Xóa"));
+		pnButtonBot.add(btnXoa=new JButton("Xóa", new ImageIcon("Img/delete.png")));
+		pnButtonBot.add(Box.createHorizontalStrut(5));
 		btnXoa.setForeground(Color.WHITE);
 		btnXoa.setBackground(new Color(30, 144, 255));
-		btnXoa.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
-		pnButtonBot.add(btnReset=new JButton("Reset"));
+		btnXoa.setBorder(BorderFactory.createEmptyBorder(7, 10, 7, 10));
+		pnButtonBot.add(btnReset=new JButton("Reset", new ImageIcon("Img/reset-icon.png")));
 		btnReset.setForeground(Color.WHITE);
 		btnReset.setBackground(new Color(30, 144, 255));
-		btnReset.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
+		btnReset.setBorder(BorderFactory.createEmptyBorder(7, 10, 7, 10));
 		panelAdd.add(pnButtonBot);
 		
 		btnReset.setPreferredSize(new Dimension(75, 30));
@@ -424,7 +426,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 			    new EmptyBorder(5, 10, 5, 10)
 			));
 		panelTop.add(Box.createHorizontalStrut(10));
-		panelTop.add(btnTim = new JButton("Tìm"));
+		panelTop.add(btnTim = new JButton("Tìm", new ImageIcon("Img/search-icon.png")));
 		btnTim.setForeground(Color.WHITE);
 		btnTim.setBackground(new Color(30, 144, 255));
 		panelTop.add(Box.createHorizontalStrut(5));
