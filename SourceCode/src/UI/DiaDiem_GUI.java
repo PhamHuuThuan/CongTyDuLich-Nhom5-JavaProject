@@ -354,6 +354,7 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		tblDiaDiemKH.addMouseListener(this);
 		tblDiaDiemKT.addMouseListener(this);
 		tblPTien.addMouseListener(this);
+		btnThongKe.addActionListener(this);
 	}
 	
 	public void showDataOnTableDiemKH() {
@@ -669,6 +670,9 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 			resetDKT();
 		}else if(o==btnReset2) {
 			resetPT();
+		}else if(o==btnThongKe) {
+			setVisible(false);
+			new ThongKe_GUI(nv).setVisible(true);
 		}
 	}
 

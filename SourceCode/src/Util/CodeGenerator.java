@@ -60,7 +60,7 @@ public class CodeGenerator {
 	}
 	public String generateMaDiaDiemKH() {
 		String maNew = "DKH";
-		String maPre = ddBus.getMaDDMax();
+		String maPre = ddBus.getMaDDMaxKH();
 		 if (maPre == null || maPre.isEmpty()) {
 		        maNew += "001";
 		    } else {
@@ -71,7 +71,7 @@ public class CodeGenerator {
 	}
 	public String generateMaDiaDiemDL() {
 		String maNew = "DDL";
-		String maPre = ddBus.getMaDDMax();
+		String maPre = ddBus.getMaDDMaxDL();
 		 if (maPre == null || maPre.isEmpty()) {
 		        maNew += "001";
 		    } else {
@@ -86,7 +86,7 @@ public class CodeGenerator {
 		if (maPre == null || maPre.isEmpty()) {
 		    maNew += "01";
 		}else {
-		 	int ma = Integer.parseInt(maPre.substring(3)) + 1;
+		 	int ma = Integer.parseInt(maPre.substring(2)) + 1;
 		 	maNew += String.format("%02d", ma);
 		}
 		return maNew;

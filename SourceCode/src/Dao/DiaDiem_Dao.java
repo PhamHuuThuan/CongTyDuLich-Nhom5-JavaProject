@@ -168,13 +168,28 @@ public class DiaDiem_Dao {
 		}
 		return dsDD;
 	}
-	public String getMaDDMax() {
+	public String getMaDDMaxKH() {
 		String maDD = "";
 		ConnectDB.getInstance();
 		try {
 			Connection con = ConnectDB.getConnection();
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select max(MaDiaDiem) as MAX from DiaDiem");
+			ResultSet rs = stmt.executeQuery("select max(MaDiaDiem) as MAX from DiaDiem where MaDiaDiem like 'DKH%' ");
+			while(rs.next())
+				maDD = rs.getString("MAX");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return maDD;
+	}
+	public String getMaDDMaxDL() {
+		String maDD = "";
+		ConnectDB.getInstance();
+		try {
+			Connection con = ConnectDB.getConnection();
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select max(MaDiaDiem) as MAX from DiaDiem where MaDiaDiem like 'DDL%'");
 			while(rs.next())
 				maDD = rs.getString("MAX");
 		} catch (SQLException e) {
