@@ -365,7 +365,8 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 		if(o==btnTrangChu) {
 			new Home_GUI(nv).setVisible(true);
 		}else if(o==btnDonHang) {
-			
+			setVisible(false);
+			new QuanLiHoaDon_GUI(nv).setVisible(true);
 		}else if(o==btnQuanLi){
 			setVisible(false);
 			new QuanLiTour_GUI(nv).setVisible(true);

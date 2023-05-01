@@ -19,6 +19,7 @@ import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -282,7 +283,7 @@ public class HoaDon_GUI extends JFrame implements ActionListener{
 		Object o = e.getSource();
 		if(o==menuInHD) {
 			try {
-				String fileName = "D:/HoaDon/"+hd.getSoHoaDon()+"_"+LocalDate.now().toString()+".pdf";
+				String fileName = "D:/HoaDon/"+hd.getSoHoaDon()+"_"+LocalDateTime.now().toString()+".pdf";
 				saveJFrameAsPdf(fileName);
 				if(new File(fileName).exists()) {
 					int result = JOptionPane.showConfirmDialog(this, "Bạn có muốn mở file PDF?", "Open PDF", JOptionPane.YES_NO_OPTION);
