@@ -88,9 +88,10 @@ public class ThanhVien_Dao {
 				String maTV = rs.getString("MaTV");
 				String tenTV = rs.getString("TenTV");
 				boolean gioiTinh = rs.getBoolean("GioiTinh");
+				boolean luaTuoi = rs.getBoolean("LuaTuoi");
 				Date ngaySinh = rs.getDate("NgaySinh");
 				HoaDon hd = new HoaDon(rs.getString("MaHD"));
-				ThanhVien tv = new ThanhVien(maTV, tenTV, gioiTinh, ngaySinh, gioiTinh, hd);
+				ThanhVien tv = new ThanhVien(maTV, tenTV, gioiTinh, ngaySinh, luaTuoi, hd);
 				dsTV.add(tv);
 			}
 		} catch (SQLException e) {

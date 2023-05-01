@@ -41,6 +41,7 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -209,6 +210,13 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 		tblHD.getColumnModel().getColumn(4).setPreferredWidth(300);
 		tblHD.getColumnModel().getColumn(5).setPreferredWidth(120);
 		tblHD.getColumnModel().getColumn(6).setPreferredWidth(120);
+		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+		rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
+		tblHD.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
+		tblHD.getColumnModel().getColumn(6).setCellRenderer(rightRenderer);
+		tblHD.getTableHeader().setBackground(new Color(30, 144, 255));
+		tblHD.getTableHeader().setForeground(Color.WHITE);
+		tblHD.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
 		JScrollPane jScrollPane = new JScrollPane(tblHD, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panelCenter.add(jScrollPane);
 		
@@ -251,10 +259,6 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 		btnLoc.addMouseListener(this);
 		btnTim.addMouseListener(this);
 		btnChiTietHD.addMouseListener(this);
-	}
-	public static void main(String[] args) {
-		NhanVien nv = new NhanVien("NV001", "0123456789", "12345", "Phạm Hữu Thuận", java.sql.Date.valueOf(LocalDate.of(2003, 5, 14)), true, "064xxxxxxxxx",  java.sql.Date.valueOf(LocalDate.of(2023, 3, 15)));
-		new QuanLiHoaDon_GUI(nv).setVisible(true);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {

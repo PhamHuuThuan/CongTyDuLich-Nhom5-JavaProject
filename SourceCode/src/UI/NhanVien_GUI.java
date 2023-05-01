@@ -334,10 +334,6 @@ public class NhanVien_GUI extends JFrame implements ActionListener, FocusListene
 		password.addFocusListener(this);
 		
 	}
-	public static void main(String[] args) {
-		NhanVien nv = new NhanVien("NV001", "0123456789", "12345", "Phạm Hữu Thuận", java.sql.Date.valueOf(LocalDate.of(2003, 5, 14)), true, "064xxxxxxxxx",  java.sql.Date.valueOf(LocalDate.of(2023, 3, 15)));
-		new NhanVien_GUI(nv).setVisible(true);
-	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub

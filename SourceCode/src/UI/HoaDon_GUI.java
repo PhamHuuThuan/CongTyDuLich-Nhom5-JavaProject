@@ -20,6 +20,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -34,6 +35,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.Document;
 
 import com.itextpdf.text.pdf.codec.wmf.Point;
@@ -43,6 +48,7 @@ import Entity.HoaDon;
 import Entity.KhachHang;
 import Entity.NhanVien;
 import Entity.PhuongTien;
+import Entity.ThanhVien;
 import Entity.TourDuLich;
 
 public class HoaDon_GUI extends JFrame implements ActionListener{
@@ -54,7 +60,7 @@ public class HoaDon_GUI extends JFrame implements ActionListener{
 	private JMenuItem menuInHD;
 	public HoaDon_GUI(HoaDon hd, NhanVien nv, TourDuLich tour, KhachHang kh) {
 		setTitle("Hóa đơn");
-		setSize(550, 700);
+		setSize(550, 800);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		this.hd = hd;
@@ -217,36 +223,61 @@ public class HoaDon_GUI extends JFrame implements ActionListener{
 		lblGetNgayKT.setFont(new Font("Arial", Font.PLAIN, 12));
 		panelChiTiet.add(lblGetNgayKT);
 		
-		panelChiTiet.add(new JLabel(""));
-		panelChiTiet.add(new JLabel(""));
+		DecimalFormat df = new DecimalFormat("#,###");
+		JLabel lblGia = new JLabel("Giá Tour: ");
+		lblGia.setFont(new Font("Arial", Font.BOLD, 12));
+		panelChiTiet.add(lblGia);
+		JLabel lblGetGia = new JLabel(df.format(tour.getGia()));
+		lblGetGia.setFont(new Font("Arial", Font.PLAIN, 12));
+		panelChiTiet.add(lblGetGia);
 		
+		JLabel lblVAT = new JLabel("VAT: ");
+		lblVAT.setFont(new Font("Arial", Font.BOLD, 12));
+		panelChiTiet.add(lblVAT);
+		JLabel lblGetVAT = new JLabel("10%");
+		lblGetVAT.setFont(new Font("Arial", Font.PLAIN, 12));
+		panelChiTiet.add(lblGetVAT);
 		
 		JLabel lblSoLuong = new JLabel("SL thành viên: ");
 		lblSoLuong.setFont(new Font("Arial", Font.BOLD, 12));
 		panelChiTiet.add(lblSoLuong);
-		
 		JLabel lblGetSL = new JLabel(hd.getDsTV().size()+"");
 		lblGetSL.setFont(new Font("Arial", Font.PLAIN, 12));
 		panelChiTiet.add(lblGetSL);
-		
-		panelChiTiet.add(new JLabel(""));
-		panelChiTiet.add(new JLabel(""));
 		
 		JLabel lblThanhTien = new JLabel("Thành Tiền: ");
 		lblThanhTien.setFont(new Font("Arial", Font.BOLD, 16));
 		panelChiTiet.add(lblThanhTien);
 		
-		DecimalFormat df = new DecimalFormat("#,###.##");
 		String formattedNumber = df.format(hd.tinhThanhTien());
 		JLabel lblGetThanhTien = new JLabel(formattedNumber +" đ");
 		lblGetThanhTien.setFont(new Font("Arial", Font.PLAIN, 16));
 		lblGetThanhTien.setForeground(new Color(220, 20, 60));
 		panelChiTiet.add(lblGetThanhTien);
 		
-		JPanel pnLine2 = new JPanel();
-		pnLine2.add(new JLabel("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"));
-		panelCenter.add(Box.createVerticalStrut(10));
-		panelCenter.add(pnLine2);
+		String cols[]= {"Mã TV", "Tên TV", "Giới Tính", "Ngày sinh", "Lứa tuổi"};
+		DefaultTableModel tblModel = new DefaultTableModel(cols, 0);
+		JTable tblTV = new JTable(tblModel);
+		tblTV.getColumnModel().getColumn(0).setPreferredWidth(50);
+		tblTV.getColumnModel().getColumn(1).setPreferredWidth(150);
+		tblTV.getColumnModel().getColumn(2).setPreferredWidth(75);
+		tblTV.getColumnModel().getColumn(3).setPreferredWidth(100);
+		tblTV.getColumnModel().getColumn(4).setPreferredWidth(75);
+		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+		rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
+		tblTV.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
+		tblTV.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
+		tblTV.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
+		tblTV.getTableHeader().setBackground(new Color(30, 144, 255));
+		tblTV.getTableHeader().setForeground(Color.WHITE);
+		JScrollPane scrollPane = new JScrollPane(tblTV, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		panelCenter.add(Box.createVerticalStrut(15));
+		panelCenter.add(scrollPane);
+		
+		//dua du lieu vao bang
+		for(ThanhVien tv : hd.getDsTV()) {
+			tblModel.addRow(new Object[] {tv.getMaTV(), tv.getTenTV(), tv.isGioiTinh()?"Nam":"Nữ", tv.getNgaySinh(), tv.isLuaTuoi()?"Người lớn":"Trẻ em"});
+		}
 		
 		JPanel panelSouth = new JPanel();
 		add(panelSouth, BorderLayout.SOUTH);
@@ -283,7 +314,8 @@ public class HoaDon_GUI extends JFrame implements ActionListener{
 		Object o = e.getSource();
 		if(o==menuInHD) {
 			try {
-				String fileName = "D:/HoaDon/"+hd.getSoHoaDon()+"_"+LocalDateTime.now().toString()+".pdf";
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy_HHmmss");
+				String fileName = "D:/HoaDon/"+hd.getSoHoaDon()+"_"+ formatter.format(LocalDateTime.now())+".pdf";
 				saveJFrameAsPdf(fileName);
 				if(new File(fileName).exists()) {
 					int result = JOptionPane.showConfirmDialog(this, "Bạn có muốn mở file PDF?", "Open PDF", JOptionPane.YES_NO_OPTION);
