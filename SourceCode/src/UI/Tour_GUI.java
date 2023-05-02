@@ -534,10 +534,10 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		}else if(o==btnDatTour) {
 			int index = tblTour.getSelectedRow();
 			if(index!=-1) {
-				if(validData()) {
+//				if(validData()) {
 					frameDatTour = new DatTour_GUI(dsTour.get(index), nv);
 					frameDatTour.setVisible(true);
-				}
+//				}
 			}else {
 				JOptionPane.showMessageDialog(this, "Vui lòng chọn Tour muốn đặt!");
 			}

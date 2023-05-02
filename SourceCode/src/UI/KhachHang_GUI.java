@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -299,8 +301,13 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 		filterPanel.add(cmbAddress = new JComboBox<String>());
 		kh_bus = new KhachHang_Bus();
 		dsKhachHang = kh_bus.getAllKH();
-		for(KhachHang kh : dsKhachHang) {
-			cmbAddress.addItem(kh.getDiaChi());
+		Set<String> addresses = new HashSet<>();
+		for (KhachHang kh : dsKhachHang) {
+		    String address = kh.getDiaChi();
+		    if (!addresses.contains(address)) {
+		        cmbAddress.addItem(address);
+		        addresses.add(address);
+		    }
 		}
 		cmbAddress.addActionListener(new ActionListener() {
 		    @Override

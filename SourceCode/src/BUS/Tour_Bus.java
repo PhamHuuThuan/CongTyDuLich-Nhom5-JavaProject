@@ -66,7 +66,7 @@ public class Tour_Bus {
 		if(kq) {
 			luuImage(tour);
 			tour_Dao.updateDSAnh(tour.getMaTour(), tour.getDsAnh());
-			sendEmail(tour);
+//			sendEmail(tour);
 		}
 		return kq;
 	}

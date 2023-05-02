@@ -697,7 +697,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 					updateChiTiet(tblTour.getRowCount()-1);
 					JOptionPane.showMessageDialog(this, "Thêm thành công!");
 				}else {
-					JOptionPane.showMessageDialog(this, "Thêm thất bại! Trùng mã!");
+					JOptionPane.showMessageDialog(this, "Thêm thất bại! Có lỗi đã xảy ra!");
 				}
 			}
 		}else if(o==btnSua) {
@@ -853,8 +853,9 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 	}
 	public void dataArrayToTable(ArrayList<TourDuLich> dsTour) {
 		tblModel.setRowCount(0);
+		DecimalFormat decimalFormat = new DecimalFormat("###");
 		for(TourDuLich x : dsTour) {
-			tblModel.addRow(new Object[] {x.getMaTour(), x.getTenTour(), x.getSoCho(), x.getNgayDi(), x.getNgayKetThuc(), x.getGia()});
+			tblModel.addRow(new Object[] {x.getMaTour(), x.getTenTour(), x.getSoCho(), x.getNgayDi(), x.getNgayKetThuc(), decimalFormat.format(x.getGia())});
 		}
 	}
 	public void reset() {

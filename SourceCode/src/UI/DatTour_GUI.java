@@ -441,6 +441,7 @@ public class DatTour_GUI extends JFrame implements ActionListener, MouseListener
 					JOptionPane.showMessageDialog(this, "Tạo thành công!");
 					hd.setKh(khNew);
 					hdBus.updateHoaDon(hd);
+					txtHoTenTV.setText(txtHoTenKH.getText());
 				}else {
 					JOptionPane.showMessageDialog(this, "Tạo thất bại! Sđt đã được sử dụng hoặc đã có lỗi xảy ra!");
 				}
@@ -456,6 +457,7 @@ public class DatTour_GUI extends JFrame implements ActionListener, MouseListener
 				lblTenKH.setText(kh.getTenKH());
 				hd.setKh(kh);
 				hdBus.updateHoaDon(hd);
+				txtHoTenTV.setText(txtHoTenKH.getText());
 			}else {
 				JOptionPane.showMessageDialog(this, "Không tìm thấy!");
 			}
@@ -481,6 +483,7 @@ public class DatTour_GUI extends JFrame implements ActionListener, MouseListener
 		}else if(o==btnSua) {
 			if(validDataTV()) {
 				ThanhVien newTV = convertTV();
+				newTV.setMaTV(dsTV.get(tblTV.getSelectedRow()).getMaTV());
 				if(tvBus.updateThanhVien(newTV)) {
 					dsTV.set(dsTV.indexOf(newTV), newTV);
 					hd.setDsTV(dsTV);
