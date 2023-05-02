@@ -154,23 +154,23 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		panelAdd.add(txtTenDiemKH = new JTextField(20));
 		
 		JPanel pnButtonTop = new JPanel(new FlowLayout());
-		pnButtonTop.add(btnThem=new JButton("Thêm"));
+		pnButtonTop.add(btnThem=new JButton("Thêm", new ImageIcon("img/plus1.png")));
 		btnThem.setForeground(Color.WHITE);
 		btnThem.setBackground(new Color(30, 144, 255));
-		btnThem.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
-		pnButtonTop.add(btnSua=new JButton("Sửa"));
+		btnThem.setBorder(BorderFactory.createEmptyBorder(7, 10, 7, 10));
+		pnButtonTop.add(btnSua=new JButton("Sửa", new ImageIcon("Img/edit-tour.png")));
 		btnSua.setForeground(Color.WHITE);
 		btnSua.setBackground(new Color(30, 144, 255));
-		btnSua.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
-		pnButtonTop.add(btnXoa=new JButton("Xóa"));
+		btnSua.setBorder(BorderFactory.createEmptyBorder(7, 10, 7, 10));
+		pnButtonTop.add(btnXoa=new JButton("Xóa", new ImageIcon("Img/delete.png")));
 		btnXoa.setForeground(Color.WHITE);
 		btnXoa.setBackground(new Color(30, 144, 255));
-		btnXoa.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
-		ImageIcon imgReset = new ImageIcon("img/reset.png");
+		btnXoa.setBorder(BorderFactory.createEmptyBorder(7, 10, 7, 10));
+		ImageIcon imgReset = new ImageIcon("Img/reset-icon.png");
 		pnButtonTop.add(btnReset=new JButton(imgReset));
 		btnReset.setForeground(Color.WHITE);
 		btnReset.setBackground(new Color(30, 144, 255));
-		btnReset.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
+		btnReset.setBorder(BorderFactory.createEmptyBorder(7, 10, 7, 10));
 		panelAdd.add(pnButtonTop);
 		
 
@@ -228,23 +228,23 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		panelAdd.add(txtTenDiemDL = new JTextField(20));
 		
 		pnButtonTop = new JPanel(new FlowLayout());
-		pnButtonTop.add(btnThem1=new JButton("Thêm"));
+		pnButtonTop.add(btnThem1=new JButton("Thêm", new ImageIcon("img/plus1.png")));
 		btnThem1.setForeground(Color.WHITE);
 		btnThem1.setBackground(new Color(30, 144, 255));
-		btnThem1.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
-		pnButtonTop.add(btnSua1=new JButton("Sửa"));
+		btnThem1.setBorder(BorderFactory.createEmptyBorder(7, 10, 7, 10));
+		pnButtonTop.add(btnSua1=new JButton("Sửa", new ImageIcon("Img/edit-tour.png")));
 		btnSua1.setForeground(Color.WHITE);
 		btnSua1.setBackground(new Color(30, 144, 255));
-		btnSua1.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
-		pnButtonTop.add(btnXoa1=new JButton("Xóa"));
+		btnSua1.setBorder(BorderFactory.createEmptyBorder(7, 10, 7, 10));
+		pnButtonTop.add(btnXoa1=new JButton("Xóa", new ImageIcon("Img/delete.png")));
 		btnXoa1.setForeground(Color.WHITE);
 		btnXoa1.setBackground(new Color(30, 144, 255));
-		btnXoa1.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
-		imgReset = new ImageIcon("img/reset.png");
+		btnXoa1.setBorder(BorderFactory.createEmptyBorder(7, 10, 7, 10));
+		imgReset = new ImageIcon("Img/reset-icon.png");
 		pnButtonTop.add(btnReset1=new JButton(imgReset));
 		btnReset1.setForeground(Color.WHITE);
 		btnReset1.setBackground(new Color(30, 144, 255));
-		btnReset1.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
+		btnReset1.setBorder(BorderFactory.createEmptyBorder(7, 10, 7, 10));
 		panelAdd.add(pnButtonTop);
 		
 //		//form ds tour và chi tiết dia diem
@@ -294,23 +294,23 @@ public class DiaDiem_GUI extends JFrame implements MouseListener,ActionListener{
 		panelAdd.add(txtTenPT = new JTextField(20));
 		
 		pnButtonTop = new JPanel(new FlowLayout());
-		pnButtonTop.add(btnThem2=new JButton("Thêm"));
+		pnButtonTop.add(btnThem2=new JButton("Thêm", new ImageIcon("img/plus1.png")));
 		btnThem2.setForeground(Color.WHITE);
 		btnThem2.setBackground(new Color(30, 144, 255));
-		btnThem2.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
-		pnButtonTop.add(btnSua2=new JButton("Sửa"));
+		btnThem2.setBorder(BorderFactory.createEmptyBorder(7, 10, 7, 10));
+		pnButtonTop.add(btnSua2=new JButton("Sửa", new ImageIcon("Img/edit-tour.png")));
 		btnSua2.setForeground(Color.WHITE);
 		btnSua2.setBackground(new Color(30, 144, 255));
-		btnSua2.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
-		pnButtonTop.add(btnXoa2=new JButton("Xóa"));
+		btnSua2.setBorder(BorderFactory.createEmptyBorder(7, 10, 7, 10));
+		pnButtonTop.add(btnXoa2=new JButton("Xóa", new ImageIcon("Img/delete.png")));
 		btnXoa2.setForeground(Color.WHITE);
 		btnXoa2.setBackground(new Color(30, 144, 255));
-		btnXoa2.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
-		imgReset = new ImageIcon("img/reset.png");
+		btnXoa2.setBorder(BorderFactory.createEmptyBorder(7, 10, 7, 10));
+		imgReset = new ImageIcon("Img/reset-icon.png");
 		pnButtonTop.add(btnReset2=new JButton(imgReset));
 		btnReset2.setForeground(Color.WHITE);
 		btnReset2.setBackground(new Color(30, 144, 255));
-		btnReset2.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));
+		btnReset2.setBorder(BorderFactory.createEmptyBorder(7, 10, 7, 10));
 		panelAdd.add(pnButtonTop);
 		
 		String cols3[] = {"Mã phương tiện", "Tên phương tiện"};

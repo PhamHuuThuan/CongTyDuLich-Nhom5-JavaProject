@@ -126,6 +126,7 @@ public class ThongKe_GUI extends JFrame implements MouseListener,ActionListener{
         for (int year = 2022; year <= currentYear; year++) {
         	comboBox.addItem(year);
         }
+        comboBox.setSelectedItem(currentYear);
         chartPanel.add(comboBox);
         
 		chartPanel.setBorder(BorderFactory.createTitledBorder("Thống kê doanh thu các tháng trong năm"));
@@ -251,13 +252,13 @@ public class ThongKe_GUI extends JFrame implements MouseListener,ActionListener{
 		panelSouth.add(contentPanel, BorderLayout.SOUTH);
 		add(panelSouth,BorderLayout.SOUTH);
 
-		
-		
 		btnTrangChu.addActionListener(this);
 		btnTour.addActionListener(this);
 		btnDiaDiem.addActionListener(this);
 		btnNhanVien.addActionListener(this);
 		comboBox.addActionListener(this);
+		
+		tinhDoanhThu(2023);
 	}
 	
 	@Override
@@ -314,7 +315,6 @@ public class ThongKe_GUI extends JFrame implements MouseListener,ActionListener{
 		for (int i = 1; i <= 12; i++) {
     	    String month = "T" + i;
     	    dataset.setValue(hd_bus.thanhTienByMonth(i, nam), "Doanh thu", month);
-    	    System.out.println(hd_bus.thanhTienByMonth(i, nam));
     	}
 	}
 }

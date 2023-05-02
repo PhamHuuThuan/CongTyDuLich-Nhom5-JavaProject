@@ -1,6 +1,7 @@
 package Entity;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -43,6 +44,12 @@ public class HoaDon{
 		this.tour = tour;
 		this.nv = nv;
 		this.kh = kh;
+	}
+	public HoaDon(String soHoaDon, Timestamp ngayTaoHD, TourDuLich tour) {
+		super();
+		this.soHoaDon = soHoaDon;
+		this.ngayTaoHD = ngayTaoHD;
+		this.tour = tour;
 	}
 	public HoaDon(String soHoaDon,java.sql.Timestamp ngayTaoHD) {
 		this.soHoaDon = soHoaDon;

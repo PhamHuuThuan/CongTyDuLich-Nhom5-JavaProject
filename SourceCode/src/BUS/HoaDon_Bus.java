@@ -3,8 +3,11 @@ package BUS;
 import java.util.ArrayList;
 
 import Dao.HoaDon_Dao;
+import Dao.ThanhVien_Dao;
+import Dao.TourDuLich_Dao;
 import Entity.HoaDon;
 import Entity.NhanVien;
+import Entity.ThanhVien;
 import Entity.TourDuLich;
 
 public class HoaDon_Bus {
@@ -40,6 +43,12 @@ public class HoaDon_Bus {
 		return hd_Dao.getHoaDonTheoNhanVienVaNgayLap(nv, ngayLapHD);
 	}
 	public double thanhTienByMonth(int month, int year) {
-		return hd_Dao.tinhTongThanhTienByMonth(month, year);
+		double tongThanhTien = 0.0;
+		ArrayList<HoaDon> dsHD = hd_Dao.tinhTongThanhTienByMonth(month, year);
+		for(HoaDon hd : dsHD) {
+			ArrayList<ThanhVien> dsTV = new ThanhVien_Dao().getThanhVienTheoMaHD(hd.getSoHoaDon());
+			tongThanhTien += hd.getTour().getGia()*dsTV.size()*1.1;
+		}
+		return tongThanhTien;
 	}
 }

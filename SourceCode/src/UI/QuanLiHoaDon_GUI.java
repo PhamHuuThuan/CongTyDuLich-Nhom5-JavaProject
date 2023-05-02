@@ -71,7 +71,7 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 	private NhanVien_Bus nvBus;
 	private ArrayList<HoaDon> ds;
 	public QuanLiHoaDon_GUI(NhanVien nv) {
-		setTitle("Vietour - Phan mem quan li tour du lich");
+		setTitle("Vietour - Phần mềm quản lí tour du lịch");
 		setSize(1200, 820);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -226,12 +226,12 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 		panelSouth.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 		
 		btnTim.setFont(new Font("Arial", Font.BOLD, 14));
-		btnTim.setBorder(new EmptyBorder(10, 30, 10, 30));
+		btnTim.setBorder(new EmptyBorder(10, 20, 10, 20));
 		btnTim.setBackground(new Color(100, 149, 237));
 		btnTim.setForeground(new Color(255, 255, 255));
 		
 		btnLoc.setFont(new Font("Arial", Font.BOLD, 14));
-		btnLoc.setBorder(new EmptyBorder(10, 30, 10, 30));
+		btnLoc.setBorder(new EmptyBorder(10, 20, 10, 20));
 		btnLoc.setBackground(new Color(100, 149, 237));
 		btnLoc.setForeground(new Color(255, 255, 255));
 		
@@ -334,7 +334,7 @@ public class QuanLiHoaDon_GUI extends JFrame implements ActionListener, MouseLis
 		else {
 			button.setBorder(new CompoundBorder(
 				    new MatteBorder(0, 0, 0, 0, new Color(255, 69, 0)),
-				    new EmptyBorder(10, 30, 10, 30)
+				    new EmptyBorder(10, 20, 10, 20)
 				));
 		}
 	}

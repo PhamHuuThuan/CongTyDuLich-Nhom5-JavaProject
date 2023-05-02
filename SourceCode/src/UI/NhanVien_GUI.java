@@ -57,7 +57,7 @@ public class NhanVien_GUI extends JFrame implements ActionListener, FocusListene
 	private NhanVien nv;
 	private NhanVien_Bus nvBus;
 	public NhanVien_GUI(NhanVien nv) {
-		setTitle("Thông tin nhân viên");
+		setTitle("Vietour - Phần mềm quản lí tour du lịch");
 		setSize(1200, 820);
 		setLocationRelativeTo(null);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("Img//travel.png"));

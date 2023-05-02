@@ -103,7 +103,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 	private NhanVien nv;
 	
 	public QuanLiTour_GUI(NhanVien nv) {
-		setTitle("Vietour - Phan mem quan li tour du lich");
+		setTitle("Vietour - Phần mềm quản lí tour du lịch");
 		setSize(1200, 820);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -427,6 +427,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 			));
 		panelTop.add(Box.createHorizontalStrut(10));
 		panelTop.add(btnTim = new JButton("Tìm", new ImageIcon("Img/search-icon.png")));
+		btnTim.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 		btnTim.setForeground(Color.WHITE);
 		btnTim.setBackground(new Color(30, 144, 255));
 		panelTop.add(Box.createHorizontalStrut(5));
@@ -829,15 +830,9 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 			else if(e.getSource()==btnTim){
 				button.setBorder(new CompoundBorder(
 					    new MatteBorder(0, 0, 0, 0, new Color(255, 69, 0)),
-					    BorderFactory.createEmptyBorder(5, 20, 5, 20)
+					    BorderFactory.createEmptyBorder(10, 20, 10, 20)
 					));
 			}
-//			else if(e.getSource()==btnDatTour){
-//				button.setBorder(new CompoundBorder(
-//					    new MatteBorder(0, 0, 0, 0, new Color(255, 69, 0)),
-//					    BorderFactory.createEmptyBorder(10, 20, 10, 20)
-//					));
-//			}
 			else if(e.getSource()==btnReset || e.getSource()==btnThem || e.getSource()==btnSua || e.getSource()==btnXoa){
 				button.setBorder(new CompoundBorder(
 					    new MatteBorder(0, 0, 0, 0, new Color(255, 69, 0)),

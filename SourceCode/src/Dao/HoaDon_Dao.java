@@ -344,27 +344,37 @@ public class HoaDon_Dao {
 	    }
 	    return maxTour;
 	}
-	public double tinhTongThanhTienByMonth(int month, int year) {
-	    double tongThanhTien = 0.0;
-	    try {
-	        ConnectDB.getInstance();
-	        Connection con = ConnectDB.getConnection();
-	        String query = "SELECT MaTour FROM HoaDon WHERE MONTH(NgayLapHD) = ? AND YEAR(NgayLapHD) = ?";
-	        PreparedStatement statement = con.prepareStatement(query);
-	        statement.setInt(1, month);
-	        statement.setInt(2, year);
-	        ResultSet rs = statement.executeQuery();
-	        while (rs.next()) {
-	            String maTour = rs.getString("MaTour");
-	            int soLuongDat = soLuongDat(maTour);
-	            TourDuLich tour = new TourDuLich_Dao().timTourTheoMa(maTour);
-	            double thanhTien = tour.getGia() * soLuongDat;
-	            tongThanhTien += thanhTien; 
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	    return tongThanhTien;
+	public ArrayList<HoaDon> tinhTongThanhTienByMonth(int month, int year) {
+		ArrayList<HoaDon> dsHD = new ArrayList<HoaDon>();
+		PreparedStatement statement = null;
+		try {
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+			String sql = "Select * from HoaDon hd \r\n"
+					+ "join TourDuLich t on hd.MaTour = t.MaTour \r\n"
+					+ "WHERE Month(hd.NgayLapHD)  = ? and Year(hd.NgayLapHD) = ?";
+			statement = con.prepareStatement(sql);
+			statement.setInt(1, month);
+			statement.setInt(2, year);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				String soHD = rs.getString("SoHoaDon");
+				java.sql.Timestamp ngayLap = rs.getTimestamp("NgayLapHD");
+				TourDuLich tour = new TourDuLich_Dao().timTourTheoMa(rs.getString("MaTour"));
+				HoaDon hd = new HoaDon(soHD,ngayLap, tour);
+				dsHD.add(hd);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				statement.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return dsHD;
 	}
 
 }

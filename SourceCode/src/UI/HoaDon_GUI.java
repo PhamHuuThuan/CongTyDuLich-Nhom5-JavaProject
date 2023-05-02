@@ -11,6 +11,7 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -59,7 +60,8 @@ public class HoaDon_GUI extends JFrame implements ActionListener{
 	private PhuongTien_Bus ptBus;
 	private JMenuItem menuInHD;
 	public HoaDon_GUI(HoaDon hd, NhanVien nv, TourDuLich tour, KhachHang kh) {
-		setTitle("Hóa đơn");
+		setTitle("Chi tiết hóa đơn");
+		setIconImage(Toolkit.getDefaultToolkit().getImage("img/travel.png"));
 		setSize(550, 800);
 		setLocationRelativeTo(null);
 		setResizable(false);

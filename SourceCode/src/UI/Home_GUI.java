@@ -34,7 +34,7 @@ public class Home_GUI extends JFrame implements ActionListener, MouseListener{
 	private JButton btnTrangChu, btnTour, btnDonHang, btnKH, btnQuanLi, btnNhanVien;
 	private NhanVien nv;
 	public Home_GUI(NhanVien nv) {
-		setTitle("Vietour - Phan mem quan li tour du lich");
+		setTitle("Vietour - Phần mềm quản lí tour du lịch");
 		setSize(1200, 820);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

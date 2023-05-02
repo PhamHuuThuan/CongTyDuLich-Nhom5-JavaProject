@@ -44,7 +44,7 @@ public class Login_GUI extends JFrame implements ActionListener{
 			e.printStackTrace();
 		}
 		nvBus = new NhanVien_Bus();
-		setTitle("Vietour - Phan mem quan li tour du lich");
+		setTitle("Vietour - Phần mềm quản lí tour du lịch");
 		setIconImage(Toolkit.getDefaultToolkit().getImage("img/travel.png"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(250, 100, 1014, 591);

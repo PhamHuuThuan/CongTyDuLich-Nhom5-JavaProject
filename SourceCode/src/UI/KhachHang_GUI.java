@@ -48,7 +48,7 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 	private NhanVien nv;
 	
 	public KhachHang_GUI(NhanVien nv) {
-		setTitle("Vietour - Phan mem quan li tour du lich");
+		setTitle("Vietour - Phần mềm quản lí tour du lịch");
 		setSize(1200,750);
 		setLocationRelativeTo(null);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("img/travel.png"));
@@ -181,7 +181,7 @@ public class KhachHang_GUI extends JFrame implements MouseListener,ActionListene
 
 		JPanel pnButtonTop = new JPanel(new FlowLayout());
 		pnButtonTop.add(Box.createVerticalStrut(50));
-		pnButtonTop.add(btnSua=new JButton("Sửa"));
+		pnButtonTop.add(btnSua=new JButton("Sửa", new ImageIcon("Img/edit-tour.png")));
 		btnSua.setForeground(Color.WHITE);
 		btnSua.setBackground(new Color(30, 144, 255));
 		btnSua.setBorder(BorderFactory.createEmptyBorder(7, 20, 7, 20));

@@ -95,7 +95,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 	private NhanVien nv;
 	
 	public Tour_GUI(NhanVien nv) {
-		setTitle("Vietour - Phan mem quan li tour du lich");
+		setTitle("Vietour - Phần mềm quản lí tour du lịch");
 		setSize(1200, 820);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -247,16 +247,16 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		btnLoc.setFont(new Font("Arial", Font.BOLD, 14));
 		btnLoc.setForeground(Color.WHITE);
 		btnLoc.setBackground(new Color(30, 144, 255));
-		btnLoc.setBorder(new EmptyBorder(5, 10, 5, 10));
+		btnLoc.setBorder(new EmptyBorder(5, 5, 5, 5));
 		panelBtn.add(Box.createHorizontalStrut(10));
 		panelBtn.add(btnReset = new JButton("Reset", new ImageIcon("Img/reset-icon.png")));
 		btnReset.setFont(new Font("Arial", Font.BOLD, 14));
 		btnReset.setForeground(Color.WHITE);
 		btnReset.setBackground(new Color(30, 144, 255));
-		btnReset.setBorder(new EmptyBorder(5, 10, 5, 10));
+		btnReset.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
 		panelSearch.add(panelBtn);
-		btnReset.setPreferredSize(new Dimension(100, 27));
+		btnReset.setPreferredSize(new Dimension(80, 27));
 		btnLoc.setPreferredSize(btnReset.getPreferredSize());
 		
 		//form ds tour và chi tiết tour
@@ -277,7 +277,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 			));
 		panelTop.add(Box.createHorizontalStrut(10));
 		panelTop.add(btnTim = new JButton("Tìm", new ImageIcon("Img/search-icon.png")));
-		btnTim.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
+		btnTim.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 		btnTim.setForeground(Color.WHITE);
 		btnTim.setBackground(new Color(30, 144, 255));
 		panelTop.add(Box.createHorizontalStrut(10));
@@ -298,7 +298,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		tblTour.setRowHeight(20);
 		tblTour.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tblTour.getColumnModel().getColumn(0).setPreferredWidth(75);
-		tblTour.getColumnModel().getColumn(1).setPreferredWidth(350);
+		tblTour.getColumnModel().getColumn(1).setPreferredWidth(380);
 		tblTour.getColumnModel().getColumn(2).setPreferredWidth(100);
 		tblTour.getColumnModel().getColumn(3).setPreferredWidth(125);
 		tblTour.getColumnModel().getColumn(4).setPreferredWidth(125);
@@ -318,13 +318,14 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 		
 		//chi tiet tour
 		//JPanel panelChiTiet = new JPanel();
-		JPanel panelTitleTour = new JPanel(new FlowLayout(FlowLayout.LEFT, 30, 20)) ;
+		JPanel panelTitleTour = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 10)) ;
 		panelThongTin.add(panelTitleTour);
 		panelTitleTour.add(lblTitleTour = new JLabel("[TXXX]Tour XXX"));
 		lblTitleTour.setFont(new Font("Arial", Font.BOLD, 20));
 		lblTitleTour.setForeground(new Color(0, 0, 255));
+		lblTitleTour.setPreferredSize(new Dimension(620, 30));
 		
-		panelTitleTour.add(lblGia = new JLabel("x.xxx.000"+"/khach"));
+		panelTitleTour.add(lblGia = new JLabel("x.xxx.000"+"/khách"));
 		lblGia.setFont(new Font("Arial", Font.PLAIN, 16));
 		lblGia.setForeground(new Color(30,144,255));
 		panelTitleTour.add(btnDatTour = new JButton("Đặt Tour", new ImageIcon("img/booking.png")));
@@ -754,7 +755,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 			else if(e.getSource()==btnTim){
 				button.setBorder(new CompoundBorder(
 					    new MatteBorder(0, 0, 0, 0, new Color(255, 69, 0)),
-					    BorderFactory.createEmptyBorder(5, 20, 5, 20)
+					    BorderFactory.createEmptyBorder(10, 20, 10, 20)
 					));
 			}
 			else if(e.getSource()==btnDatTour){
@@ -765,7 +766,7 @@ public class Tour_GUI extends JFrame implements ActionListener, MouseListener{
 			}else if(e.getSource()==btnReset || e.getSource()==btnLoc){
 				button.setBorder(new CompoundBorder(
 					    new MatteBorder(0, 0, 0, 0, new Color(255, 69, 0)),
-					    BorderFactory.createEmptyBorder(5, 10, 5, 10)
+					    BorderFactory.createEmptyBorder(5, 5, 5, 5)
 					));
 			}
 		}
