@@ -89,9 +89,6 @@ public class Login_GUI extends JFrame implements ActionListener{
 		
 		btnLogin.addActionListener(this);
 	}
-	public static void main(String[] args) {
-		new Login_GUI().setVisible(true);
-	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();

@@ -118,7 +118,7 @@ public class Tour_Bus {
 				   msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(kh.getEmail()));
 				   msg.setSubject("VIETOUR - ["+tour.getMaTour()+"] "+tour.getTenTour()+ " <<New Tour>>");
 				   msg.setText("Xin chào "+ kh.getTenKH()+"!\n"
-						   +"["+tour.getMaTour()+"] "+tour.getTenTour()+ " <<New Tour>>"
+						   +"["+tour.getMaTour()+"] "+tour.getTenTour()+ " <<New Tour>>\n"
 						   +"Mô tả: "+tour.getMoTa()+"\n"
 						   +"Ngày khởi hành: "+tour.getNgayDi()+"\n"
 						   +"Lịch trình: "+ tour.getDiemKH().getTenDiaDiem() +" - "+tour.getDiemDen().getTenDiaDiem()+"\n"
