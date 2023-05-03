@@ -122,7 +122,7 @@ public class HoaDon_GUI extends JFrame implements ActionListener{
 		panelTTHD.add(panelGetHD);
 		
 		JPanel panelGetNV = new JPanel();
-		JLabel lblGetNV = new JLabel(nv.getMaNV());
+		JLabel lblGetNV = new JLabel(nv.getTenNV());
 		lblGetNV.setFont(new Font("Arial", Font.PLAIN, 12));
 		panelGetNV.add(lblGetNV);
 		panelTTHD.add(panelGetNV);
