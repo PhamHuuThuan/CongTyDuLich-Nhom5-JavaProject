@@ -697,7 +697,7 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 					updateChiTiet(tblTour.getRowCount()-1);
 					JOptionPane.showMessageDialog(this, "Thêm thành công!");
 				}else {
-					JOptionPane.showMessageDialog(this, "Thêm thất bại! Có lỗi đã xảy ra!");
+					JOptionPane.showMessageDialog(this, "Thêm thất bại! Trùng mã hoặc Có lỗi đã xảy ra!");
 				}
 			}
 		}else if(o==btnSua) {

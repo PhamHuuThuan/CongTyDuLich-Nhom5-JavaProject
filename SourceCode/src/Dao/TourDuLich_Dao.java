@@ -230,7 +230,7 @@ public class TourDuLich_Dao {
 					+ "		where hd.MaTour = t.MaTour\r\n"
 					+ "		group by hd.MaTour), 0)) >= ? and NgayDi >= ? and DiemKH = ? and DiemKT = ? \r\n"
 					+ "		and PhuongTien = ? \r\n"
-					+ "		and DATEDIFF(day, NgayDi, NgayKetThuc) = ?";
+					+ "		and DATEDIFF(day, NgayDi, NgayKetThuc) >= ?";
 			stmt = con.prepareStatement(sql);
 			
 			stmt.setInt(1, soNguoi);
