@@ -430,8 +430,10 @@ public class DatTour_GUI extends JFrame implements ActionListener, MouseListener
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if(o == btnClose) {
-			hdBus.deleteHoaDon(hd.getSoHoaDon());
-			dispose();
+			if(JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn thoát?\n Dữ liệu hóa đơn sẽ bị xóa.", "Cảnh báo", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+				hdBus.deleteHoaDon(hd.getSoHoaDon());
+				dispose();
+			}
 		}else if(o == btnTao) {
 			if(validDataKH()) {
 				KhachHang khNew = convertKH();

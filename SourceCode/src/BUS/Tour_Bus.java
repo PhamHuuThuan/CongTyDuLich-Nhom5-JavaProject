@@ -112,6 +112,7 @@ public class Tour_Bus {
 		});
 		  
 		try {
+			//send new tour to 3 customer
 			   for(int i =0; i<3; i++) {
 				   Message msg = new MimeMessage(s);
 				   msg.setFrom(new InternetAddress("huuthuan1405@gmail.com"));
