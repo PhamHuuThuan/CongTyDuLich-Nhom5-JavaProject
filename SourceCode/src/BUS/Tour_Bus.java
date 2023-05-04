@@ -66,7 +66,7 @@ public class Tour_Bus {
 		if(kq) {
 			luuImage(tour);
 			tour_Dao.updateDSAnh(tour.getMaTour(), tour.getDsAnh());
-//			sendEmail(tour);
+			sendEmail(tour);
 		}
 		return kq;
 	}
@@ -112,12 +112,12 @@ public class Tour_Bus {
 		});
 		  
 		try {
-			   for(KhachHang kh : dsKH) {
+			   for(int i =0; i<3; i++) {
 				   Message msg = new MimeMessage(s);
 				   msg.setFrom(new InternetAddress("huuthuan1405@gmail.com"));
-				   msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(kh.getEmail()));
+				   msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(dsKH.get(i).getEmail()));
 				   msg.setSubject("VIETOUR - ["+tour.getMaTour()+"] "+tour.getTenTour()+ " <<New Tour>>");
-				   msg.setText("Xin chào "+ kh.getTenKH()+"!\n"
+				   msg.setText("Xin chào "+ dsKH.get(i).getTenKH()+"!\n"
 						   +"["+tour.getMaTour()+"] "+tour.getTenTour()+ " <<New Tour>>\n"
 						   +"Mô tả: "+tour.getMoTa()+"\n"
 						   +"Ngày khởi hành: "+tour.getNgayDi()+"\n"

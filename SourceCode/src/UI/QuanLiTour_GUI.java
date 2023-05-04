@@ -767,6 +767,10 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 			updateChiTiet(r);
 			
 			dsAnh = dsTour.get(r).getDsAnh();
+			btnAnh1.setText(dsAnh.get(0));
+			btnAnh2.setText(dsAnh.get(1));
+			btnAnh3.setText(dsAnh.get(2));
+			btnAnh4.setText(dsAnh.get(3));
 		}else if(o==tblHead) {
 			int col = tblHead.columnAtPoint(e.getPoint());
 			switch(col) {
@@ -878,6 +882,10 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 		lblTourTim.setText(null);
 		dataArrayToTable(dsTour);
 		dsAnh = new ArrayList<String>();
+		btnAnh1.setText(null);
+		btnAnh2.setText(null);
+		btnAnh3.setText(null);
+		btnAnh4.setText(null);
 	}
 	public void timTour() {
 		String maTim = txtTim.getText();
@@ -1076,9 +1084,13 @@ public class QuanLiTour_GUI extends JFrame implements ActionListener, MouseListe
 			JOptionPane.showMessageDialog(this, "Error: Ngày kết thúc không được trước ngày hôm nay và trước ngày khởi hành!");
 			ngayKT.requestFocus();
 			return false;
-		}if(ptGia!=true) {
-			JOptionPane.showMessageDialog(this, "Error: Nhập sai định dạng!\nGiá chỉ được nhập số và dấu .");
+		}if(ptGia!=true || Double.parseDouble(gia)<=0) {
+			JOptionPane.showMessageDialog(this, "Error: Nhập sai định dạng!\nGiá chỉ được nhập số và dấu . Giá > 0");
 			txtGia.requestFocus();
+			return false;
+		}
+		if(dsAnh.size()<4) {
+			JOptionPane.showMessageDialog(this, "Error: Phải chọn đủ 4 ảnh");
 			return false;
 		}
 		return true;
